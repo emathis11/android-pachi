@@ -1,0 +1,22 @@
+<resources>
+    
+    <string-array name="playColor">
+        <item>Noir</item>
+        <item>Blanc</item>
+        <item>Aléatoire</item>
+    </string-array>
+    
+    <string-array name="playLevels">
+        <item>1 (plus rapide)</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10 (plus fort)</item>
+    </string-array>
+        
+</resources>

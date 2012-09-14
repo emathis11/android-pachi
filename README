@@ -1,0 +1,27 @@
+
+                *** ElyGo-lib ***
+
+ElyGo-lib is the core library used by the Android application "ElyGo".
+It provides several features related to the game of Go (Igo, Weiqi, Baduk).
+
+
+                *** USAGE ***
+
+It is an Android library project and cannot be run directly as it is.
+Check the Android documentation for more informations about library projects.
+
+You can also download the "ElyGo-bots" source code for an example on how to
+use this library in an application.
+
+Link : https://github.com/Daimas/elygo-bots
+
+
+               *** Copyrights and License ***
+
+All files are under the GNU General Public License, which may be found in
+the file COPYING.
+
+Author :
+
+  Emmanuel Mathis
+  <emmanuel *at* lr-studios.net>

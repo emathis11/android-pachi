@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item
+        android:id="@+id/menu_undo"
+        android:title="@string/ab_undo"
+        android:icon="@drawable/ic_action_undo"
+        android:orderInCategory="0"
+        android:showAsAction="always|withText" />
+    <item
+        android:id="@+id/menu_pass"
+        android:title="@string/ab_pass"
+        android:orderInCategory="1"
+        android:showAsAction="always|withText" />
+    <item
+        android:id="@+id/menu_settings"
+        android:title="@string/preferences_title"
+        android:icon="@drawable/ic_action_settings"
+        android:orderInCategory="2"
+        android:showAsAction="always|withText" />
+</menu>

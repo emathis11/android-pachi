@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppThemeLight" parent="Theme.Sherlock.Light">
+        <item name="actionBarStyle">@style/ActionBar</item>
+        <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="windowContentOverlay">@drawable/actionbar_shadow</item>
+        <item name="android:windowContentOverlay">@drawable/actionbar_shadow</item>
+        <item name="android:buttonStyle">@style/AppButton</item>
+    </style>
+
+    <style name="ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid">
+<!--        <item name="background">@drawable/actionbar_top_bg</item>
+       <item name="android:background">@drawable/actionbar_top_bg</item>
+        <item name="android:backgroundSplit">@drawable/abs__ab_bottom_solid_light_holo</item>
+       <item name="backgroundSplit">@drawable/abs__ab_bottom_solid_light_holo</item>-->
+        <item name="displayOptions">showHome|showTitle|disableHome</item>
+        <item name="android:displayOptions">showHome|showTitle|disableHome</item>
+        <item name="titleTextStyle">@style/ActionBar.TitleText</item>
+        <item name="android:titleTextStyle">@style/ActionBar.TitleText</item>
+        <item name="subtitleTextStyle">@style/ActionBar.SubtitleText</item>
+        <item name="android:subtitleTextStyle">@style/ActionBar.SubtitleText</item>
+    </style>
+    <style name="ActionBar.TitleText" parent="TextAppearance.Sherlock.Widget.ActionBar.Title">
+        <item name="android:textColor">@android:color/black</item>
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="ActionBar.SubtitleText" parent="TextAppearance.Sherlock.Widget.ActionBar.Subtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">#555</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="AppButton" parent="android:style/Widget.Button">
+        <item name="android:background">@drawable/__btn_default_holo_light</item>
+        <item name="android:gravity">center</item>
+        <item name="android:padding">8dp</item>
+    </style>
+
+
+
+    <style name="FormButtonText">
+        <item name="android:textSize">21sp</item>
+    </style>
+    <style name="FormSmallButtonText">
+        <item name="android:textSize">18dp</item>
+    </style>
+
+    <style name="score_player_name">
+        <item name="android:textSize">17sp</item>
+        <item name="android:textColor">#444</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="score_player_time">
+        <item name="android:layout_marginTop">6dp</item>
+        <item name="android:textSize">19sp</item>
+        <item name="android:textColor">#AAA</item>
+    </style>
+    <style name="CustomDialog" parent="android:style/Theme.Dialog">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowIsFloating">true</item>
+    </style>
+
+    <style name="dialog_title">
+        <item name="android:textSize">16sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:ellipsize">end</item>
+    </style>
+</resources>
