@@ -14,10 +14,10 @@
             android:defaultValue="false" />
         <CheckBoxPreference
             android:title="@string/pref_fastinput"
-            android:key="fastInputPref"
+            android:key="requiresValidationPref"
             android:summaryOn="@string/pref_fastinput_on"
             android:summaryOff="@string/pref_fastinput_off"
-            android:defaultValue="true" />
+            android:defaultValue="false" />
         <ListPreference
             android:title="@string/pref_inputtype"
             android:key="inputType"

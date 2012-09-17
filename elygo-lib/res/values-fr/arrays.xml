@@ -18,5 +18,17 @@
         <item>9</item>
         <item>10 (plus fort)</item>
     </string-array>
-        
+
+    <string-array name="inputTypes">
+        <item>Décalage (toujours)</item>
+        <item>Décalage (grands goban uniquement)</item>
+        <item>Mode stylet</item>
+    </string-array>
+
+    <string-array name="themePref">
+        <item>Standard</item>
+        <item>Bois sombre</item>
+        <item>Noir et blanc</item>
+    </string-array>
+
 </resources>

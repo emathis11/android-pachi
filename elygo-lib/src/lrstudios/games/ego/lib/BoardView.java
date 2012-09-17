@@ -29,6 +29,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.preference.PreferenceManager;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.SurfaceHolder;
@@ -37,6 +38,7 @@ import lrstudios.games.ego.lib.themes.BlackWhiteTheme;
 import lrstudios.games.ego.lib.themes.DarkBoardTheme;
 import lrstudios.games.ego.lib.themes.StandardTheme;
 import lrstudios.games.ego.lib.themes.Theme;
+import lrstudios.util.android.AndroidUtils;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -59,7 +61,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 	// Values from preferences
 	private Theme _theme;
 	private int _zoom_margin;
-	private boolean _fastInput;
+	private boolean _requiresValidation;
     private float _setting_offsetY;
     private boolean _offsetLarge;
     private int _gridLineSize;
@@ -85,15 +87,15 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 	private float _zoomFactor;
 	private int _stoneSize;
 	private Point _crossCursor = new Point(-1, -1);
+    private Point _moveValidated;
     private Rect _baseBounds;
     private Rect _clipBounds;
-    private boolean _needMoveValidation;
+    private boolean _isMoveLegal;
+    private boolean _forceRequiresValidation;
     private boolean _allowIllegalMoves;
     private boolean _playLock;
-	private boolean _moveValidated;
 	private boolean _showAnswers;
     private boolean _showVariations;
-	private boolean _resetBounds;
     private boolean _showFinalStatus;
     private boolean _reverseColors;
     private boolean _monocolor;
@@ -120,10 +122,22 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 		{
             if (!_playLock)
             {
-                final Point coords = _cache_coord2Point(event.getX(), event.getY() - _offsetY);
+                float x = event.getX();
+                float y = event.getY();
 
-                _moveValidated = (_crossCursor.x >= 0 && coords.equals(_crossCursor.x, _crossCursor.y));
-                moveCrossCursor(coords);
+                if (_requiresValidation)
+                {
+                    final Point coords = _cache_getBoardCoordsAtLocation(x, y);
+                    if (_crossCursor.x >= 0 && _isMoveLegal && coords.equals(_crossCursor.x, _crossCursor.y))
+                        _moveValidated = new Point(coords);
+                    else
+                        _moveValidated = null;
+                }
+                if (_moveValidated == null)
+                {
+                    final Point coords = _cache_getBoardCoordsAtLocation(x, y - _offsetY);
+                    moveCrossCursor(coords);
+                }
             }
 			return true;
 		}
@@ -131,17 +145,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 		@Override
 		public boolean onSingleTapUp(MotionEvent event)
 		{
-			if (!_fastInput && !_playLock)
+			if (_requiresValidation && !_playLock && _moveValidated != null)
             {
-                final Point coords = _cache_coord2Point(event.getX(), event.getY());
-                if (_moveValidated)
-                {
-                    if (_listener != null)
-                        _listener.onPress(coords.x, coords.y);
-                    moveCrossCursor(null);
-                }
+                if (_listener != null)
+                    _listener.onPress(_moveValidated.x, _moveValidated.y);
+                moveCrossCursor(null);
             }
-
 			return true;
 		}
 
@@ -155,9 +164,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     // This event isn't handled by the GestureDector so we handle it outside
 	private boolean onUp(MotionEvent event)
 	{
-		if (_fastInput && !_playLock)
+		if (!_requiresValidation && !_playLock)
 		{
-            final Point coords = _cache_coord2Point(event.getX(), event.getY() - _offsetY);
+            final Point coords = _cache_getBoardCoordsAtLocation(event.getX(), event.getY() - _offsetY);
 
 			if (_crossCursor.x >= 0 && _listener != null && _isInBounds(coords) &&
                 (_allowIllegalMoves || _game.isLegal(coords.x, coords.y)))
@@ -166,15 +175,19 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             }
 			moveCrossCursor(null);
 		}
+        else if (_requiresValidation && !_isMoveLegal)
+        {
+            moveCrossCursor(null);
+        }
 
 		return true;
 	}
 
 	private boolean onMove(MotionEvent event)
 	{
-        if (!_playLock)
+        if (!_playLock && _moveValidated == null)
         {
-            final Point coords = _cache_coord2Point(event.getX(), event.getY() - _offsetY);
+            final Point coords = _cache_getBoardCoordsAtLocation(event.getX(), event.getY() - _offsetY);
             moveCrossCursor(coords);
         }
 
@@ -214,11 +227,10 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 	public void readPreferences()
 	{
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
-
         _zoom_margin = Integer.parseInt(prefs.getString("tsumegoMarginPref", "3"));
 		_stonesPadding = Integer.parseInt(prefs.getString("stonePaddingPref", "1"));
 		_gridLineSize = Integer.parseInt(prefs.getString("gridLinesSizePref", "1"));
-		_fastInput = !_needMoveValidation && prefs.getBoolean("fastInputPref", true);
+		_requiresValidation = _forceRequiresValidation || prefs.getBoolean("requiresValidationPref", false);
         String skin = prefs.getString("themePref", "standard");
         String inputType = prefs.getString("inputType", "0");
 
@@ -241,20 +253,6 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         _offsetLarge = inputType.equals("offsetLarge");
 	}
 
-	/**
-	 * Initializes the View to invalidate the current board.
-	 * The variable _game must be defined before calling this function.
-	 * If zoom is true, the view will be zoomed to hide the empty parts of the board.
-	 */
-	private void initBoard()
-	{
-		_size = _game.board.getSize();
-		_showAnswers = false;
-		_resetBounds = true;
-
-		recreateGraphics();
-	}
-
 
 	/**
 	 * Changes the current board shown by this view.
@@ -263,7 +261,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 	{
 		_isZoom = allowZoom;
 		_game = game;
-		initBoard();
+
+        _size = _game.board.getSize();
+        _showAnswers = false;
+        _baseBounds = null;
+        recreateGraphics();
 	}
 
 	public void setZoomMargin(int margin)
@@ -285,9 +287,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /** Defines whether playing moves needs validation or not (this overrides the preference). */
     public void setMoveValidation(boolean needValidation)
     {
-        _needMoveValidation = needValidation;
-        if (needValidation)
-            _fastInput = false;
+        _forceRequiresValidation = needValidation;
     }
 
     /** Allows or prevents the view to fire onPress events for illegal moves. */
@@ -363,10 +363,15 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 	 */
 	private void moveCrossCursor(Point coords)
     {
-        if (coords != null && _isInBounds(coords) && (_allowIllegalMoves || _game.isLegal(coords.x, coords.y)))
+        if (_isInBounds(coords))
+        {
             _crossCursor.set(coords.x, coords.y);
+            _isMoveLegal = _allowIllegalMoves || _game.isLegal(coords.x, coords.y);
+        }
         else
+        {
             _crossCursor.set(-1, -1);
+        }
         invalidate(); // TODO repaint cross cursor seulement
 	}
 
@@ -394,15 +399,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 		if (_surfaceWidth <= 0 || _surfaceHeight <= 0)
 			return;
 
-        _clipBounds = new Rect(_size, _size, -1, -1);
         _baseGridInterval = _surfaceSmallestSize / (float) _size;
 
-        // resetBounds avoids rotating the board when recreateGraphics() is called multiple times
-        // during the same game or problem (this happens especially when the user go to
-        // the preferences screen during playing and go back).
-        boolean resetBounds = _resetBounds || _baseBounds == null;
-		_resetBounds = false;
-        _computeDimensions(_isZoom && resetBounds);
+        _computeDimensions(_isZoom && _baseBounds == null);
 
         if (!_offsetLarge || (_clipBounds.width() > 15 && _clipBounds.height() > 15))
             _offsetY = _setting_offsetY;
@@ -434,7 +433,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     private void _computeDimensions(boolean allowRotation)
     {
         final Rect maxBounds = new Rect(0, 0, _size - 1, _size - 1);
-        _clipBounds = _game.board.getBounds();
+        _clipBounds = (_baseBounds == null) ? _game.board.getBounds() : _baseBounds;
+
+        // _baseBounds avoids rotating/zooming the same problem multiple times (this may
+        // happen especially when the user go to the preferences screen during playing
+        // and go back).
+        _baseBounds = new Rect(_clipBounds);
 
         if (!_isZoom || _clipBounds.right < 0 || _clipBounds.bottom < 0)
         {
@@ -443,7 +447,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
         else
         {
-            Utils.Rect_addMargin(_clipBounds, (_size < 19 ? 99 : _zoom_margin), maxBounds);
+            AndroidUtils.Rect_addMargin(_clipBounds, (_size < 19 ? 99 : _zoom_margin), maxBounds);
         }
 
         int hSize = _clipBounds.width() + 1;
@@ -467,12 +471,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             || (hSize < vSize && _finalWidth > _finalHeight)))
         {
             _game.rotateCCW();
+            _baseBounds = null;
             _computeDimensions(false);
         }
         else
         {
-            _baseBounds = new Rect(_clipBounds);
-
             // If an entire side of the board is shown, there may be some space left on this side. We remove it
             int spaceWidth = (_surfaceWidth - _finalWidth) / _stoneSize;
 
@@ -502,7 +505,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 _finalHeight += _stoneSize * bottomSpace;
             }
 
-            Utils.Rect_crop(_clipBounds, maxBounds);
+            AndroidUtils.Rect_crop(_clipBounds, maxBounds);
         }
     }
 
@@ -513,7 +516,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 		if (_game == null)
 		{
 			_game = new GoGame(9, 6.5, 0);
-			initBoard();
+			changeGame(_game, false);
 		}
         setWillNotDraw(false); // Necessary for `onDraw()` to be called
 	}
@@ -662,7 +665,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 				Rect bounds = new Rect();
 				paint.getTextBounds(markText, 0, markText.length(), bounds);
 				canvas.drawText(markText,
-						stoneSize * x + (stoneSize / 2.0f) - Utils.getTextWidth(markText, paint) / 2.0f, // getTextWidth() is more accurate than getBounds()
+						stoneSize * x + (stoneSize / 2.0f) - AndroidUtils.getTextWidth(markText, paint) / 2.0f, // getTextWidth() is more accurate than getBounds()
 						stoneSize * y + (stoneSize / 2.0f) + bounds.height() / 2.0f,
 						paint);
 			}
@@ -699,9 +702,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 		{
 			for (GameNode node : _game.getCurrentNode().nextNodes)
 			{
+                if (node.value < 0)
+                    continue;
+
                 int x = node.x - _clipBounds.left;
                 int y = node.y - _clipBounds.top;
-
 				canvas.drawCircle(
 						stoneSize * x + stoneSize / 2,
 						stoneSize * y + stoneSize / 2,
@@ -710,32 +715,36 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 		}
 
         // Cross cursor
-        if (_crossCursor.x >= 0 && (_allowIllegalMoves || _game.isLegal(_crossCursor.x, _crossCursor.y)))
+        if (_crossCursor.x >= 0)
         {
             int x = _crossCursor.x - _clipBounds.left;
             int y = _crossCursor.y - _clipBounds.top;
 
+            Paint paint = _isMoveLegal ? _theme.crossCursorPaint : _theme.illegalCrossCursorPaint;
             canvas.drawLine(
                 stoneSize * x + stoneSize / 2f, 0,
-                stoneSize * x + stoneSize / 2f, _surfaceHeight, _theme.crossCursorPaint);
+                stoneSize * x + stoneSize / 2f, _surfaceHeight, paint);
             canvas.drawLine(
                 -_leftMargin, stoneSize * y + stoneSize / 2f,
-                _surfaceWidth - _leftMargin, stoneSize * y + stoneSize / 2f, _theme.crossCursorPaint);
+                _surfaceWidth - _leftMargin, stoneSize * y + stoneSize / 2f, paint);
 
-            Drawable cursor;
-            byte nextPlayer = _game.getNextPlayer();
-            if (nextPlayer == GoBoard.ANY)
-                cursor = _theme.anyStoneDrawable;
-            else if (nextPlayer == GoBoard.EMPTY)
-                cursor = _theme.blackTerritory;
-            else if (!_monocolor && ((nextPlayer == GoBoard.BLACK && !_reverseColors) || (nextPlayer == GoBoard.WHITE && _reverseColors)))
-                cursor = _cursorDrawableBlack;
-            else
-                cursor = _cursorDrawableWhite;
-            cursor.setBounds(
-                stoneSize * x + _stonesPadding, stoneSize * y + _stonesPadding,
-                stoneSize * x - _stonesPadding + _stoneSize, stoneSize * y - _stonesPadding + _stoneSize);
-            cursor.draw(canvas);
+            if (_isMoveLegal)
+            {
+                Drawable cursor;
+                byte nextPlayer = _game.getNextPlayer();
+                if (nextPlayer == GoBoard.ANY)
+                    cursor = _theme.anyStoneDrawable;
+                else if (nextPlayer == GoBoard.EMPTY)
+                    cursor = _theme.blackTerritory;
+                else if (!_monocolor && ((nextPlayer == GoBoard.BLACK && !_reverseColors) || (nextPlayer == GoBoard.WHITE && _reverseColors)))
+                    cursor = _cursorDrawableBlack;
+                else
+                    cursor = _cursorDrawableWhite;
+                cursor.setBounds(
+                    stoneSize * x + _stonesPadding, stoneSize * y + _stonesPadding,
+                    stoneSize * x - _stonesPadding + _stoneSize, stoneSize * y - _stonesPadding + _stoneSize);
+                cursor.draw(canvas);
+            }
         }
 
         // Animations
@@ -842,7 +851,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * Returns the board coordinates located at the specified (x, y) point on the surface.
      * WARNING : for performance issues, the reference returned will always be the same.
      */
-	private Point _cache_coord2Point(float x, float y)
+	private Point _cache_getBoardCoordsAtLocation(float x, float y)
 	{
         int finalX = (int)(x / _stoneSize) + _clipBounds.left;
 		int finalY = (int)(y / _stoneSize) + _clipBounds.top;

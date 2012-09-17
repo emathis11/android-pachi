@@ -25,6 +25,7 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 import android.util.AttributeSet;
 import android.view.View;
+import lrstudios.util.android.AndroidUtils;
 
 
 public class PrisonersView extends View
@@ -129,7 +130,7 @@ public class PrisonersView extends View
         _textPaint.getTextBounds(_prisoners, 0, _prisoners.length(), rect);
         canvas.drawText(
                 _prisoners,
-                (_stoneSize - Utils.getTextWidth(_prisoners, _textPaint)) / 2f,
+                (_stoneSize - AndroidUtils.getTextWidth(_prisoners, _textPaint)) / 2f,
                 (_stoneSize - rect.height()) / 2f + rect.height(),
                 _textPaint);
     }

@@ -420,7 +420,7 @@ public final class SgfParser
                 _writeProperty("BR", _gameInfo.blackRank);
 
             _writeProperty("SZ", _gameInfo.boardSize);
-            _writeProperty("KM", Utils.komiToString(_gameInfo.komi, '.'));
+            _writeProperty("KM", _komiToSgfString(_gameInfo.komi));
             if (_gameInfo.handicap > 0)
                 _writeProperty("HA", _gameInfo.handicap);
             if (_gameInfo.result != null)
@@ -573,6 +573,11 @@ public final class SgfParser
             _cachedCoords.x = sgfCoords.charAt(0) - 'a';
             _cachedCoords.y = sgfCoords.charAt(1) - 'a';
         }
+    }
+
+    private String _komiToSgfString(double komi)
+    {
+        return String.format("%d.%d", (int)(komi), ((int)Math.round(komi * 10.0) % 10));
     }
 
 

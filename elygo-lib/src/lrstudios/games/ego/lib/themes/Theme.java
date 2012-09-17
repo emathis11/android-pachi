@@ -53,6 +53,8 @@ public abstract class Theme
 
 	/** Objet Paint à utiliser pour dessiner les lignes du cross cursor. */
 	public Paint crossCursorPaint;
+    /** Objet Paint à utiliser pour dessiner les lignes du cross cursor pour un coup illégal. */
+    public Paint illegalCrossCursorPaint;
 
 	/** Objet Paint à utiliser pour dessiner les marques représentant une bonne variation. */
 	public Paint goodVariationPaint;
@@ -132,6 +134,10 @@ public abstract class Theme
 		crossCursorPaint = new Paint();
 		crossCursorPaint.setColor(Color.rgb(158, 55, 158));
 		crossCursorPaint.setStrokeWidth(3);
+
+        illegalCrossCursorPaint = new Paint();
+        illegalCrossCursorPaint.setColor(Color.rgb(232, 25, 25));
+        illegalCrossCursorPaint.setStrokeWidth(2);
 
 		goodVariationPaint = new Paint();
 		goodVariationPaint.setAntiAlias(true);

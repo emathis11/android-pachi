@@ -24,7 +24,7 @@ import android.widget.Toast;
 import com.actionbarsherlock.app.SherlockFragmentActivity;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
-import lrstudios.games.ego.lib.Utils;
+import lrstudios.util.android.AndroidUtils;
 
 
 /**
@@ -74,7 +74,7 @@ public class BetterFragmentActivity extends SherlockFragmentActivity
         new AlertDialog.Builder(this)
             .setTitle(title)
             .setMessage(message)
-            .setPositiveButton(android.R.string.ok, Utils.getEmptyDialogOnClickListener())
+            .setPositiveButton(android.R.string.ok, AndroidUtils.getEmptyDialogOnClickListener())
             .show();
     }
 

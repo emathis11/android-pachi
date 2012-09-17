@@ -43,6 +43,7 @@ import lrstudios.games.ego.lib.BoardView;
 import lrstudios.games.ego.lib.GoGame;
 import lrstudios.games.ego.lib.R;
 import lrstudios.games.ego.lib.Utils;
+import lrstudios.util.android.AndroidUtils;
 import lrstudios.util.android.ui.BetterFragmentActivity;
 
 import java.io.File;
@@ -103,7 +104,6 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
 
         if (requestCode == CODE_PREFERENCES_ACTIVITY)
         {
-            Log.v(TAG, "Preferences reloaded ('preferences' activity closed)");
             _loadPreferences();
             _boardView.readPreferences();
             _boardView.recreateGraphics();
@@ -144,14 +144,14 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
         final CheckBox chkSaveSd = (CheckBox) dialogView.findViewById(R.id.chk_save_sd);
         final TextView txtWarning = (TextView) dialogView.findViewById(R.id.txt_warning_file_overwrite);
 
-        if (!Utils.isExternalStorageWriteable())
+        if (!AndroidUtils.isExternalStorageWriteable())
         {
             chkSaveSd.setChecked(false);
             chkSaveSd.setEnabled(false);
             chkSaveSd.setClickable(false);
         }
 
-        edtFileName.setFilters(new InputFilter[]{Utils.getFilenameInputFilter()});
+        edtFileName.setFilters(new InputFilter[]{AndroidUtils.getFilenameInputFilter()});
         edtFileName.setText(defaultName);
         edtFileName.addTextChangedListener(new TextWatcher()
         {
@@ -237,7 +237,7 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
                     }
                 }
             })
-            .setNegativeButton(android.R.string.cancel, Utils.getEmptyDialogOnClickListener())
+            .setNegativeButton(android.R.string.cancel, AndroidUtils.getEmptyDialogOnClickListener())
             .show();
     }
 
