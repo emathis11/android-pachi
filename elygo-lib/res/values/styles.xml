@@ -9,7 +9,7 @@
     </style>
 
     <style name="ActionBar" parent="Widget.Sherlock.Light.ActionBar.Solid">
-<!--        <item name="background">@drawable/actionbar_top_bg</item>
+        <!--        <item name="background">@drawable/actionbar_top_bg</item>
        <item name="android:background">@drawable/actionbar_top_bg</item>
         <item name="android:backgroundSplit">@drawable/abs__ab_bottom_solid_light_holo</item>
        <item name="backgroundSplit">@drawable/abs__ab_bottom_solid_light_holo</item>-->
@@ -35,7 +35,6 @@
         <item name="android:gravity">center</item>
         <item name="android:padding">8dp</item>
     </style>
-
 
 
     <style name="FormButtonText">

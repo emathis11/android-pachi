@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Default locale: EN (English) -->
-    
+
     <!-- Frequent words -->
     <string name="white">White</string>
     <string name="black">Black</string>
@@ -28,7 +28,7 @@
     <string name="gtp_resume_game">Resume</string>
     <string name="gtp_resign_win">You won by resignation !</string>
     <string name="gtp_game_result">%1$s wins by %2$s !</string>
-    
+
     <string name="board_no_moves">Game start</string>
     <string name="board_move_number">Move %d</string>
     <string name="board_game_vs">Game vs %1$s %2$s</string>
@@ -36,14 +36,15 @@
     <string name="board_compute_territory">Calculating territory status…</string>
     <string name="board_player_resigned">%s resigned the game.</string>
     <string name="board_player_passes">%s passes.</string>
-    
+
     <!-- Save game Dialog -->
     <string name="hint_filename">Game name</string>
     <string name="dialog_title_save">Save game</string>
     <string name="txt_save_sd">Save on SD card</string>
     <string name="enter_game_name">Enter a name for this game :</string>
     <string name="game_saved">Game %s saved.</string>
-    <string name="overwrite_warning">A game with this name already exists. If you continue, it will be overwritten.</string>
+    <string name="overwrite_warning">A game with this name already exists. If you continue, it will be overwritten.
+    </string>
 
     <!-- Game Info Dialog -->
     <string name="dialog_title_gameinfo">Details</string>
@@ -62,8 +63,8 @@
     <string name="pref_statusbar">Hide Status bar</string>
     <string name="pref_statusbar_desc">Only if a board is open</string>
     <string name="pref_fastinput">Requires validation</string>
-    <string name="pref_fastinput_on">Moves are played immediately</string>
-    <string name="pref_fastinput_off">Playing a move requires validation (a second tap)</string>
+    <string name="pref_fastinput_off">Moves are played immediately</string>
+    <string name="pref_fastinput_on">Playing a move requires validation (a second tap)</string>
     <string name="pref_inputtype">Stone input type</string>
     <string name="pref_inputtype_desc">Provides several ways to play a move on the board</string>
     <string name="pref_theme">Board theme</string>
@@ -84,5 +85,5 @@
     <string name="err_invalid_integer">The value "%s" is not a valid integer.</string>
     <string name="err_occurred">An error occurred (%s).</string>
     <string name="err_dialog_title">Error</string>
-    
+
 </resources>

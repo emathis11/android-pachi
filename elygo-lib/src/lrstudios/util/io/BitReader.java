@@ -26,16 +26,14 @@ import java.io.InputStream;
 /**
  * Reads bits from an InputStream.
  */
-public class BitReader
-{
+public class BitReader {
     private InputStream _stream;
     private byte[] _buffer;
     private int _bufferPos;
     private int _bitmask;
 
-    
-    public BitReader(InputStream stream)
-    {
+
+    public BitReader(InputStream stream) {
         _stream = stream;
         _buffer = new byte[128];
         _bufferPos = _buffer.length;
@@ -47,27 +45,22 @@ public class BitReader
      *
      * @throws IOException An error occured during reading, or the end of stream has been reached.
      */
-    public boolean read() throws IOException
-    {
-        if (_bufferPos == _buffer.length)
-        {
+    public boolean read() throws IOException {
+        if (_bufferPos == _buffer.length) {
             int bytesRead = _stream.read(_buffer);
             if (bytesRead < 0)
                 throw new EOFException();
-            
+
             _bufferPos = _buffer.length - bytesRead;
             System.arraycopy(_buffer, 0, _buffer, _bufferPos, bytesRead);
         }
-        
+
         boolean bit = (_buffer[_bufferPos] & _bitmask) != 0;
 
-        if (_bitmask == 0x80)
-        {
+        if (_bitmask == 0x80) {
             _bitmask = 0x1;
             _bufferPos++;
-        }
-        else
-        {
+        } else {
             _bitmask <<= 1;
         }
 
@@ -82,14 +75,12 @@ public class BitReader
      * @param bitsToRead The number of bits to read, between 1 and 64 (included).
      * @throws IOException An error occured during reading, or the end of stream has been reached.
      */
-    public long read(int bitsToRead) throws IOException
-    {
+    public long read(int bitsToRead) throws IOException {
         if (bitsToRead > 64)
             bitsToRead = 64;
 
         long result = 0;
-        for (int i = bitsToRead - 1; i >= 0; i--)
-        {
+        for (int i = bitsToRead - 1; i >= 0; i--) {
             if (read())
                 result |= 1 << i;
         }

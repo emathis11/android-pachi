@@ -19,8 +19,7 @@
 package lrstudios.util;
 
 
-public final class Rect
-{
+public final class Rect {
     public int top;
     public int left;
     public int bottom;
@@ -30,15 +29,13 @@ public final class Rect
     /**
      * Creates a new rectangle with the coordinates set to 0.
      */
-    public Rect()
-    {
+    public Rect() {
     }
 
     /**
      * Creates a new rectangle with the specified coordinates.
      */
-    public Rect(int left, int top, int right, int bottom)
-    {
+    public Rect(int left, int top, int right, int bottom) {
         this.left = left;
         this.top = top;
         this.right = right;
@@ -49,15 +46,13 @@ public final class Rect
     /**
      * Returns true if (x,y) is inside the Rectangle. Both left, top, bottom, right are considered to be inside.
      */
-    public boolean contains(int x, int y)
-    {
+    public boolean contains(int x, int y) {
         return (x >= left && x <= right && y >= top && y <= bottom);
     }
 
 
     @Override
-    public String toString()
-    {
+    public String toString() {
         return "[Rect] top=" + top + ", left=" + left + ", bottom=" + bottom + ", right=" + right;
     }
 }

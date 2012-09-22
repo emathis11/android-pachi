@@ -62,8 +62,8 @@
     <string name="pref_statusbar">Ocultar la barra de estatuto</string>
     <string name="pref_statusbar_desc">Unicamente si un goban está abierto</string>
     <string name="pref_fastinput">Validación de las jugadas</string>
-    <string name="pref_fastinput_on">Las jugadas son efectivos al soltar de la clave</string>
-    <string name="pref_fastinput_off">Jugar un movimiento necesita una validación (Segundo apoyo)</string>
+    <string name="pref_fastinput_off">Las jugadas son efectivos al soltar de la clave</string>
+    <string name="pref_fastinput_on">Jugar un movimiento necesita una validación (Segundo apoyo)</string>
     <string name="pref_inputtype">Colocación de piedras</string>
     <string name="pref_inputtype_desc">Elija el modo con el cuál los movimientos están jugados sobre el goban</string>
     <string name="pref_theme">Tema del goban</string>
@@ -77,10 +77,12 @@
     <string name="err_internal">Ha ocurrido un error interno. Por favor, trata de nuevo.</string>
     <string name="err_filename_short">El nombre de la partida es demasiado corto.</string>
     <string name="err_sd_read_only">No se puede salvar la partida : la carte SD manca.</string>
-    <string name="err_save_game">Ha occurido un error interno durante el respaldo de la partida. Proba de nuevo.</string>
+    <string name="err_save_game">Ha occurido un error interno durante el respaldo de la partida. Proba de nuevo.
+    </string>
     <string name="err_file_not_found">No se encuentra el archivo : %s</string>
     <string name="err_file_read_error">Se puede leer el archivo : %s</string>
-    <string name="err_loading_sgf">Error durante la carga de la partida : el archivo SGF está probablemente dañado.</string>
+    <string name="err_loading_sgf">Error durante la carga de la partida : el archivo SGF está probablemente dañado.
+    </string>
     <string name="err_invalid_integer">El valor "%s" no es un nombre completo válido.</string>
     <string name="err_occurred">Ha ocurrido un error (%s).</string>
     <string name="err_dialog_title">Error</string>

@@ -26,60 +26,91 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.PathShape;
 
 
-public abstract class Theme
-{
-	private static final String TAG = "Theme";
+public abstract class Theme {
+    private static final String TAG = "Theme";
 
 
-	/** Le bitmap contenant l'image d'une pierre noire. */
-	public Bitmap blackStoneBitmap;
+    /**
+     * Le bitmap contenant l'image d'une pierre noire.
+     */
+    public Bitmap blackStoneBitmap;
 
-	/** Le Drawable représentant une pierre blanche. */
-	public Bitmap whiteStoneBitmap;
+    /**
+     * Le Drawable représentant une pierre blanche.
+     */
+    public Bitmap whiteStoneBitmap;
 
-	/** Objet Paint à utiliser pour dessiner les marques sur des pierres noires. */
-	public Paint blackMarkPaint;
-    /** Objet Paint à utiliser pour dessiner les marques sur des pierres blanches. */
-	public Paint whiteMarkPaint;
-	/** Objet Paint à utiliser pour dessiner les marques directement sur le goban. */
-	public Paint boardMarkPaint;
+    /**
+     * Objet Paint à utiliser pour dessiner les marques sur des pierres noires.
+     */
+    public Paint blackMarkPaint;
+    /**
+     * Objet Paint à utiliser pour dessiner les marques sur des pierres blanches.
+     */
+    public Paint whiteMarkPaint;
+    /**
+     * Objet Paint à utiliser pour dessiner les marques directement sur le goban.
+     */
+    public Paint boardMarkPaint;
 
-    /** Objet Paint à utiliser pour dessiner un texte sur une pierre noire. */
+    /**
+     * Objet Paint à utiliser pour dessiner un texte sur une pierre noire.
+     */
     public Paint blackLabelPaint;
-    /** Objet Paint à utiliser pour dessiner un texte sur une pierre blanche. */
+    /**
+     * Objet Paint à utiliser pour dessiner un texte sur une pierre blanche.
+     */
     public Paint whiteLabelPaint;
-    /** Objet Paint à utiliser pour dessiner un texte directement sur le goban. */
+    /**
+     * Objet Paint à utiliser pour dessiner un texte directement sur le goban.
+     */
     public Paint boardLabelPaint;
 
-	/** Objet Paint à utiliser pour dessiner les lignes du cross cursor. */
-	public Paint crossCursorPaint;
-    /** Objet Paint à utiliser pour dessiner les lignes du cross cursor pour un coup illégal. */
+    /**
+     * Objet Paint à utiliser pour dessiner les lignes du cross cursor.
+     */
+    public Paint crossCursorPaint;
+    /**
+     * Objet Paint à utiliser pour dessiner les lignes du cross cursor pour un coup illégal.
+     */
     public Paint illegalCrossCursorPaint;
 
-	/** Objet Paint à utiliser pour dessiner les marques représentant une bonne variation. */
-	public Paint goodVariationPaint;
+    /**
+     * Objet Paint à utiliser pour dessiner les marques représentant une bonne variation.
+     */
+    public Paint goodVariationPaint;
 
-	/** Objet Paint à utiliser pour dessiner les marques représentant une mauvaise variation. */
-	public Paint badVariationPaint;
+    /**
+     * Objet Paint à utiliser pour dessiner les marques représentant une mauvaise variation.
+     */
+    public Paint badVariationPaint;
 
-	/** Marque en forme de triangle. */
-	public ShapeDrawable triangleMark;
-	/** Marque en forme de cercle. */
-	public ShapeDrawable circleMark;
-	/** Marque en forme de croix. */
-	public ShapeDrawable crossMark;
-	/** Marque en forme de carré. */
-	public ShapeDrawable squareMark;
+    /**
+     * Marque en forme de triangle.
+     */
+    public ShapeDrawable triangleMark;
+    /**
+     * Marque en forme de cercle.
+     */
+    public ShapeDrawable circleMark;
+    /**
+     * Marque en forme de croix.
+     */
+    public ShapeDrawable crossMark;
+    /**
+     * Marque en forme de carré.
+     */
+    public ShapeDrawable squareMark;
 
     public ShapeDrawable blackTerritory;
     public ShapeDrawable whiteTerritory;
     public ShapeDrawable anyStoneDrawable;
 
     protected Paint _hoshiPaint;
-	protected Paint _gridPaint;
+    protected Paint _gridPaint;
     protected Paint _anyPaint;
-	protected PathShape _hoshiShape;
-	protected PathShape _gridShape;
+    protected PathShape _hoshiShape;
+    protected PathShape _gridShape;
     protected Drawable _deadBlackStone;
     protected Drawable _deadWhiteStone;
     protected Drawable _blackVariation;
@@ -89,9 +120,9 @@ public abstract class Theme
     protected Config _config;
 
 
-
-
-    /** Dessine le fond d'écran sur le canvas spécifié. */
+    /**
+     * Dessine le fond d'écran sur le canvas spécifié.
+     */
     public abstract void drawBackground(Canvas canvas, int left, int top, int right, int bottom);
 
     public abstract Bitmap createBlackStoneBitmap(int stoneSize);
@@ -99,9 +130,10 @@ public abstract class Theme
     public abstract Bitmap createWhiteStoneBitmap(int stoneSize);
 
 
-    /** Dans le constructeur on place l'initialisation indépendante des paramètres du goban à afficher (taille, ...). */
-	public Theme(Context context)
-	{
+    /**
+     * Dans le constructeur on place l'initialisation indépendante des paramètres du goban à afficher (taille, ...).
+     */
+    public Theme(Context context) {
         _context = context;
 
         _gridPaint = new Paint();
@@ -114,38 +146,38 @@ public abstract class Theme
         _anyPaint.setStrokeWidth(0);
 
         blackMarkPaint = new Paint();
-		blackMarkPaint.setAntiAlias(true);
-		blackMarkPaint.setColor(Color.WHITE);
-		blackMarkPaint.setStyle(Paint.Style.STROKE);
-		blackMarkPaint.setStrokeWidth(4);
+        blackMarkPaint.setAntiAlias(true);
+        blackMarkPaint.setColor(Color.WHITE);
+        blackMarkPaint.setStyle(Paint.Style.STROKE);
+        blackMarkPaint.setStrokeWidth(4);
 
-		whiteMarkPaint = new Paint();
-		whiteMarkPaint.setAntiAlias(true);
-		whiteMarkPaint.setColor(Color.BLACK);
-		whiteMarkPaint.setStyle(Paint.Style.STROKE);
-		whiteMarkPaint.setStrokeWidth(4);
+        whiteMarkPaint = new Paint();
+        whiteMarkPaint.setAntiAlias(true);
+        whiteMarkPaint.setColor(Color.BLACK);
+        whiteMarkPaint.setStyle(Paint.Style.STROKE);
+        whiteMarkPaint.setStrokeWidth(4);
 
-		boardMarkPaint = new Paint();
-		boardMarkPaint.setAntiAlias(true);
-		boardMarkPaint.setColor(Color.BLACK);
-		boardMarkPaint.setStyle(Paint.Style.STROKE);
-		boardMarkPaint.setStrokeWidth(4);
+        boardMarkPaint = new Paint();
+        boardMarkPaint.setAntiAlias(true);
+        boardMarkPaint.setColor(Color.BLACK);
+        boardMarkPaint.setStyle(Paint.Style.STROKE);
+        boardMarkPaint.setStrokeWidth(4);
 
-		crossCursorPaint = new Paint();
-		crossCursorPaint.setColor(Color.rgb(158, 55, 158));
-		crossCursorPaint.setStrokeWidth(3);
+        crossCursorPaint = new Paint();
+        crossCursorPaint.setColor(Color.rgb(158, 55, 158));
+        crossCursorPaint.setStrokeWidth(3);
 
         illegalCrossCursorPaint = new Paint();
         illegalCrossCursorPaint.setColor(Color.rgb(232, 25, 25));
         illegalCrossCursorPaint.setStrokeWidth(2);
 
-		goodVariationPaint = new Paint();
-		goodVariationPaint.setAntiAlias(true);
-		goodVariationPaint.setColor(Color.rgb(0, 200, 0));
+        goodVariationPaint = new Paint();
+        goodVariationPaint.setAntiAlias(true);
+        goodVariationPaint.setColor(Color.rgb(0, 200, 0));
 
-		badVariationPaint = new Paint();
-		badVariationPaint.setAntiAlias(true);
-		badVariationPaint.setColor(Color.rgb(200, 0, 0));
+        badVariationPaint = new Paint();
+        badVariationPaint.setAntiAlias(true);
+        badVariationPaint.setColor(Color.rgb(200, 0, 0));
 
         blackLabelPaint = new Paint();
         blackLabelPaint.setAntiAlias(true);
@@ -159,9 +191,10 @@ public abstract class Theme
     }
 
 
-	/** Initialise le skin actuel (cette fonction doit être appelée avant d'utiliser le skin). */
-	public void init(Config config)
-	{
+    /**
+     * Initialise le skin actuel (cette fonction doit être appelée avant d'utiliser le skin).
+     */
+    public void init(Config config) {
         _config = config;
         float stoneSize = config.stoneSize;
         int boardSize = config.boardSize;
@@ -173,43 +206,40 @@ public abstract class Theme
 
         final float intervalDIV2 = stoneSize / 2.0f;
         final float boardWidth = stoneSize * boardSize;
-		final float lineEnd = boardWidth - intervalDIV2;
+        final float lineEnd = boardWidth - intervalDIV2;
 
         // Grille
-		Path path = new Path();
-		for (int i = 0; i < boardSize; i++)
-		{
-			final float pos = intervalDIV2 + stoneSize * i;
-			path.moveTo(pos, intervalDIV2);
-			path.lineTo(pos, lineEnd);
-			path.moveTo(intervalDIV2, pos);
-			path.lineTo(lineEnd, pos);
-		}
-		_gridShape = new PathShape(path, boardWidth, boardWidth);
+        Path path = new Path();
+        for (int i = 0; i < boardSize; i++) {
+            final float pos = intervalDIV2 + stoneSize * i;
+            path.moveTo(pos, intervalDIV2);
+            path.lineTo(pos, lineEnd);
+            path.moveTo(intervalDIV2, pos);
+            path.lineTo(lineEnd, pos);
+        }
+        _gridShape = new PathShape(path, boardWidth, boardWidth);
 
 
-		// Hoshis
-		path = new Path();
-		float radius = intervalDIV2 / 4.0f;
-		int decal = (boardSize > 12) ? 7 : 5;
+        // Hoshis
+        path = new Path();
+        float radius = intervalDIV2 / 4.0f;
+        int decal = (boardSize > 12) ? 7 : 5;
 
-		path.addCircle(intervalDIV2 * decal, intervalDIV2 * decal, radius, Direction.CW);
-		path.addCircle(boardWidth - intervalDIV2 * decal, intervalDIV2 * decal, radius, Direction.CW);
-		path.addCircle(intervalDIV2 * decal, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
-		path.addCircle(boardWidth - intervalDIV2 * decal, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
+        path.addCircle(intervalDIV2 * decal, intervalDIV2 * decal, radius, Direction.CW);
+        path.addCircle(boardWidth - intervalDIV2 * decal, intervalDIV2 * decal, radius, Direction.CW);
+        path.addCircle(intervalDIV2 * decal, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
+        path.addCircle(boardWidth - intervalDIV2 * decal, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
 
-		if (boardSize % 2 == 1)
-		{
-			path.addCircle(boardWidth / 2f, boardWidth / 2f, radius, Direction.CW);
-			if (boardSize > 10)
-			{
-				path.addCircle(boardWidth / 2f, intervalDIV2 * decal, radius, Direction.CW);
-				path.addCircle(boardWidth / 2f, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
-				path.addCircle(intervalDIV2 * decal, boardWidth / 2f, radius, Direction.CW);
-				path.addCircle(boardWidth - intervalDIV2 * decal, boardWidth / 2f, radius, Direction.CW);
-			}
-		}
-		_hoshiShape = new PathShape(path, boardWidth, boardWidth);
+        if (boardSize % 2 == 1) {
+            path.addCircle(boardWidth / 2f, boardWidth / 2f, radius, Direction.CW);
+            if (boardSize > 10) {
+                path.addCircle(boardWidth / 2f, intervalDIV2 * decal, radius, Direction.CW);
+                path.addCircle(boardWidth / 2f, boardWidth - intervalDIV2 * decal, radius, Direction.CW);
+                path.addCircle(intervalDIV2 * decal, boardWidth / 2f, radius, Direction.CW);
+                path.addCircle(boardWidth - intervalDIV2 * decal, boardWidth / 2f, radius, Direction.CW);
+            }
+        }
+        _hoshiShape = new PathShape(path, boardWidth, boardWidth);
 
         int surfaceHeight = config.surfaceHeight;
         int surfaceWidth = config.surfaceWidth;
@@ -286,15 +316,15 @@ public abstract class Theme
     }
 
 
-	/** Dessine la grille sur le canvas spécifié. */
-	public void drawGrid(Canvas canvas)
-	{
-		_gridShape.draw(canvas, _gridPaint);
-		_hoshiShape.draw(canvas, _hoshiPaint);
-	}
+    /**
+     * Dessine la grille sur le canvas spécifié.
+     */
+    public void drawGrid(Canvas canvas) {
+        _gridShape.draw(canvas, _gridPaint);
+        _hoshiShape.draw(canvas, _hoshiPaint);
+    }
 
-    public void drawDeadBlackStone(Canvas canvas, int left, int top, int interval)
-    {
+    public void drawDeadBlackStone(Canvas canvas, int left, int top, int interval) {
         int stonePadding = _config.stonesPadding;
         _deadBlackStone.setBounds(left + stonePadding, top + stonePadding, left + interval - stonePadding, top + interval - stonePadding);
         _deadBlackStone.draw(canvas);
@@ -302,8 +332,7 @@ public abstract class Theme
         whiteTerritory.draw(canvas);
     }
 
-    public void drawDeadWhiteStone(Canvas canvas, int left, int top, int interval)
-    {
+    public void drawDeadWhiteStone(Canvas canvas, int left, int top, int interval) {
         int stonePadding = _config.stonesPadding;
         _deadWhiteStone.setBounds(left + stonePadding, top + stonePadding, left + interval - stonePadding, top + interval - stonePadding);
         _deadWhiteStone.draw(canvas);
@@ -311,30 +340,26 @@ public abstract class Theme
         blackTerritory.draw(canvas);
     }
 
-    public void drawBlackVariation(Canvas canvas, int left, int top, int interval)
-    {
+    public void drawBlackVariation(Canvas canvas, int left, int top, int interval) {
         int stonePadding = _config.stonesPadding;
         _blackVariation.setBounds(left + stonePadding, top + stonePadding, left + interval - stonePadding, top + interval - stonePadding);
         _blackVariation.draw(canvas);
     }
 
-    public void drawWhiteVariation(Canvas canvas, int left, int top, int interval)
-    {
+    public void drawWhiteVariation(Canvas canvas, int left, int top, int interval) {
         int stonePadding = _config.stonesPadding;
         _whiteVariation.setBounds(left + stonePadding, top + stonePadding, left + interval - stonePadding, top + interval - stonePadding);
         _whiteVariation.draw(canvas);
     }
 
-    public void drawAnyStone(Canvas canvas, int left, int top, int interval)
-    {
+    public void drawAnyStone(Canvas canvas, int left, int top, int interval) {
         int stonePadding = _config.stonesPadding;
         anyStoneDrawable.setBounds(left + stonePadding, top + stonePadding, left + interval - stonePadding, top + interval - stonePadding);
         anyStoneDrawable.draw(canvas);
     }
 
 
-    public static Bitmap makeBitmap(Drawable drawable, int bitmapWidth, int bitmapHeight, Bitmap.Config config)
-    {
+    public static Bitmap makeBitmap(Drawable drawable, int bitmapWidth, int bitmapHeight, Bitmap.Config config) {
         Bitmap bitmap = Bitmap.createBitmap(bitmapWidth, bitmapHeight, config);
         Canvas canvas = new Canvas(bitmap);
         drawable.setBounds(0, 0, bitmapWidth, bitmapHeight);
@@ -343,8 +368,7 @@ public abstract class Theme
     }
 
 
-    public static class Config
-    {
+    public static class Config {
         public final int surfaceWidth;
         public final int surfaceHeight;
         public final float stoneSize;
@@ -353,8 +377,7 @@ public abstract class Theme
         public final int stonesPadding;
 
 
-        public Config(int surfaceWidth, int surfaceHeight, float stoneSize, int boardSize, int gridLineSize, int stonesPadding)
-        {
+        public Config(int surfaceWidth, int surfaceHeight, float stoneSize, int boardSize, int gridLineSize, int stonesPadding) {
             this.surfaceWidth = surfaceWidth;
             this.surfaceHeight = surfaceHeight;
             this.stoneSize = stoneSize;

@@ -1,11 +1,11 @@
 <resources>
-    
+
     <string-array name="playColor">
         <item>Noir</item>
         <item>Blanc</item>
         <item>Aléatoire</item>
     </string-array>
-    
+
     <string-array name="playLevels">
         <item>1 (plus rapide)</item>
         <item>2</item>

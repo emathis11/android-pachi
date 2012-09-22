@@ -22,21 +22,20 @@ package lrstudios.games.ego.lib;
 /**
  * Represents a board mark with a label (usually letters or digits).
  */
-public final class BoardLabelMark extends BoardMark
-{
+public final class BoardLabelMark extends BoardMark {
     protected char _label;
 
-    public BoardLabelMark(int x, int y, char label)
-    {
+    public BoardLabelMark(int x, int y, char label) {
         super(x, y, MARK_LABEL);
         _label = label;
     }
 
 
-    /** {@inheritDoc} */
+    /**
+     * {@inheritDoc}
+     */
     @Override
-    public char getLabel()
-    {
+    public char getLabel() {
         return _label;
     }
 }

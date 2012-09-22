@@ -23,8 +23,7 @@ import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 
 
-public final class BoardAnimation
-{
+public final class BoardAnimation {
     public Drawable drawable;
     public int x;
     public int y;
@@ -45,8 +44,7 @@ public final class BoardAnimation
     private int endHeight;
 
 
-    public BoardAnimation(Drawable drawable, Rect startBounds, Rect endBounds, int startAlpha, int endAlpha)
-    {
+    public BoardAnimation(Drawable drawable, Rect startBounds, Rect endBounds, int startAlpha, int endAlpha) {
         this.drawable = drawable;
         startX = startBounds.left;
         startY = startBounds.top;
@@ -66,31 +64,28 @@ public final class BoardAnimation
         alpha = startAlpha;
     }
 
-    
-    public void update(double stepSize)
-    {
+
+    public void update(double stepSize) {
         currentStep += stepSize;
         if (currentStep > 1.0)
             currentStep = 1.0;
 
-        x = (int)Math.round(startX + (endX - startX) * currentStep);
-        y = (int)Math.round(startY + (endY - startY) * currentStep);
-        width = (int)Math.round(startWidth + (endWidth - startWidth) * currentStep);
-        height = (int)Math.round(startHeight + (endHeight - startHeight) * currentStep);
-        alpha = (int)Math.round(startAlpha + (endAlpha - startAlpha) * currentStep);
+        x = (int) Math.round(startX + (endX - startX) * currentStep);
+        y = (int) Math.round(startY + (endY - startY) * currentStep);
+        width = (int) Math.round(startWidth + (endWidth - startWidth) * currentStep);
+        height = (int) Math.round(startHeight + (endHeight - startHeight) * currentStep);
+        alpha = (int) Math.round(startAlpha + (endAlpha - startAlpha) * currentStep);
     }
 
 
-    public void draw(Canvas canvas)
-    {
+    public void draw(Canvas canvas) {
         drawable.setBounds(x, y, x + width, y + height);
         drawable.setAlpha(alpha);
         drawable.draw(canvas);
     }
 
 
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return (currentStep > 0.999);
     }
 }

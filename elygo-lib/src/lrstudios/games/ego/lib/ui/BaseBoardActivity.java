@@ -38,7 +38,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.TextView;
-import com.actionbarsherlock.view.MenuItem;
 import lrstudios.games.ego.lib.BoardView;
 import lrstudios.games.ego.lib.GoGame;
 import lrstudios.games.ego.lib.R;
@@ -56,15 +55,14 @@ import java.util.Random;
 /**
  * The base class for all board activities (Tsumego, IGS, ...) which contains the common data and functions.
  */
-public abstract class BaseBoardActivity extends BetterFragmentActivity implements BoardView.BoardListener
-{
+public abstract class BaseBoardActivity extends BetterFragmentActivity implements BoardView.BoardListener {
     private static final String TAG = "BaseBoardActivity";
-    
+
     private static final String SD_CARD_GAMES_FOLDER_PATH = "ElyGo/SGF"; // TODO
 
     public static final String
-        INTENT_GAME_INFO = "lrstudios.games.ego.GAME_INFO",
-        INTENT_GAME_MODE = "lrstudios.games.ego.GAME_MODE";
+            INTENT_GAME_INFO = "lrstudios.games.ego.GAME_INFO",
+            INTENT_GAME_MODE = "lrstudios.games.ego.GAME_MODE";
 
     protected static final Random _random = new Random();
     protected static final int CODE_PREFERENCES_ACTIVITY = 501;
@@ -78,10 +76,8 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
     private File _internalGamesDir;
 
 
-
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         _internalGamesDir = getDir("SGF", Context.MODE_PRIVATE);
         _loadPreferences();
@@ -89,8 +85,7 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
 
 
     @Override
-    public void setContentView(final int layoutResID)
-    {
+    public void setContentView(final int layoutResID) {
         super.setContentView(layoutResID);
         _boardView = (BoardView) findViewById(R.id.boardView);
         _boardView.setBoardListener(this);
@@ -98,43 +93,26 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
 
 
     @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == CODE_PREFERENCES_ACTIVITY)
-        {
+        if (requestCode == CODE_PREFERENCES_ACTIVITY) {
             _loadPreferences();
             _boardView.readPreferences();
             _boardView.recreateGraphics();
         }
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
-        int id = item.getItemId();
-        if (id == R.id.menu_settings)
-        {
-            startActivityForResult(new Intent(this, Preferences.class), CODE_PREFERENCES_ACTIVITY);
-        }
-        return true;
-    }
-
-
-    protected void setSubtitleMoveNumber(int moveNumber)
-    {
+    protected void setSubtitleMoveNumber(int moveNumber) {
         getSupportActionBar().setSubtitle((moveNumber > 0) ?
-            getString(R.string.board_move_number, moveNumber) : getString(R.string.board_no_moves));
+                getString(R.string.board_move_number, moveNumber) : getString(R.string.board_no_moves));
     }
 
 
-    protected void _showSaveDialog(final GoGame game, String defaultName)
-    {
+    protected void _showSaveDialog(final GoGame game, String defaultName) {
         LayoutInflater inflater = (LayoutInflater) getSystemService(LAYOUT_INFLATER_SERVICE);
         final View dialogView = inflater.inflate(R.layout.dialog_save_file, null);
-        if (dialogView == null)
-        {
+        if (dialogView == null) {
             Log.e(TAG, "Unable to inflate save dialog layout : " + R.layout.dialog_save_file);
             showToast(R.string.err_internal);
             return;
@@ -144,8 +122,7 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
         final CheckBox chkSaveSd = (CheckBox) dialogView.findViewById(R.id.chk_save_sd);
         final TextView txtWarning = (TextView) dialogView.findViewById(R.id.txt_warning_file_overwrite);
 
-        if (!AndroidUtils.isExternalStorageWriteable())
-        {
+        if (!AndroidUtils.isExternalStorageWriteable()) {
             chkSaveSd.setChecked(false);
             chkSaveSd.setEnabled(false);
             chkSaveSd.setClickable(false);
@@ -153,25 +130,24 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
 
         edtFileName.setFilters(new InputFilter[]{AndroidUtils.getFilenameInputFilter()});
         edtFileName.setText(defaultName);
-        edtFileName.addTextChangedListener(new TextWatcher()
-        {
+        edtFileName.addTextChangedListener(new TextWatcher() {
             @Override
-            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
-            @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
 
             @Override
-            public void afterTextChanged(Editable editable)
-            {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 _checkFileExists(edtFileName.getText().toString(),
-                    chkSaveSd.isEnabled() && chkSaveSd.isChecked(), txtWarning);
+                        chkSaveSd.isEnabled() && chkSaveSd.isChecked(), txtWarning);
             }
         });
-        chkSaveSd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
-        {
+        chkSaveSd.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked)
-            {
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                 _checkFileExists(edtFileName.getText().toString(), isChecked, txtWarning);
             }
         });
@@ -179,92 +155,75 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
         _checkFileExists(edtFileName.getText().toString(), false, txtWarning);
 
         new AlertDialog.Builder(BaseBoardActivity.this)
-            .setView(dialogView)
-            .setTitle(R.string.dialog_title_save)
-            .setMessage(R.string.enter_game_name)
-            .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                @Override
-                public void onClick(DialogInterface dialog, int which)
-                {
-                    String fileName = edtFileName.getText().toString();
-                    boolean saveSd = chkSaveSd.isEnabled() && chkSaveSd.isChecked();
+                .setView(dialogView)
+                .setTitle(R.string.dialog_title_save)
+                .setMessage(R.string.enter_game_name)
+                .setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        String fileName = edtFileName.getText().toString();
+                        boolean saveSd = chkSaveSd.isEnabled() && chkSaveSd.isChecked();
 
-                    if (fileName.length() == 0)
-                    {
-                        showToast(R.string.err_filename_short);
-                        return;
-                    }
+                        if (fileName.length() == 0) {
+                            showToast(R.string.err_filename_short);
+                            return;
+                        }
 
-                    File destFile;
-                    String sgfFilename = fileName + ".sgf";
-                    if (saveSd)
-                    {
-                        destFile = new File(
-                            new File(Environment.getExternalStorageDirectory(), SD_CARD_GAMES_FOLDER_PATH),
-                            sgfFilename);
-                    }
-                    else
-                    {
-                        destFile = new File(getDir("SGF", Context.MODE_PRIVATE), sgfFilename);
-                    }
-                    if (destFile.exists())
-                        destFile.delete();
+                        File destFile;
+                        String sgfFilename = fileName + ".sgf";
+                        if (saveSd) {
+                            destFile = new File(
+                                    new File(Environment.getExternalStorageDirectory(), SD_CARD_GAMES_FOLDER_PATH),
+                                    sgfFilename);
+                        } else {
+                            destFile = new File(getDir("SGF", Context.MODE_PRIVATE), sgfFilename);
+                        }
+                        if (destFile.exists())
+                            destFile.delete();
 
-                    FileOutputStream stream = null;
-                    try
-                    {
-                        stream = new FileOutputStream(destFile);
-                        game.saveSgf(stream);
-                        showToast(getString(R.string.game_saved, fileName));
-                    }
-                    catch (FileNotFoundException e)
-                    {
-                        e.printStackTrace();
-                        if (saveSd)
-                            showToast(R.string.err_sd_read_only);
-                        else
+                        FileOutputStream stream = null;
+                        try {
+                            stream = new FileOutputStream(destFile);
+                            game.saveSgf(stream);
+                            showToast(getString(R.string.game_saved, fileName));
+                        } catch (FileNotFoundException e) {
+                            e.printStackTrace();
+                            if (saveSd)
+                                showToast(R.string.err_sd_read_only);
+                            else
+                                showToast(R.string.err_save_game);
+                        } catch (IOException e) {
+                            e.printStackTrace();
+                            Log.v(TAG, "Deleted file : " + destFile.delete());
                             showToast(R.string.err_save_game);
+                        } finally {
+                            Utils.closeStream(stream);
+                        }
                     }
-                    catch (IOException e)
-                    {
-                        e.printStackTrace();
-                        Log.v(TAG, "Deleted file : " + destFile.delete());
-                        showToast(R.string.err_save_game);
-                    }
-                    finally
-                    {
-                        Utils.closeStream(stream);
-                    }
-                }
-            })
-            .setNegativeButton(android.R.string.cancel, AndroidUtils.getEmptyDialogOnClickListener())
-            .show();
+                })
+                .setNegativeButton(android.R.string.cancel, AndroidUtils.getEmptyDialogOnClickListener())
+                .show();
     }
 
 
-    private void _checkFileExists(String desiredFileName, boolean saveOnSd, View warningView)
-    {
+    private void _checkFileExists(String desiredFileName, boolean saveOnSd, View warningView) {
         if (desiredFileName.length() == 0)
             return;
 
         desiredFileName += ".sgf";
         File file;
-        if (saveOnSd)
-        {
+        if (saveOnSd) {
             file = new File(
-                new File(Environment.getExternalStorageDirectory(), SD_CARD_GAMES_FOLDER_PATH),
-                desiredFileName);
-        }
-        else
-        {
+                    new File(Environment.getExternalStorageDirectory(), SD_CARD_GAMES_FOLDER_PATH),
+                    desiredFileName);
+        } else {
             file = new File(_internalGamesDir, desiredFileName);
         }
         warningView.setVisibility(file.exists() ? View.VISIBLE : View.INVISIBLE);
     }
 
 
-    protected void _loadPreferences()
-    {
+    protected void _loadPreferences() {
         final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getBaseContext());
         final Window window = getWindow();
 

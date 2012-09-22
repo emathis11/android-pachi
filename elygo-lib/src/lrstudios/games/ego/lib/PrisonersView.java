@@ -28,8 +28,7 @@ import android.view.View;
 import lrstudios.util.android.AndroidUtils;
 
 
-public class PrisonersView extends View
-{
+public class PrisonersView extends View {
     private static final String TAG = "PrisonersView";
 
     private int _stoneSize;
@@ -39,32 +38,27 @@ public class PrisonersView extends View
     private boolean _isWhiteStone = false;
 
 
-    public PrisonersView(Context context)
-    {
+    public PrisonersView(Context context) {
         super(context);
         _handleAttributes(context, null);
         _recreateGraphics();
     }
 
-    public PrisonersView(Context context, AttributeSet attrs)
-    {
+    public PrisonersView(Context context, AttributeSet attrs) {
         super(context, attrs);
         _handleAttributes(context, attrs);
         _recreateGraphics();
     }
 
-    public PrisonersView(Context context, AttributeSet attrs, int defStyle)
-    {
+    public PrisonersView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
         _handleAttributes(context, attrs);
         _recreateGraphics();
     }
 
 
-    private void _handleAttributes(Context context, AttributeSet attrs)
-    {
-        if (attrs != null)
-        {
+    private void _handleAttributes(Context context, AttributeSet attrs) {
+        if (attrs != null) {
             TypedArray arr = context.obtainStyledAttributes(attrs, R.styleable.PrisonersView);
             _isWhiteStone = arr.getBoolean(R.styleable.PrisonersView_showWhiteStone, false);
             arr.recycle();
@@ -77,8 +71,7 @@ public class PrisonersView extends View
     /**
      * Changes the displayed number of prisoners.
      */
-    public void setCapturedStones(int newAmount)
-    {
+    public void setCapturedStones(int newAmount) {
         String temp = Integer.toString(newAmount);
         if (temp.equals(_prisoners))
             return;
@@ -89,28 +82,24 @@ public class PrisonersView extends View
     }
 
 
-    private void _recreateGraphics()
-    {
+    private void _recreateGraphics() {
         _stoneSize = Math.round(getResources().getDimension(R.dimen.prisoners_view_stone_size));
-        if (_isWhiteStone)
-        {
+        if (_isWhiteStone) {
             Paint whiteStonePaint = new Paint();
             whiteStonePaint.setAntiAlias(true);
             whiteStonePaint.setShader(new LinearGradient(
-                    (int)(_stoneSize * 0.33), 0,
-                _stoneSize, _stoneSize,
+                    (int) (_stoneSize * 0.33), 0,
+                    _stoneSize, _stoneSize,
                     Color.rgb(255, 255, 255), Color.rgb(142, 142, 142), Shader.TileMode.CLAMP));
 
             _stone = new ShapeDrawable(new OvalShape());
             _stone.getPaint().set(whiteStonePaint);
             _stone.setBounds(0, 0, _stoneSize, _stoneSize);
-        }
-        else
-        {
+        } else {
             Paint blackStonePaint = new Paint();
             blackStonePaint.setAntiAlias(true);
             blackStonePaint.setShader(new RadialGradient(
-                _stoneSize / 3.0f, _stoneSize / 10.0f, _stoneSize / 2.1f,
+                    _stoneSize / 3.0f, _stoneSize / 10.0f, _stoneSize / 2.1f,
                     Color.rgb(70, 70, 70), Color.BLACK, Shader.TileMode.CLAMP));
 
             _stone = new ShapeDrawable(new OvalShape());
@@ -122,8 +111,7 @@ public class PrisonersView extends View
 
 
     @Override
-    protected void onDraw(Canvas canvas)
-    {
+    protected void onDraw(Canvas canvas) {
         _stone.draw(canvas);
 
         Rect rect = new Rect();
@@ -136,8 +124,7 @@ public class PrisonersView extends View
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         setMeasuredDimension(_stoneSize, _stoneSize);
 /*        int parentWidth = MeasureSpec.getSize(widthMeasureSpec);

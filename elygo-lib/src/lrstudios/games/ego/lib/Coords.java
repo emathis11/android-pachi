@@ -22,43 +22,37 @@ package lrstudios.games.ego.lib;
 /**
  * Represents a point defined by two coordinates.
  */
-public final class Coords
-{
-	public int x;
-	public int y;
-	
-	
-	public Coords()
-	{
-	}
-	public Coords(final int x, final int y)
-	{
-		this.x = x;
-		this.y = y;
-	}
+public final class Coords {
+    public int x;
+    public int y;
 
-    public void set(final int x, final int y)
-    {
+
+    public Coords() {
+    }
+
+    public Coords(final int x, final int y) {
+        this.x = x;
+        this.y = y;
+    }
+
+    public void set(final int x, final int y) {
         this.x = x;
         this.y = y;
     }
 
 
-	@Override
-    public String toString()
-	{
-		return String.format("(%d, %d)", x, y);
-	}
+    @Override
+    public String toString() {
+        return String.format("(%d, %d)", x, y);
+    }
 
 
     /**
      * Returns true if the specified object have the same coordinates that the current object.
      */
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof Coords)
-        {
+    public boolean equals(Object obj) {
+        if (obj instanceof Coords) {
             Coords coords = (Coords) obj;
             return x == coords.x && y == coords.y;
         }

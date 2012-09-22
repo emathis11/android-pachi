@@ -21,26 +21,24 @@ package lrstudios.games.ego.lib;
 /**
  * These move coordinates are stored in 3 bytes, to reduce memory usage on Android.
  */
-public final class LightCoords
-{
+public final class LightCoords {
     public byte x;
     public byte y;
     public byte color;
 
-    public LightCoords(int x, int y, byte color)
-    {
+    public LightCoords(int x, int y, byte color) {
         this.x = (byte) x;
         this.y = (byte) y;
         this.color = color;
     }
 
 
-    /** Ne compare que les coordonnées, pas la couleur. */
+    /**
+     * Ne compare que les coordonnées, pas la couleur.
+     */
     @Override
-    public boolean equals(Object obj)
-    {
-        if (obj instanceof LightCoords)
-        {
+    public boolean equals(Object obj) {
+        if (obj instanceof LightCoords) {
             LightCoords coords = (LightCoords) obj;
             return x == coords.x && y == coords.y;
         }

@@ -61,8 +61,8 @@
     <string name="pref_statusbar">Masquer barre de statut</string>
     <string name="pref_statusbar_desc">Uniquement si un goban est ouvert</string>
     <string name="pref_fastinput">Validation des coups</string>
-    <string name="pref_fastinput_on">Les coups sont joués immédiatement au relâchement</string>
-    <string name="pref_fastinput_off">Jouer un coup nécessite une validation (2e appui)</string>
+    <string name="pref_fastinput_off">Les coups sont joués immédiatement au relâchement</string>
+    <string name="pref_fastinput_on">Jouer un coup nécessite une validation (2e appui)</string>
     <string name="pref_inputtype">Pose de pierres</string>
     <string name="pref_inputtype_desc">Choisissez la façon dont les coups sont joués sur le goban</string>
     <string name="pref_theme">Thème du goban</string>
@@ -75,11 +75,15 @@
     <!-- Error messages -->
     <string name="err_internal">Une erreur interne est survenue, veuillez réessayer.</string>
     <string name="err_filename_short">Le nom de la partie est trop court.</string>
-    <string name="err_sd_read_only">Impossible de sauvegarder la partie : la carte SD a été retirée ou n\'est plus accessible.</string>
-    <string name="err_save_game">Une erreur est survenue lors de la sauvegarde de la partie, veuillez réessayer.</string>
+    <string name="err_sd_read_only">Impossible de sauvegarder la partie : la carte SD a été retirée ou n\'est plus
+        accessible.
+    </string>
+    <string name="err_save_game">Une erreur est survenue lors de la sauvegarde de la partie, veuillez réessayer.
+    </string>
     <string name="err_file_not_found">Fichier introuvable : %s</string>
     <string name="err_file_read_error">Impossible de lire le fichier : %s</string>
-    <string name="err_loading_sgf">Erreur lors du chargement de la partie: le fichier SGF est probablement corrompu.</string>
+    <string name="err_loading_sgf">Erreur lors du chargement de la partie: le fichier SGF est probablement corrompu.
+    </string>
     <string name="err_invalid_integer">La valeur "%s" n\'est pas un nombre entier valide.</string>
     <string name="err_occurred">Une erreur est survenue (%s).</string>
     <string name="err_dialog_title">Erreur</string>

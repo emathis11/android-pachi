@@ -5,18 +5,18 @@
     <item>
         <shape android:shape="rectangle">
             <solid
-                android:color="#888" />
+                    android:color="#888"/>
             <size
-                android:height="1dp" />
+                    android:height="1dp"/>
         </shape>
     </item>
     <item android:top="1dp">
         <shape android:shape="rectangle">
             <gradient
-                android:angle="270"
-                android:startColor="#F4F4F4"
-                android:endColor="#D6D6D6"
-                android:type="linear" />
+                    android:angle="270"
+                    android:startColor="#F4F4F4"
+                    android:endColor="#D6D6D6"
+                    android:type="linear"/>
         </shape>
     </item>
 

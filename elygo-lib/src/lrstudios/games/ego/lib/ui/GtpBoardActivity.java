@@ -32,30 +32,28 @@ import java.io.FileInputStream;
 import java.text.DecimalFormat;
 
 
-public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener
-{
+public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener {
     private static final String TAG = "GtpBoardActivity";
-	
+
     public static final int
-        MSG_GTP_MOVE = 2,
-        MSG_FINAL_SCORE = 3;
+            MSG_GTP_MOVE = 2,
+            MSG_FINAL_SCORE = 3;
 
     public static final String
-        INTENT_PLAY_RESTORE = "lrstudios.games.ego.PLAY_RESTORE",
-        INTENT_GTP_BOT_CLASS = "lrstudios.games.ego.BOT_CLASS";
+            INTENT_PLAY_RESTORE = "lrstudios.games.ego.PLAY_RESTORE",
+            INTENT_GTP_BOT_CLASS = "lrstudios.games.ego.BOT_CLASS";
 
 
     private ScoreView _scoreView;
     private static GtpThread _gtpThread;
-	private ActivityHandler _handler = new ActivityHandler();
+    private ActivityHandler _handler = new ActivityHandler();
     private GtpBot _bot;
     private ProgressDialog _waitingScoreDialog;
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-	{
-    	super.onCreate(savedInstanceState);
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_INDETERMINATE_PROGRESS);
         setContentView(R.layout.board_activity);
 
@@ -63,8 +61,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
 
         final Bundle extras = getIntent().getExtras();
         IntentGameInfo gameInfo = (IntentGameInfo) extras.getParcelable(INTENT_GAME_INFO);
-        if (gameInfo == null)
-        {
+        if (gameInfo == null) {
             showToast(R.string.err_internal);
             finish();
             return;
@@ -72,24 +69,19 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
 
         // Wait if a previous instance of the bot is still running (this may happen if the user closed
         // this activity during the bot's turn, and reopened it quickly)
-        if (_gtpThread != null && _gtpThread.isAlive())
-        {
+        if (_gtpThread != null && _gtpThread.isAlive()) {
             _gtpThread.quit();
             try {
                 _gtpThread.join(); // TODO show a ProgressDialog?
-            }
-            catch (InterruptedException e) {
+            } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
         Class<?> botClass = (Class<?>) extras.getSerializable(INTENT_GTP_BOT_CLASS);
-        try
-        {
+        try {
             _bot = (GtpBot) botClass.getConstructor().newInstance();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
             showToast(R.string.err_internal);
             finish();
@@ -101,8 +93,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
 
         boolean restore = extras.getBoolean(INTENT_PLAY_RESTORE, false);
         boolean loadOk = false;
-        if (restore)
-        {
+        if (restore) {
             try {
                 FileInputStream stream = openFileInput("gtp_save.sgf");
                 _bot.newGame(stream);
@@ -110,14 +101,12 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 if (_bot.isBotTurn()) // The game is never saved before the bot's turn
                     _bot.switchColors();
                 loadOk = true;
-            }
-            catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
-        if (!loadOk || !restore)
-        {
+        if (!loadOk || !restore) {
             int boardsize = gameInfo.boardSize;
             double komi = gameInfo.komi;
             byte color = gameInfo.color;
@@ -134,15 +123,12 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         String botName = _bot.getName();
         String botLevel = getString(R.string.board_bot_level, gameInfo.botLevel);
         String blackName, whiteName, blackRank, whiteRank;
-        if (_bot.getPlayerColor() == GoBoard.BLACK)
-        {
+        if (_bot.getPlayerColor() == GoBoard.BLACK) {
             whiteName = botName;
             whiteRank = botLevel;
             blackName = getString(R.string.player);
             blackRank = "";
-        }
-        else
-        {
+        } else {
             whiteName = getString(R.string.player);
             whiteRank = "";
             blackName = botName;
@@ -164,12 +150,11 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
 
         setSupportProgressBarIndeterminateVisibility(false);
         _updateGameLogic();
-	}
+    }
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         super.onCreateOptionsMenu(menu);
         getSupportMenuInflater().inflate(R.menu.actionbar_gtp_board, menu);
 
@@ -179,12 +164,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         super.onOptionsItemSelected(item);
         int id = item.getItemId();
-        if (id == R.id.menu_undo)
-        {
+        if (id == R.id.menu_undo) {
             _bot.undo();
             _updatePrisoners();
             _updateGameLogic();
@@ -197,34 +180,28 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 _bot.getName(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes());
             _showSaveDialog(_bot.getGame(), defaultName);
         }*/
-        else if (id == R.id.menu_pass)
-        {
+        else if (id == R.id.menu_pass) {
             onPress(-1, -1);
         }
         return true;
     }
 
-    
+
     @Override
-	public void onPress(int x, int y)
-	{
-        if (_bot.playMove(new Coords(x, y)))
-        {
+    public void onPress(int x, int y) {
+        if (_bot.playMove(new Coords(x, y))) {
             _updatePrisoners();
             _updateGameLogic();
-        }
-        else
+        } else
             Log.w(TAG, "The move was illegal.");
-	}
+    }
 
 
-    private void _updateGameLogic()
-    {
+    private void _updateGameLogic() {
         GoGame game = _bot.getGame();
 
         // Enter scoring
-        if (game.hasTwoPasses())
-        {
+        if (game.hasTwoPasses()) {
             _lockPlaying();
             _gtpThread.getFinalScore();
             _waitingScoreDialog = new ProgressDialog(this);
@@ -232,17 +209,12 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _waitingScoreDialog.setCancelable(true);
             _waitingScoreDialog.setMessage(getString(R.string.board_compute_territory));
             _waitingScoreDialog.show();
-        }
-        else if (!game.isFinished())
-        {
-            if (_bot.isBotTurn())
-            {
+        } else if (!game.isFinished()) {
+            if (_bot.isBotTurn()) {
                 _lockPlaying();
                 setSupportProgressBarIndeterminateVisibility(true);
                 _gtpThread.playMove();
-            }
-            else
-            {
+            } else {
                 _unlockPlaying();
             }
         }
@@ -251,15 +223,13 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     }
 
 
-    protected void _lockPlaying()
-    {
+    protected void _lockPlaying() {
         _boardView.lockPlaying();
         disableOptionItem(R.id.menu_undo);
         disableOptionItem(R.id.menu_pass);
     }
 
-    protected void _unlockPlaying()
-    {
+    protected void _unlockPlaying() {
         _boardView.unlockPlaying();
         GoGame game = _bot.getGame();
         boolean isFinished = game.getCurrentNode().x >= -1 && !game.isFinished();
@@ -267,8 +237,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         setOptionItemEnabled(R.id.menu_pass, isFinished);
     }
 
-    protected void _updatePrisoners()
-    {
+    protected void _updatePrisoners() {
         GoGame game = _bot.getGame();
         _scoreView.setBlackPrisoners(game.getBlackPrisoners());
         _scoreView.setWhitePrisoners(game.getWhitePrisoners());
@@ -276,13 +245,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     }
 
 
-    private class ActivityHandler extends Handler
-    {
+    private class ActivityHandler extends Handler {
         @Override
-        public void handleMessage(Message msg)
-        {
-            if (msg.what == MSG_GTP_MOVE)
-            {
+        public void handleMessage(Message msg) {
+            if (msg.what == MSG_GTP_MOVE) {
                 GoGame game = _bot.getGame();
                 GameNode move = game.getCurrentNode();
 
@@ -290,30 +256,21 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 {
                     showInfoDialog(getString(R.string.board_player_resigned, _bot.getName()));
                     setTitle(R.string.gtp_resign_win);
-                }
-                else if (move.x == -1)
-                {
+                } else if (move.x == -1) {
                     // Don't show two dialogs if the game is finished
                     if (!_bot.getGame().hasTwoPasses())
                         showInfoDialog(getString(R.string.board_player_passes, _bot.getName()));
-                }
-                else if (move.x >= 0)
-                {
+                } else if (move.x >= 0) {
                     _updatePrisoners();
-                }
-                else
-                {
+                } else {
                     Log.e(TAG, "invalid move coordinates : " + move);
                 }
 
                 setSupportProgressBarIndeterminateVisibility(false);
                 _updateGameLogic();
-            }
-            else if (msg.what == MSG_FINAL_SCORE)
-            {
+            } else if (msg.what == MSG_FINAL_SCORE) {
                 GoGameResult result = (GoGameResult) msg.obj;
-                if (_waitingScoreDialog != null)
-                {
+                if (_waitingScoreDialog != null) {
                     _waitingScoreDialog.dismiss();
                     _waitingScoreDialog = null;
                 }
@@ -321,9 +278,9 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                 _boardView.invalidate();
 
                 String winner = getString(
-                    result.getWinner() == GoGameResult.BLACK ? R.string.black : R.string.white);
+                        result.getWinner() == GoGameResult.BLACK ? R.string.black : R.string.white);
                 setTitle(getString(R.string.gtp_game_result,
-                    winner, new DecimalFormat("#0.#").format(result.getScore())));
+                        winner, new DecimalFormat("#0.#").format(result.getScore())));
                 disableOptionItem(R.id.menu_undo);
                 disableOptionItem(R.id.menu_pass);
             }

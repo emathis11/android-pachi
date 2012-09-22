@@ -26,8 +26,7 @@ import android.os.Parcelable;
  * This parcelable class is passed to a BoardActivity to start a new game
  * with the specified parameters.
  */
-public final class IntentGameInfo implements Parcelable
-{
+public final class IntentGameInfo implements Parcelable {
     public int boardSize;
     public int handicap;
     public byte color;
@@ -36,12 +35,10 @@ public final class IntentGameInfo implements Parcelable
     public String rules = "";
 
 
-    public IntentGameInfo()
-    {
+    public IntentGameInfo() {
     }
 
-    public IntentGameInfo(Parcel in)
-    {
+    public IntentGameInfo(Parcel in) {
         boardSize = in.readInt();
         handicap = in.readInt();
         color = in.readByte();
@@ -52,14 +49,12 @@ public final class IntentGameInfo implements Parcelable
 
 
     @Override
-    public int describeContents()
-    {
+    public int describeContents() {
         return 0;
     }
 
     @Override
-    public void writeToParcel(Parcel parcel, int i)
-    {
+    public void writeToParcel(Parcel parcel, int i) {
         parcel.writeInt(boardSize);
         parcel.writeInt(handicap);
         parcel.writeByte(color);
@@ -68,17 +63,14 @@ public final class IntentGameInfo implements Parcelable
         parcel.writeString(rules);
     }
 
-    public static final Parcelable.Creator<IntentGameInfo> CREATOR = new Parcelable.Creator<IntentGameInfo>()
-    {
+    public static final Parcelable.Creator<IntentGameInfo> CREATOR = new Parcelable.Creator<IntentGameInfo>() {
         @Override
-        public IntentGameInfo createFromParcel(Parcel source)
-        {
+        public IntentGameInfo createFromParcel(Parcel source) {
             return new IntentGameInfo(source);
         }
 
         @Override
-        public IntentGameInfo[] newArray(int size)
-        {
+        public IntentGameInfo[] newArray(int size) {
             return new IntentGameInfo[size];
         }
     };

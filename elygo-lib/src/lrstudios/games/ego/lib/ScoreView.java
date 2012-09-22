@@ -32,8 +32,7 @@ import android.widget.TextView;
 /**
  * Contains the score panel.
  */
-public class ScoreView extends FrameLayout
-{
+public class ScoreView extends FrameLayout {
     private TextView _txtBlackName;
     private TextView _txtWhiteName;
     private TextView _txtBlackTime;
@@ -50,27 +49,23 @@ public class ScoreView extends FrameLayout
     private ForegroundColorSpan _rankSpan;
 
 
-    public ScoreView(Context context)
-    {
+    public ScoreView(Context context) {
         super(context);
         _init(context);
     }
 
-    public ScoreView(Context context, AttributeSet attrs)
-    {
+    public ScoreView(Context context, AttributeSet attrs) {
         super(context, attrs);
         _init(context);
     }
 
-    public ScoreView(Context context, AttributeSet attrs, int styleDef)
-    {
+    public ScoreView(Context context, AttributeSet attrs, int styleDef) {
         super(context, attrs, styleDef);
         _init(context);
     }
 
 
-    private void _init(Context context)
-    {
+    private void _init(Context context) {
         LayoutInflater.from(context).inflate(R.layout.score_panel, this, true);
         _rankSpan = new ForegroundColorSpan(context.getResources().getColor(R.color.scoreview_rank));
 
@@ -83,96 +78,81 @@ public class ScoreView extends FrameLayout
     }
 
 
-    public void addBlackPrisoners(int amount)
-    {
+    public void addBlackPrisoners(int amount) {
         setBlackPrisoners(_blackPrisoners + amount);
     }
 
-    public void addWhitePrisoners(int amount)
-    {
+    public void addWhitePrisoners(int amount) {
         setWhitePrisoners(_whitePrisoners + amount);
     }
 
-    public void setBlackPrisoners(int newAmount)
-    {
+    public void setBlackPrisoners(int newAmount) {
         _blackPrisoners = newAmount;
         _blackPrisonersView.setCapturedStones(newAmount);
     }
 
-    public void setWhitePrisoners(int newAmount)
-    {
+    public void setWhitePrisoners(int newAmount) {
         _whitePrisoners = newAmount;
         _whitePrisonersView.setCapturedStones(newAmount);
     }
 
-    public void setBlackName(String blackName)
-    {
+    public void setBlackName(String blackName) {
         _blackName = blackName;
         _refreshBlackName();
     }
 
-    public void setWhiteName(String whiteName)
-    {
+    public void setWhiteName(String whiteName) {
         _whiteName = whiteName;
         _refreshWhiteName();
     }
 
-    public void setBlackRank(String blackRank)
-    {
+    public void setBlackRank(String blackRank) {
         _blackRank = blackRank;
         _refreshBlackName();
     }
 
-    public void setWhiteRank(String whiteRank)
-    {
+    public void setWhiteRank(String whiteRank) {
         _whiteRank = whiteRank;
         _refreshWhiteName();
     }
 
-    private void _refreshBlackName()
-    {
+    private void _refreshBlackName() {
         _txtBlackName.setText(_spanText(_blackName, _blackRank));
     }
 
-    private void _refreshWhiteName()
-    {
+    private void _refreshWhiteName() {
         _txtWhiteName.setText(_spanText(_whiteName, _whiteRank));
     }
 
-    private CharSequence _spanText(String name, String rank)
-    {
+    private CharSequence _spanText(String name, String rank) {
         String finalStr = name + " " + rank;
         SpannableString spanStr = new SpannableString(finalStr);
         spanStr.setSpan(_rankSpan, name.length(), finalStr.length(), Spannable.SPAN_EXCLUSIVE_EXCLUSIVE);
         return spanStr;
     }
 
-    /** Change le temps restant pour noir. Passer "null" ou une chaine vide cachera complètement la View. */
-    public void setBlackTime(String blackTime)
-    {
-        if (blackTime != null && blackTime.length() > 0)
-        {
+    /**
+     * Change le temps restant pour noir. Passer "null" ou une chaine vide cachera complètement la View.
+     */
+    public void setBlackTime(String blackTime) {
+        if (blackTime != null && blackTime.length() > 0) {
             if (_txtBlackTime.getVisibility() != View.VISIBLE)
                 _txtBlackTime.setVisibility(View.VISIBLE);
             _txtBlackTime.setText(blackTime);
-        }
-        else
-        {
+        } else {
             _txtBlackTime.setVisibility(View.GONE);
         }
     }
 
-    /** Change le temps restant pour blanc. Passer "null" ou une chaine vide cachera complètement la View. */
-    public void setWhiteTime(String whiteTime)
-    {
-        if (whiteTime != null && whiteTime.length() > 0)
-        {
+    /**
+     * Change le temps restant pour blanc. Passer "null" ou une chaine vide cachera complètement la View.
+     */
+    public void setWhiteTime(String whiteTime) {
+        if (whiteTime != null && whiteTime.length() > 0) {
             if (_txtWhiteTime.getVisibility() != View.VISIBLE)
                 _txtWhiteTime.setVisibility(View.VISIBLE);
             _txtWhiteTime.setText(whiteTime);
-        }
-        else
-        {
+        } else {
             _txtWhiteTime.setVisibility(View.GONE);
         }
     }

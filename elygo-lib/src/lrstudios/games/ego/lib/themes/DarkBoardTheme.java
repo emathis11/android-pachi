@@ -26,18 +26,15 @@ import android.graphics.Shader;
 import lrstudios.games.ego.lib.R;
 
 
-public class DarkBoardTheme extends StandardTheme
-{
-    public DarkBoardTheme(Context context)
-    {
+public class DarkBoardTheme extends StandardTheme {
+    public DarkBoardTheme(Context context) {
         super(context);
     }
 
     @Override
-    protected void defineBackgroundPaint(Paint backgroundPaint)
-    {
+    protected void defineBackgroundPaint(Paint backgroundPaint) {
         backgroundPaint.setShader(new BitmapShader(
-            BitmapFactory.decodeResource(_context.getResources(), R.drawable.wood2),
-            Shader.TileMode.MIRROR, Shader.TileMode.MIRROR));
+                BitmapFactory.decodeResource(_context.getResources(), R.drawable.wood2),
+                Shader.TileMode.MIRROR, Shader.TileMode.MIRROR));
     }
 }

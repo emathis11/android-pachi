@@ -31,17 +31,16 @@ import java.util.Stack;
 /**
  * Represents a go game, which can contain a variation tree and other informations.
  */
-public class GoGame
-{
-	private static final String TAG = "GoGame";
-    
+public class GoGame {
+    private static final String TAG = "GoGame";
+
     public static final int BASE_NODE_COORD = -9;
-	
-	
-	// Variables
+
+
+    // Variables
     public GameInfo info = new GameInfo();
-	public int gameNumber;
-	public GoBoard board;
+    public int gameNumber;
+    public GoBoard board;
     public GoBoard finalStatus;
 
     protected byte _currentPlayer = GoBoard.BLACK;
@@ -57,15 +56,12 @@ public class GoGame
     protected GameNode _playNode;
 
 
-
-
     /**
      * Creates a new game with the specified parameters. The handicap isn't placed automatically
      * for New-zealand and Chinese rules.
      */
-    public GoGame(int boardSize, double komi, int handicap, String rules)
-    {
-        this (new GoBoard(boardSize), komi);
+    public GoGame(int boardSize, double komi, int handicap, String rules) {
+        this(new GoBoard(boardSize), komi);
         info.handicap = handicap;
 
         if (rules == null || rules.length() == 0)
@@ -78,17 +74,15 @@ public class GoGame
     /**
      * Creates a new game with the specified parameters. The rule will be the Japanese rule.
      */
-	public GoGame(int boardSize, double komi, int handicap)
-	{
-        this (boardSize, komi, handicap, "Japanese");
+    public GoGame(int boardSize, double komi, int handicap) {
+        this(boardSize, komi, handicap, "Japanese");
     }
-	
+
     /**
      * Creates a new game from the specified base position.
      */
-	public GoGame(GoBoard board, double komi)
-	{
-		this.board = board;
+    public GoGame(GoBoard board, double komi) {
+        this.board = board;
         info.komi = komi;
         _size = board.getSize();
         info.boardSize = _size;
@@ -99,10 +93,8 @@ public class GoGame
 
         ArrayList<LightCoords> setStones = new ArrayList<LightCoords>(16);
         byte[] colors = board.getBoardArray();
-        for (int x = 0; x < _size; x++)
-        {
-            for (int y = 0; y < _size; y++)
-            {
+        for (int x = 0; x < _size; x++) {
+            for (int y = 0; y < _size; y++) {
                 byte color = colors[y * _size + x];
                 if (color != GoBoard.EMPTY)
                     setStones.add(new LightCoords(x, y, color));
@@ -110,10 +102,9 @@ public class GoGame
         }
         _baseNode.setStones = setStones;
         updateMarks();
-	}
+    }
 
-    GoGame(GameInfo gameInfo, GameNode baseNode)
-    {
+    GoGame(GameInfo gameInfo, GameNode baseNode) {
         this(gameInfo.boardSize, gameInfo.komi, 0, gameInfo.rules);
         info = gameInfo;
         _baseNode = baseNode;
@@ -123,56 +114,55 @@ public class GoGame
         updateMarks();
     }
 
-	
-	
-    /** Plays a move on the board. Returns false if the move was illegal (and thus was not played). */
-	public boolean playMove(int x, int y)
-	{
-		return playMove(x, y, _currentPlayer);
-	}
 
-    /** Plays a move on the board. Returns false if the move was illegal (and thus was not played). */
-    public boolean playMove(Coords coords)
-    {
+    /**
+     * Plays a move on the board. Returns false if the move was illegal (and thus was not played).
+     */
+    public boolean playMove(int x, int y) {
+        return playMove(x, y, _currentPlayer);
+    }
+
+    /**
+     * Plays a move on the board. Returns false if the move was illegal (and thus was not played).
+     */
+    public boolean playMove(Coords coords) {
         return playMove(coords.x, coords.y, _currentPlayer);
     }
 
-	/**
+    /**
      * Plays a move on the board. Returns false if the move was illegal (and thus was not played).<br>
      * Set x to -1 to pass.<br>
      * The move will be added to the variation tree and a mark will be placed on this move.
      * TODO si un ko blanc existe et qu'on rejoue un coup blanc immédiatement dedans, ca devrait être valide
      */
-	public boolean playMove(int x, int y, byte color)
-	{
-        if (_playNode == null || _playNode == _currentNode)
-        {
+    public boolean playMove(int x, int y, byte color) {
+        if (_playNode == null || _playNode == _currentNode) {
             if (x >= 0 && !board.isLegal(x, y, color))
                 return false;
             placeMove(x, y, color);
             if (_playNode != null)
                 _playNode = _currentNode;
-        }
-        else
-        {
+        } else {
             GameNode node = new GameNode(x, y, color);
             node.parentNode = _playNode;
             _playNode.nextNodes.add(node);
             _playNode = node;
         }
         return true;
-	}
+    }
 
 
-    /** The current player passes. */
-    public void pass()
-    {
+    /**
+     * The current player passes.
+     */
+    public void pass() {
         playMove(-1, -1, _currentPlayer);
     }
 
-    /** The specified player resigns the game. */
-    public void resign(byte color)
-    {
+    /**
+     * The specified player resigns the game.
+     */
+    public void resign(byte color) {
         char winnerChar = (color == GoBoard.BLACK) ? GoGameResult.WHITE : GoGameResult.BLACK;
         info.result = new GoGameResult(winnerChar, GoGameResult.RESIGN);
     }
@@ -180,8 +170,7 @@ public class GoGame
     /**
      * Returns true if the game is finished (= a result is set for this game).
      */
-    public boolean isFinished()
-    {
+    public boolean isFinished() {
         return info.result != null;
     }
 
@@ -189,8 +178,7 @@ public class GoGame
     /**
      * Returns the current move number of this game.
      */
-    public int getCurrentMoveNumber()
-    {
+    public int getCurrentMoveNumber() {
         return _playedMoves.size();
     }
 
@@ -199,8 +187,7 @@ public class GoGame
      * Places a move on the board, without checking its legality.
      * This move will become the current one.
      */
-    public void placeMove(int x, int y, byte color)
-    {
+    public void placeMove(int x, int y, byte color) {
         if (x >= _size) // In some old SGF files, a pass was a move outside of the board
         {
             x = -1;
@@ -208,11 +195,9 @@ public class GoGame
         }
         board.setKoCoords(-1, -1);
         List<Coords> prisoners = null;
-        if (x >= 0 && y >= 0)
-        {
+        if (x >= 0 && y >= 0) {
             prisoners = board.placeMove(x, y, color);
-            if (prisoners.size() == 1)
-            {
+            if (prisoners.size() == 1) {
                 // Check if the move produces a ko
                 byte[] colors = board.getBoardArray();
                 byte[] savedColors = new byte[colors.length];
@@ -242,8 +227,7 @@ public class GoGame
      * Places a move on the board of the color of the current player, without checking its legality.
      * This move will become the current one.
      */
-    public void placeMove(int x, int y)
-    {
+    public void placeMove(int x, int y) {
         placeMove(x, y, _currentPlayer);
     }
 
@@ -252,23 +236,20 @@ public class GoGame
      * Cancels the current move, removes it from the game tree and returns it (or null if
      * there was no move to undo). TODO validité d'un undo au milieu d'une variation...?
      */
-	public GameNode undo(boolean removeFromTree)
-	{
+    public GameNode undo(boolean removeFromTree) {
         GameNode move = _currentNode;
         GameNode parentMove = move.parentNode;
         if (parentMove == null) // Only the base move have parentNode set to null
             return null;
 
-        if (move.x >= 0)
-        {
+        if (move.x >= 0) {
             // Supprimer la dernière pierre
             board.set(move.x, move.y, GoBoard.EMPTY);
         }
 
         // Replacer la position précédente sur le goban (prisoniers + commandes SGF type AB[])
         MoveInfo moveInfo = _playedMoves.pop();
-        if (moveInfo.prisoners != null && moveInfo.prisoners.size() > 0)
-        {
+        if (moveInfo.prisoners != null && moveInfo.prisoners.size() > 0) {
             for (LightCoords coords : moveInfo.prisoners)
                 board.set(coords.x, coords.y, coords.color);
 
@@ -277,19 +258,16 @@ public class GoGame
             else
                 _whitePrisoners -= moveInfo.prisoners.size();
         }
-        if (_currentNode.setStones != null && _currentNode.setStones.size() > 0)
-        {
+        if (_currentNode.setStones != null && _currentNode.setStones.size() > 0) {
             for (LightCoords coords : _currentNode.setStones)
                 board.set(coords.x, coords.y, GoBoard.EMPTY);
         }
-        if (moveInfo.removedStones != null && moveInfo.removedStones.size() > 0)
-        {
+        if (moveInfo.removedStones != null && moveInfo.removedStones.size() > 0) {
             for (LightCoords coords : moveInfo.removedStones)
                 board.set(coords.x, coords.y, coords.color);
         }
 
-        if (!_playedMoves.empty())
-        {
+        if (!_playedMoves.empty()) {
             Coords ko = _playedMoves.peek().ko;
             if (ko != null)
                 board.setKoCoords(ko.x, ko.y);
@@ -303,8 +281,8 @@ public class GoGame
 
         updateMarks();
         switchCurrentPlayer();
-		return move;
-	}
+        return move;
+    }
 
 
     /**
@@ -315,13 +293,11 @@ public class GoGame
      *
      * @return The real number of moves navigated.
      */
-    public int navigate(int amount)
-    {
+    public int navigate(int amount) {
         int count = 0;
 
         // Nombre positif
-        for (int i = 0; i < amount; i++)
-        {
+        for (int i = 0; i < amount; i++) {
             int size = _currentNode.nextNodes.size();
             if (size == 0)
                 break;
@@ -333,8 +309,7 @@ public class GoGame
         }
 
         // Nombre négatif
-        for (int i = 0; i > amount; i--)
-        {
+        for (int i = 0; i > amount; i--) {
             if (_currentNode.parentNode == null)
                 break;
             undo(false);
@@ -350,16 +325,14 @@ public class GoGame
     /**
      * Sets the current move to the next variation available (or do nothing if there is none).
      */
-    public void gotoNextVariation()
-    {
+    public void gotoNextVariation() {
         _changeVariation(true);
     }
 
     /**
      * Sets the current move to the previous variation available (or do nothing if there is none).
      */
-    public void gotoPreviousVariation()
-    {
+    public void gotoPreviousVariation() {
         _changeVariation(false);
     }
 
@@ -368,16 +341,14 @@ public class GoGame
      * navigated and the current node changed. Every following move will be appended next
      * to each other.
      */
-    public void playAtCurrentNode(boolean enable)
-    {
+    public void playAtCurrentNode(boolean enable) {
         _playNode = enable ? _currentNode : null;
     }
 
     /**
      * Resets the final status of stones.
      */
-    public void resetFinalStatus()
-    {
+    public void resetFinalStatus() {
         finalStatus = new GoBoard(_size);
     }
 
@@ -387,17 +358,15 @@ public class GoGame
      * This can also change the previous move values to show the maximum value
      * which can be reached by playing them. TODO appliquer aux coups suivants? ou interdire si ce n'est pas la fin d'une branche?
      */
-    public void setMoveValue(byte value)
-    {
+    public void setMoveValue(byte value) {
         _currentNode.setMoveValue(value);
     }
 
-    
+
     /**
-    * Adds a stone of the specified color to the current position (it's not a move). It doesn't capture any stones.
-    */
-    public void addStone(int x, int y, byte color)
-    {
+     * Adds a stone of the specified color to the current position (it's not a move). It doesn't capture any stones.
+     */
+    public void addStone(int x, int y, byte color) {
         _currentNode.setStone(x, y, color);
         board.placeMove(x, y, color, false);
     }
@@ -406,8 +375,7 @@ public class GoGame
      * Removes the current move from the game tree, including all of the following moves.
      * If this is called from the base move, the whole tree will be deleted.
      */
-    public void deleteMove()
-    {
+    public void deleteMove() {
         if (_currentNode.parentNode == null)
             clear();
         else
@@ -418,20 +386,17 @@ public class GoGame
      * Rotates the board and the variations by 90° CCW
      * (this doesn't rotate added stones and any other SGF property).
      */
-    public void rotateCCW()
-    {
+    public void rotateCCW() {
         board.rotateCCW();
         _rotateMovesCCW_loop(getBaseNode());
         updateMarks();
     }
 
-    private void _rotateMovesCCW_loop(GameNode move)
-    {
-        if (move.x >= 0 && move.y >= 0)
-        {
+    private void _rotateMovesCCW_loop(GameNode move) {
+        if (move.x >= 0 && move.y >= 0) {
             byte temp = move.x;
             move.x = move.y;
-            move.y = (byte)(_size - temp - 1);
+            move.y = (byte) (_size - temp - 1);
         }
 
         for (GameNode nextMove : move.nextNodes)
@@ -442,11 +407,10 @@ public class GoGame
     /**
      * Returns the coordinates of each prisoner captured by the current move, or null if there was no.
      */
-    public Collection<LightCoords> getLastPrisoners()
-    {
+    public Collection<LightCoords> getLastPrisoners() {
         if (_playedMoves.empty())
             return new ArrayList<LightCoords>();
-        
+
         MoveInfo info = _playedMoves.peek();
         return (info.prisoners != null) ? info.prisoners : new ArrayList<LightCoords>();
     }
@@ -455,8 +419,7 @@ public class GoGame
     /**
      * Returns true if both players just passed successively (this move and the last one).
      */
-    public boolean hasTwoPasses()
-    {
+    public boolean hasTwoPasses() {
         final GameNode parentMove = _currentNode.parentNode;
         return parentMove != null && _currentNode.x == -1 && parentMove.x == -1;
     }
@@ -464,8 +427,7 @@ public class GoGame
     /**
      * Shows/hides move numbers (displayed as numeric marks on the board).
      */
-    public void showMoveNumbers(boolean show)
-    {
+    public void showMoveNumbers(boolean show) {
         _showMoveNumbers = show;
         updateMarks();
     }
@@ -474,8 +436,7 @@ public class GoGame
      * Returns true if playing a stone at the specified coordinates for the current player is legal
      * according to the current position.
      */
-    public boolean isLegal(int x, int y)
-    {
+    public boolean isLegal(int x, int y) {
         return board.isLegal(x, y, _currentPlayer);
     }
 
@@ -483,105 +444,116 @@ public class GoGame
      * Returns true if playing a stone with the specified color and coordinates is legal
      * according to the current position.
      */
-    public boolean isLegal(int x, int y, byte color)
-    {
+    public boolean isLegal(int x, int y, byte color) {
         return board.isLegal(x, y, color);
     }
-    
-    /** Returns the current move. */
-    public GameNode getCurrentNode()
-    {
+
+    /**
+     * Returns the current move.
+     */
+    public GameNode getCurrentNode() {
         return _currentNode;
     }
 
-    /** Returns the base move of the current game tree. */
-    public GameNode getBaseNode()
-    {
+    /**
+     * Returns the base move of the current game tree.
+     */
+    public GameNode getBaseNode() {
         return _baseNode;
     }
-    
-	/** Switches the next player to play (black becomes white, white becomes black). */
-	public void switchCurrentPlayer()
-	{
-		_currentPlayer = (_currentPlayer == GoBoard.BLACK) ? GoBoard.WHITE : GoBoard.BLACK;
-	}
-	
-	/** Returns the color of the next player to play. */
-	public byte getNextPlayer()
-	{
-		return _currentPlayer;
-	}
 
-    /** Sets the next player to play (use constants of this class : BLACK or WHITE). */
-    public void setNextPlayer(byte color)
-    {
+    /**
+     * Switches the next player to play (black becomes white, white becomes black).
+     */
+    public void switchCurrentPlayer() {
+        _currentPlayer = (_currentPlayer == GoBoard.BLACK) ? GoBoard.WHITE : GoBoard.BLACK;
+    }
+
+    /**
+     * Returns the color of the next player to play.
+     */
+    public byte getNextPlayer() {
+        return _currentPlayer;
+    }
+
+    /**
+     * Sets the next player to play (use constants of this class : BLACK or WHITE).
+     */
+    public void setNextPlayer(byte color) {
         _currentPlayer = color;
     }
 
-    /** Returns the komi for this game. */
-    public double getKomi()
-    {
+    /**
+     * Returns the komi for this game.
+     */
+    public double getKomi() {
         return info.komi;
     }
 
-    /** Returns the number of handicap stones used for this game. */
-    public int getHandicap()
-    {
+    /**
+     * Returns the number of handicap stones used for this game.
+     */
+    public int getHandicap() {
         return info.handicap;
     }
 
-    /** Returns the total number of black prisoners (captured by black). */
-    public int getBlackPrisoners()
-    {
+    /**
+     * Returns the total number of black prisoners (captured by black).
+     */
+    public int getBlackPrisoners() {
         return _blackPrisoners;
     }
 
-    /** Returns the total number of white prisoners (captured by white). */
-    public int getWhitePrisoners()
-    {
+    /**
+     * Returns the total number of white prisoners (captured by white).
+     */
+    public int getWhitePrisoners() {
         return _whitePrisoners;
     }
 
-    /** Returns the final status of the specified intersection (BLACK_TERRITORY, ...). */
-    public byte getFinalStatus(int x, int y)
-    {
+    /**
+     * Returns the final status of the specified intersection (BLACK_TERRITORY, ...).
+     */
+    public byte getFinalStatus(int x, int y) {
         return finalStatus.getColor(x, y);
     }
 
-    /** Sets the final status of the specified intersection (BLACK_TERRITORY, ...). */
-    public void setFinalStatus(int x, int y, byte status)
-    {
+    /**
+     * Sets the final status of the specified intersection (BLACK_TERRITORY, ...).
+     */
+    public void setFinalStatus(int x, int y, byte status) {
         finalStatus.set(x, y, status);
     }
 
-    /** Completely clears the game tree. */
-    public void clear()
-    {
+    /**
+     * Completely clears the game tree.
+     */
+    public void clear() {
         _playedMoves.clear();
         _baseNode = new GameNode(BASE_NODE_COORD, BASE_NODE_COORD, GoBoard.EMPTY);
         _currentNode = _baseNode;
         board.clear();
     }
 
-    /** Navigate to the last move of the current selected variation. */
-    public void gotoLastMove()
-    {
+    /**
+     * Navigate to the last move of the current selected variation.
+     */
+    public void gotoLastMove() {
         navigate(999999);
     }
 
-    /** Navigate to the first move of the game. */
-    public void gotoFirstMove()
-    {
+    /**
+     * Navigate to the first move of the game.
+     */
+    public void gotoFirstMove() {
         navigate(-999999);
     }
-
 
 
     /**
      * Returns the actual representation of the game in a SGF string.
      */
-    public String getSgf()
-    {
+    public String getSgf() {
         return new SgfParser().toSgfString(this);
     }
 
@@ -590,8 +562,7 @@ public class GoGame
      *
      * @throws IOException An error occured during writing.
      */
-    public void saveSgf(final OutputStream stream) throws IOException
-    {
+    public void saveSgf(final OutputStream stream) throws IOException {
         new SgfParser().save(this, stream);
     }
 
@@ -600,8 +571,7 @@ public class GoGame
      *
      * @throws IOException An error occured during reading (The SGF may be corrupted).
      */
-    public static GoGame loadSgf(final InputStream stream) throws IOException
-    {
+    public static GoGame loadSgf(final InputStream stream) throws IOException {
         GoGame[] games = new SgfParser().parse(stream);
         return games.length > 0 ? games[0] : new GoGame(19, 6.5, 0);
     }
@@ -611,8 +581,7 @@ public class GoGame
      *
      * @throws IOException An error occured during reading (The SGF is probably corrupted).
      */
-    public static GoGame loadSgf(final String sgf) throws IOException
-    {
+    public static GoGame loadSgf(final String sgf) throws IOException {
         InputStream stream = new ByteArrayInputStream(sgf.getBytes());
         GoGame game = loadSgf(stream);
         stream.close();
@@ -625,8 +594,7 @@ public class GoGame
      *
      * @throws IOException An error occured during writing.
      */
-    public void saveLrf(final OutputStream stream) throws IOException
-    {
+    public void saveLrf(final OutputStream stream) throws IOException {
         new LrfParser().save(this, stream);
     }
 
@@ -635,19 +603,16 @@ public class GoGame
      *
      * @throws IOException An error occured during reading.
      */
-    public static GoGame loadLrf(final InputStream stream) throws IOException
-    {
+    public static GoGame loadLrf(final InputStream stream) throws IOException {
         return new LrfParser().parse(stream);
     }
 
-    
 
     /**
      * Adds a move at the current position (set x to -1 to add a pass) and set it as the current move.
      * If the move already exists, no node is created, it is just set to the corresponding node.
      */
-    protected void _addToTree(int x, int y, byte color, List<Coords> prisoners)
-    {
+    protected void _addToTree(int x, int y, byte color, List<Coords> prisoners) {
         _currentNode = _currentNode.addNode(x, y, color);
         GameNode parentNode = _currentNode.parentNode;
         if (parentNode != null)
@@ -659,14 +624,12 @@ public class GoGame
     /**
      * Sets or removes from the board the specified moves by the current node (SGF properties AE/AW/AB).
      */
-    protected void _addRequestedStones()
-    {
+    protected void _addRequestedStones() {
         if (_currentNode.setStones == null || _currentNode.setStones.size() == 0)
             return;
 
         ArrayList<LightCoords> removedList = new ArrayList<LightCoords>();
-        for (LightCoords coords : _currentNode.setStones)
-        {
+        for (LightCoords coords : _currentNode.setStones) {
             byte prevColor = board.getColor(coords.x, coords.y);
             removedList.add(new LightCoords(coords.x, coords.y, prevColor));
             board.set(coords.x, coords.y, coords.color);
@@ -679,8 +642,7 @@ public class GoGame
     /**
      * Sets the current move to the next or previous variation available, depending on the parameter.
      */
-    protected void _changeVariation(boolean isNext)
-    {
+    protected void _changeVariation(boolean isNext) {
         GameNode parentMove = _currentNode.parentNode;
         if (parentMove == null)
             return;
@@ -690,12 +652,11 @@ public class GoGame
             return;
 
         int index = parentMove.nextNodes.indexOf(_currentNode);
-        if (index < 0)
-        {
+        if (index < 0) {
             System.err.println("Cannot find current node in parent list");
             return;
         }
-        
+
         if (isNext)
             index = (index == size - 1) ? 0 : index + 1;
         else
@@ -713,8 +674,7 @@ public class GoGame
      * TODO No handicap is set for even boardsizes
      * TODO Handle handicap > 9
      */
-    public void placeHandicap(int handicap)
-    {
+    public void placeHandicap(int handicap) {
         if (handicap <= 1 || _size % 2 == 0)
             return;
         if (handicap > 9)
@@ -725,8 +685,7 @@ public class GoGame
         int c2 = _size / 2;
         int c3 = _size - 3 - shift;
 
-        switch (handicap)
-        {
+        switch (handicap) {
             case 8:
                 addStone(c2, c1, GoBoard.BLACK);
                 addStone(c2, c3, GoBoard.BLACK);
@@ -750,10 +709,11 @@ public class GoGame
         info.handicap = handicap;
     }
 
-    
-    /** Updates the marks on the board, including the dynamic ones (last played move, move numbers, ko). */
-    void updateMarks()
-    {
+
+    /**
+     * Updates the marks on the board, including the dynamic ones (last played move, move numbers, ko).
+     */
+    void updateMarks() {
         board.removeMarks();
         // TODO Numéroter les coups de la partie si demandé
 
@@ -764,21 +724,18 @@ public class GoGame
         if (ko != null)
             board.setMark(new BoardMark(ko.x, ko.y, BoardMark.MARK_SQUARE));
 
-        if (_currentNode.boardMarks != null)
-        {
+        if (_currentNode.boardMarks != null) {
             for (BoardMark mark : _currentNode.boardMarks)
                 board.setMark(mark);
         }
     }
 
 
-    
     /**
      * Contains informations about a move played on the board. It is used to be able to undo
      * any of these moves.
      */
-    protected final class MoveInfo
-    {
+    protected final class MoveInfo {
         /**
          * Contains the coordinates and color of all intersections altered by the last move.
          * This excludes prisoners, but includes any stone removed with an SGF command like AB[]
@@ -791,18 +748,17 @@ public class GoGame
          */
         public List<LightCoords> prisoners;
 
-        /** Contains the coordinates of the ko if there is one, else it is set to null. */
+        /**
+         * Contains the coordinates of the ko if there is one, else it is set to null.
+         */
         public Coords ko;
 
 
-
-        public MoveInfo(Collection<Coords> prisoners, byte prisonersColor, Coords ko)
-        {
-            this (prisoners, prisonersColor, ko, null);
+        public MoveInfo(Collection<Coords> prisoners, byte prisonersColor, Coords ko) {
+            this(prisoners, prisonersColor, ko, null);
         }
-        
-        public MoveInfo(Collection<Coords> prisoners, byte prisonersColor, Coords ko, Collection<LightCoords> removedStones)
-        {
+
+        public MoveInfo(Collection<Coords> prisoners, byte prisonersColor, Coords ko, Collection<LightCoords> removedStones) {
             this.ko = ko;
             addPrisoners(prisoners, prisonersColor);
             setRemovedStones(removedStones);
@@ -811,8 +767,7 @@ public class GoGame
         /**
          * Sets the coordinates of each prisoner captured by the current move.
          */
-        public void addPrisoners(Collection<Coords> prisoners, byte prisonersColor)
-        {
+        public void addPrisoners(Collection<Coords> prisoners, byte prisonersColor) {
             if (prisoners == null)
                 return;
 
@@ -825,8 +780,7 @@ public class GoGame
         /**
          * Adds the coordinates and color of an intersection altered by the last move.
          */
-        public void addRemovedStone(LightCoords removedStone)
-        {
+        public void addRemovedStone(LightCoords removedStone) {
             if (removedStones == null)
                 removedStones = new ArrayList<LightCoords>(8);
             removedStones.add(removedStone);
@@ -835,15 +789,14 @@ public class GoGame
         /**
          * Adds the coordinates and color of multiple intersections altered by the last move.
          */
-        public void setRemovedStones(Collection<LightCoords> removedStones)
-        {
+        public void setRemovedStones(Collection<LightCoords> removedStones) {
             if (removedStones == null)
                 return;
 
             if (this.removedStones == null)
                 this.removedStones = new ArrayList<LightCoords>(8);
             else
-               this.removedStones.clear();
+                this.removedStones.clear();
             this.removedStones.addAll(removedStones);
         }
     }

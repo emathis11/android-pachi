@@ -25,16 +25,14 @@ import java.io.OutputStream;
 /**
  * Writes bits to an OutputStream.
  */
-public class BitWriter
-{
+public class BitWriter {
     private OutputStream _stream;
     private byte[] _buffer;
     private int _bufferPos;
     private int _nextBit;
 
 
-    public BitWriter(OutputStream stream)
-    {
+    public BitWriter(OutputStream stream) {
         _stream = stream;
         _buffer = new byte[128];
         _bufferPos = 0;
@@ -42,21 +40,17 @@ public class BitWriter
     }
 
 
-    public void write(boolean bit) throws IOException
-    {
+    public void write(boolean bit) throws IOException {
         if (bit)
             _buffer[_bufferPos] |= _nextBit;
 
-        if (_nextBit == 0x80)
-        {
+        if (_nextBit == 0x80) {
             _nextBit = 0x1;
             _bufferPos++;
             if (_bufferPos == _buffer.length)
                 flush();
             _buffer[_bufferPos] = 0;
-        }
-        else
-        {
+        } else {
             _nextBit <<= 1;
         }
     }
@@ -64,12 +58,11 @@ public class BitWriter
     /**
      * Writes the specified bits (starting from the highest bits) to the underlying OutputStream.
      *
-     * @param bits The integer containing the bits to write.
+     * @param bits        The integer containing the bits to write.
      * @param bitsToWrite The number of bits to write.
      * @throws IOException An error occured during writing.
      */
-    public void write(long bits, int bitsToWrite) throws IOException
-    {
+    public void write(long bits, int bitsToWrite) throws IOException {
         if (bitsToWrite > 64)
             bitsToWrite = 64;
 
@@ -77,8 +70,7 @@ public class BitWriter
             write((bits & (1 << i)) != 0);
     }
 
-    public void writeLittleEndian(long bits, int bitsToWrite) throws IOException
-    {
+    public void writeLittleEndian(long bits, int bitsToWrite) throws IOException {
         if (bitsToWrite > 64)
             bitsToWrite = 64;
 
@@ -92,8 +84,7 @@ public class BitWriter
      *
      * @throws IOException An error occured while writing to the OutputStream.
      */
-    public void flush() throws IOException
-    {
+    public void flush() throws IOException {
         if (_nextBit > 0x1)
             _bufferPos++;
 

@@ -24,84 +24,104 @@ import java.util.ArrayList;
 /**
  * Represents a single node of a variation tree.
  */
-public final class GameNode
-{
+public final class GameNode {
     public static byte COORD_UNDEFINED = -9;
-    
-    
-    /** The x coordinate of the move. Set to COORD_UNDEFINED (default value) if no move is played. */
+
+
+    /**
+     * The x coordinate of the move. Set to COORD_UNDEFINED (default value) if no move is played.
+     */
     public byte x;
-    /** The y coordinate of the move. Set to COORD_UNDEFINED (default value) if no move is played. */
+    /**
+     * The y coordinate of the move. Set to COORD_UNDEFINED (default value) if no move is played.
+     */
     public byte y;
 
-    /** The color of the move (either GoBoard.BLACK, GoBoard.WHITE or GoBoard.EMPTY if not used). */
+    /**
+     * The color of the move (either GoBoard.BLACK, GoBoard.WHITE or GoBoard.EMPTY if not used).
+     */
     public byte color;
 
-    /** The move value, between 0 (lower) and 100 (better). Set to -1 if not used (default value). */
+    /**
+     * The move value, between 0 (lower) and 100 (better). Set to -1 if not used (default value).
+     */
     public byte value = -1;
 
-    /** This remembers the last variation index choosed. */
+    /**
+     * This remembers the last variation index choosed.
+     */
     public byte lastVariation = 0;
 
-    /** A list containing the next nodes (never null). */
+    /**
+     * A list containing the next nodes (never null).
+     */
     public ArrayList<GameNode> nextNodes = new ArrayList<GameNode>(1);
 
-    /** The parent node of the current node (can be null if the node is the base node). */
+    /**
+     * The parent node of the current node (can be null if the node is the base node).
+     */
     public GameNode parentNode;
 
-    /** Move comments are stored in UTF-8, because the default encoding (UTF-16) uses too much memory. */
+    /**
+     * Move comments are stored in UTF-8, because the default encoding (UTF-16) uses too much memory.
+     */
     private byte[] _comment_utf8;
 
-    /** Contains all stones and empty intersections to be set on the board (SGF commands AB[], AW[], AE[]). Can be null. */
+    /**
+     * Contains all stones and empty intersections to be set on the board (SGF commands AB[], AW[], AE[]). Can be null.
+     */
     public ArrayList<LightCoords> setStones;
 
-    /** Contains all marks set on the board (can be null). */
+    /**
+     * Contains all marks set on the board (can be null).
+     */
     public ArrayList<BoardMark> boardMarks;
 
-    
 
-    /** Creates a new empty node with default values. */
-    public GameNode()
-    {
+    /**
+     * Creates a new empty node with default values.
+     */
+    public GameNode() {
         x = y = COORD_UNDEFINED;
     }
 
-    /** Creates a new node with the specified parameters. */
-    public GameNode(int x, int y, byte color)
-    {
+    /**
+     * Creates a new node with the specified parameters.
+     */
+    public GameNode(int x, int y, byte color) {
         this.x = (byte) x;
         this.y = (byte) y;
         this.color = color;
     }
 
 
-
-    /** Gets the comment associated to this node. */
-    public String getComment()
-    {
+    /**
+     * Gets the comment associated to this node.
+     */
+    public String getComment() {
         if (_comment_utf8 == null)
             return "";
         try {
             return new String(_comment_utf8, "UTF-8");
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
             return "[Error]";
         }
     }
 
-    /** Sets the comment associated to this node. */
-    public void setComment(String comment)
-    {
+    /**
+     * Sets the comment associated to this node.
+     */
+    public void setComment(String comment) {
         try {
             _comment_utf8 = comment.getBytes("UTF-8");
-        }
-        catch (Exception ignored) {
+        } catch (Exception ignored) {
         }
     }
 
-    /** Adds a stone or empty intersection to be set on the board. */
-    public void setStone(int x, int y, byte color)
-    {
+    /**
+     * Adds a stone or empty intersection to be set on the board.
+     */
+    public void setStone(int x, int y, byte color) {
         if (setStones == null)
             setStones = new ArrayList<LightCoords>(6);
 
@@ -112,9 +132,10 @@ public final class GameNode
         setStones.add(coords);
     }
 
-    /** Removes a stone to be set on the board. */
-    public void unsetStone(int x, int y)
-    {
+    /**
+     * Removes a stone to be set on the board.
+     */
+    public void unsetStone(int x, int y) {
         if (setStones == null)
             return;
 
@@ -124,9 +145,10 @@ public final class GameNode
             setStones.remove(index);
     }
 
-    /** Adds a mark to the current node. */
-    public void addMark(BoardMark newMark)
-    {
+    /**
+     * Adds a mark to the current node.
+     */
+    public void addMark(BoardMark newMark) {
         if (boardMarks == null)
             boardMarks = new ArrayList<BoardMark>(4);
         else
@@ -134,13 +156,12 @@ public final class GameNode
         boardMarks.add(newMark);
     }
 
-    /** Removes the mark placed on the specified coordinates. */
-    public void removeMark(int x, int y)
-    {
-        for (BoardMark mark : boardMarks)
-        {
-            if (mark.x == x && mark.y == y)
-            {
+    /**
+     * Removes the mark placed on the specified coordinates.
+     */
+    public void removeMark(int x, int y) {
+        for (BoardMark mark : boardMarks) {
+            if (mark.x == x && mark.y == y) {
                 boardMarks.remove(mark);
                 break;
             }
@@ -153,19 +174,15 @@ public final class GameNode
      *
      * @return The move added to the tree, or the existing node.
      */
-    public GameNode addNode(int x, int y, byte color)
-    {
+    public GameNode addNode(int x, int y, byte color) {
         GameNode move = new GameNode(x, y, color);
         int index = nextNodes.indexOf(move);
-        if (index < 0)
-        {
+        if (index < 0) {
             move.parentNode = this;
             move.value = value;
             nextNodes.add(move);
             return move;
-        }
-        else
-        {
+        } else {
             return nextNodes.get(index);
         }
     }
@@ -174,8 +191,7 @@ public final class GameNode
      * Adds a move (and any associated following move) to the list of the next moves.
      * It is added even if a move played at the same coordinates already exists.
      */
-    public void forceAddMove(GameNode move)
-    {
+    public void forceAddMove(GameNode move) {
         nextNodes.add(move);
         move.parentNode = this;
     }
@@ -184,15 +200,12 @@ public final class GameNode
      * Sets the value of the current node to the specified one. This also set the
      * value of all parent nodes as long as no higher value is encountered.
      */
-    public void setMoveValue(byte value)
-    {
+    public void setMoveValue(byte value) {
         this.value = value;
         GameNode move = this;
-        while ((move = move.parentNode) != null)
-        {
+        while ((move = move.parentNode) != null) {
             byte highestValue = -1;
-            for (GameNode nextMove : move.nextNodes)
-            {
+            for (GameNode nextMove : move.nextNodes) {
                 if (nextMove.value > highestValue)
                     highestValue = nextMove.value;
             }
@@ -209,19 +222,16 @@ public final class GameNode
      * Returns true if the specified variable is a GameNode with the same color and coordinates as the current one.
      */
     @Override
-    public boolean equals(Object object)
-    {
-        if (object instanceof GameNode)
-        {
+    public boolean equals(Object object) {
+        if (object instanceof GameNode) {
             GameNode move = (GameNode) object;
-            return  x == move.x && y == move.y && color == move.color;
+            return x == move.x && y == move.y && color == move.color;
         }
         return false;
     }
-    
+
     @Override
-    public String toString()
-    {
+    public String toString() {
         return String.format("[GameNode] " + color + ", x=" + x + ", y=" + y);
     }
 }

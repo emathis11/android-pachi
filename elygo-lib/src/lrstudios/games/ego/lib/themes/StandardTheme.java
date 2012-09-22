@@ -28,25 +28,22 @@ import android.graphics.drawable.shapes.OvalShape;
 import lrstudios.games.ego.lib.R;
 
 
-
-public class StandardTheme extends Theme
-{
+public class StandardTheme extends Theme {
     private static final int SHADOW_SIZE = 1;
 
-	private Paint _backgroundPaint;
+    private Paint _backgroundPaint;
     private ShapeDrawable _shadowDrawable;
 
 
-	public StandardTheme(Context context)
-	{
+    public StandardTheme(Context context) {
         super(context);
-		_gridPaint.setStyle(Paint.Style.STROKE);
-		_gridPaint.setStrokeWidth(0);
-		_gridPaint.setColor(Color.BLACK);
+        _gridPaint.setStyle(Paint.Style.STROKE);
+        _gridPaint.setStrokeWidth(0);
+        _gridPaint.setColor(Color.BLACK);
 
-		_hoshiPaint.setAntiAlias(true);
-		_hoshiPaint.setColor(Color.BLACK);
-		_hoshiPaint.setStyle(Paint.Style.FILL);
+        _hoshiPaint.setAntiAlias(true);
+        _hoshiPaint.setColor(Color.BLACK);
+        _hoshiPaint.setStyle(Paint.Style.FILL);
 
         _shadowDrawable = new ShapeDrawable(new OvalShape());
         Paint shadowPaint = _shadowDrawable.getPaint();
@@ -55,20 +52,18 @@ public class StandardTheme extends Theme
 
         _backgroundPaint = new Paint();
         defineBackgroundPaint(_backgroundPaint);
-	}
+    }
 
-    protected void defineBackgroundPaint(Paint backgroundPaint)
-    {
+    protected void defineBackgroundPaint(Paint backgroundPaint) {
         backgroundPaint.setShader(new BitmapShader(
-            BitmapFactory.decodeResource(_context.getResources(), R.drawable.wood6),
-            TileMode.MIRROR, TileMode.MIRROR));
+                BitmapFactory.decodeResource(_context.getResources(), R.drawable.wood6),
+                TileMode.MIRROR, TileMode.MIRROR));
     }
 
 
-	@Override
-	public void init(Config config)
-	{
-		super.init(config);
+    @Override
+    public void init(Config config) {
+        super.init(config);
         Resources res = _context.getResources();
 
         _deadBlackStone = new BitmapDrawable(res, blackStoneBitmap);
@@ -79,18 +74,16 @@ public class StandardTheme extends Theme
         _blackVariation.setAlpha(112);
         _whiteVariation = new BitmapDrawable(res, whiteStoneBitmap);
         _whiteVariation.setAlpha(144);
-	}
+    }
 
-
-	@Override
-	public void drawBackground(Canvas canvas, int left, int top, int right, int bottom)
-	{
-		canvas.drawRect(left, top, right, bottom, _backgroundPaint);
-	}
 
     @Override
-    public Bitmap createBlackStoneBitmap(int stoneSize)
-    {
+    public void drawBackground(Canvas canvas, int left, int top, int right, int bottom) {
+        canvas.drawRect(left, top, right, bottom, _backgroundPaint);
+    }
+
+    @Override
+    public Bitmap createBlackStoneBitmap(int stoneSize) {
         int realStoneSize = stoneSize + SHADOW_SIZE;
 
         Bitmap bitmap = Bitmap.createBitmap(realStoneSize, realStoneSize, Bitmap.Config.ARGB_8888);
@@ -103,8 +96,8 @@ public class StandardTheme extends Theme
 
         blackStonePaint.setAntiAlias(true);
         blackStonePaint.setShader(new RadialGradient(
-            realStoneSize / 3.0f, realStoneSize / 8.2f, realStoneSize / 2.1f,
-            Color.rgb(120, 120, 120), Color.BLACK, TileMode.CLAMP));
+                realStoneSize / 3.0f, realStoneSize / 8.2f, realStoneSize / 2.1f,
+                Color.rgb(120, 120, 120), Color.BLACK, TileMode.CLAMP));
 
         stoneDrawable.setBounds(SHADOW_SIZE, SHADOW_SIZE, realStoneSize - SHADOW_SIZE, realStoneSize - SHADOW_SIZE);
         stoneDrawable.draw(canvas);
@@ -112,8 +105,7 @@ public class StandardTheme extends Theme
     }
 
     @Override
-    public Bitmap createWhiteStoneBitmap(int stoneSize)
-    {
+    public Bitmap createWhiteStoneBitmap(int stoneSize) {
         int realStoneSize = stoneSize + SHADOW_SIZE;
 
         Bitmap bitmap = Bitmap.createBitmap(realStoneSize, realStoneSize, Bitmap.Config.ARGB_8888);
@@ -126,9 +118,9 @@ public class StandardTheme extends Theme
 
         whiteStonePaint.setAntiAlias(true);
         whiteStonePaint.setShader(new LinearGradient(
-            (int)(realStoneSize * 0.33), 0,
-            realStoneSize, realStoneSize,
-            Color.rgb(255, 255, 255), Color.rgb(142, 142, 142), TileMode.CLAMP));
+                (int) (realStoneSize * 0.33), 0,
+                realStoneSize, realStoneSize,
+                Color.rgb(255, 255, 255), Color.rgb(142, 142, 142), TileMode.CLAMP));
 
         stoneDrawable.setBounds(SHADOW_SIZE, SHADOW_SIZE, realStoneSize - SHADOW_SIZE, realStoneSize - SHADOW_SIZE);
         stoneDrawable.draw(canvas);

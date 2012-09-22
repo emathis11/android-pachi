@@ -1,6 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="lrstudios.games.ego.lib">
+          package="lrstudios.games.ego.lib">
 
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16" />
-    
+    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="16"/>
+
 </manifest>

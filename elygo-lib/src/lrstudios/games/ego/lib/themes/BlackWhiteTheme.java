@@ -29,14 +29,14 @@ import android.graphics.drawable.ShapeDrawable;
 import android.graphics.drawable.shapes.OvalShape;
 
 
-/** Basic black and white Theme. */
-public final class BlackWhiteTheme extends Theme
-{
-	private Paint _backgroundPaint;
+/**
+ * Basic black and white Theme.
+ */
+public final class BlackWhiteTheme extends Theme {
+    private Paint _backgroundPaint;
 
 
-	public BlackWhiteTheme(Context context)
-	{
+    public BlackWhiteTheme(Context context) {
         super(context);
 
         _backgroundPaint = new Paint();
@@ -44,17 +44,16 @@ public final class BlackWhiteTheme extends Theme
 
         _gridPaint.setColor(Color.rgb(64, 64, 64));
         _gridPaint.setStyle(Paint.Style.STROKE);
-		_gridPaint.setStrokeWidth(0);
+        _gridPaint.setStrokeWidth(0);
 
         _hoshiPaint.setAntiAlias(true);
         _hoshiPaint.setColor(Color.BLACK);
         _hoshiPaint.setStyle(Paint.Style.FILL);
-	}
+    }
 
 
-	@Override
-	public void init(Config config)
-	{
+    @Override
+    public void init(Config config) {
         super.init(config);
         Resources res = _context.getResources();
 
@@ -69,15 +68,13 @@ public final class BlackWhiteTheme extends Theme
     }
 
 
-	@Override
-	public void drawBackground(Canvas canvas, int left, int top, int right, int bottom)
-	{
-		canvas.drawRect(left, top, right, bottom, _backgroundPaint);
-	}
+    @Override
+    public void drawBackground(Canvas canvas, int left, int top, int right, int bottom) {
+        canvas.drawRect(left, top, right, bottom, _backgroundPaint);
+    }
 
     @Override
-    public Bitmap createBlackStoneBitmap(int stoneSize)
-    {
+    public Bitmap createBlackStoneBitmap(int stoneSize) {
         Bitmap bitmap = Bitmap.createBitmap(stoneSize, stoneSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 
@@ -92,8 +89,7 @@ public final class BlackWhiteTheme extends Theme
     }
 
     @Override
-    public Bitmap createWhiteStoneBitmap(int stoneSize)
-    {
+    public Bitmap createWhiteStoneBitmap(int stoneSize) {
         Bitmap bitmap = Bitmap.createBitmap(stoneSize, stoneSize, Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(bitmap);
 

@@ -27,35 +27,34 @@ import java.util.List;
 /**
  * Parses and saves SGF files from/to instances of {@link GoGame}.
  */
-public final class SgfParser
-{
+public final class SgfParser {
     private static final String[] _properties;
 
     // SGF properties constants : these are used to speed up the parsing/saving process
     public static final byte
-        PROP_UNDEFINED = -1,
-        PROP_ADD_BLACK = 0, PROP_ADD_EMPTY = 1, PROP_ANNOTATION = 2, PROP_APPLICATION_NAME = 3, PROP_ARROW = 4, PROP_ADD_WHITE = 5,
-        PROP_BLACK = 6, PROP_BLACK_TIME_LEFT = 7, PROP_BAD_MOVE = 8, PROP_BLACK_RANK = 9, PROP_BLACK_TEAM = 10,
-        PROP_COMMENT = 11, PROP_CHARSET = 12, PROP_COPYRIGHT = 13, PROP_CIRCLE = 14,
-        PROP_DIM_POINTS = 15, PROP_EVEN_POSITION = 16, PROP_DOUBTFUL = 17, PROP_DATE = 18,
-        PROP_EVENT = 19,
-        PROP_SGF_VERSION = 20, PROP_FIGURE = 21,
-        PROP_GOOD_FOR_BLACK = 22, PROP_GAME_COMMENT = 23, PROP_GAME = 24, PROP_GAME_NAME = 25, PROP_GOOD_FOR_WHITE = 26,
-        PROP_HANDICAP = 27, PROP_HOTSPOT = 28,
-        PROP_INTERESTING = 29,
-        PROP_KOMI = 30, PROP_KO = 31,
-        PROP_LABEL = 32, PROP_LINE = 33,
-        PROP_MARK_WITH_X = 34, PROP_SET_MOVE_NUMBER = 35,
-        PROP_NODE_NAME = 36,
-        PROP_OT_STONES_BLACK = 37, PROP_OPENING = 38, PROP_OVERTIME = 39, PROP_OT_STONES_WHITE = 40,
-        PROP_PLAYER_BLACK = 41, PROP_PLACE = 42, PROP_PLAYER_TO_PLAY = 43, PROP_PRINT_MOVE_MODE = 44, PROP_PLAYER_WHITE = 45,
-        PROP_RESULT = 46, PROP_ROUND = 47, PROP_RULES = 48,
-        PROP_SELECTED = 49, PROP_SOURCE = 50, PROP_SQUARE = 51, PROP_STYLE = 52, PROP_SIZE = 53,
-        PROP_TERRITORY_BLACK = 54, PROP_TESUJI = 55, PROP_TIME_LIMIT = 56, PROP_TRIANGLE = 57, PROP_TERRITORY_WHITE = 58,
-        PROP_UNCLEAR_POS = 59, PROP_USER = 60,
-        PROP_VALUE = 61, PROP_VIEW = 62,
-        PROP_WHITE = 63, PROP_WHITE_TIME_LEFT = 64, PROP_WHITE_RANK = 65, PROP_WHITE_TEAM = 66,
-        PROP_MAX_VALUE = 66;
+            PROP_UNDEFINED = -1,
+            PROP_ADD_BLACK = 0, PROP_ADD_EMPTY = 1, PROP_ANNOTATION = 2, PROP_APPLICATION_NAME = 3, PROP_ARROW = 4, PROP_ADD_WHITE = 5,
+            PROP_BLACK = 6, PROP_BLACK_TIME_LEFT = 7, PROP_BAD_MOVE = 8, PROP_BLACK_RANK = 9, PROP_BLACK_TEAM = 10,
+            PROP_COMMENT = 11, PROP_CHARSET = 12, PROP_COPYRIGHT = 13, PROP_CIRCLE = 14,
+            PROP_DIM_POINTS = 15, PROP_EVEN_POSITION = 16, PROP_DOUBTFUL = 17, PROP_DATE = 18,
+            PROP_EVENT = 19,
+            PROP_SGF_VERSION = 20, PROP_FIGURE = 21,
+            PROP_GOOD_FOR_BLACK = 22, PROP_GAME_COMMENT = 23, PROP_GAME = 24, PROP_GAME_NAME = 25, PROP_GOOD_FOR_WHITE = 26,
+            PROP_HANDICAP = 27, PROP_HOTSPOT = 28,
+            PROP_INTERESTING = 29,
+            PROP_KOMI = 30, PROP_KO = 31,
+            PROP_LABEL = 32, PROP_LINE = 33,
+            PROP_MARK_WITH_X = 34, PROP_SET_MOVE_NUMBER = 35,
+            PROP_NODE_NAME = 36,
+            PROP_OT_STONES_BLACK = 37, PROP_OPENING = 38, PROP_OVERTIME = 39, PROP_OT_STONES_WHITE = 40,
+            PROP_PLAYER_BLACK = 41, PROP_PLACE = 42, PROP_PLAYER_TO_PLAY = 43, PROP_PRINT_MOVE_MODE = 44, PROP_PLAYER_WHITE = 45,
+            PROP_RESULT = 46, PROP_ROUND = 47, PROP_RULES = 48,
+            PROP_SELECTED = 49, PROP_SOURCE = 50, PROP_SQUARE = 51, PROP_STYLE = 52, PROP_SIZE = 53,
+            PROP_TERRITORY_BLACK = 54, PROP_TESUJI = 55, PROP_TIME_LIMIT = 56, PROP_TRIANGLE = 57, PROP_TERRITORY_WHITE = 58,
+            PROP_UNCLEAR_POS = 59, PROP_USER = 60,
+            PROP_VALUE = 61, PROP_VIEW = 62,
+            PROP_WHITE = 63, PROP_WHITE_TIME_LEFT = 64, PROP_WHITE_RANK = 65, PROP_WHITE_TEAM = 66,
+            PROP_MAX_VALUE = 66;
 
     private PushbackReader _reader;
     private ArrayList<GameNode> _baseNodes;
@@ -72,8 +71,7 @@ public final class SgfParser
     private StringBuilder _value = new StringBuilder(16);
 
 
-    public SgfParser()
-    {
+    public SgfParser() {
     }
 
 
@@ -83,8 +81,7 @@ public final class SgfParser
      *
      * @throws IOException An error occurred during reading (the SGF file may be corrupted).
      */
-    public GoGame[] parse(InputStream stream) throws IOException
-    {
+    public GoGame[] parse(InputStream stream) throws IOException {
         Reader reader = new BufferedReader(new InputStreamReader(stream), 1024);
         _reader = _infoOnly ? new CopyPushbackReader(reader) : new PushbackReader(reader);
         _nodeCount = 0;
@@ -93,7 +90,7 @@ public final class SgfParser
 
         _parse_loop(null);
         if (_infoOnly && _gameInfo != null)
-            _gameInfo.originalSgf = ((CopyPushbackReader)_reader).getString();
+            _gameInfo.originalSgf = ((CopyPushbackReader) _reader).getString();
         //System.out.println("Found " + _baseNodes.size() + " games with a total of " + _nodeCount + " SGF nodes.");
 
         int nodes = _baseNodes.size();
@@ -108,28 +105,21 @@ public final class SgfParser
      *
      * @throws IOException An error occurred during reading (the SGF file may be corrupted).
      */
-    public GoGame[] parseInfo(InputStream stream) throws IOException
-    {
+    public GoGame[] parseInfo(InputStream stream) throws IOException {
         _infoOnly = true;
         return parse(stream);
     }
 
     // Recursive parsing function
-    private void _parse_loop(GameNode curNode) throws IOException
-    {
+    private void _parse_loop(GameNode curNode) throws IOException {
         int ch;
-        while ((ch = _reader.read()) != -1)
-        {
-            switch (ch)
-            {
+        while ((ch = _reader.read()) != -1) {
+            switch (ch) {
                 case ';':
                     GameNode node = _parseNode();
-                    if (curNode == null)
-                    {
+                    if (curNode == null) {
                         _baseNodes.add(node);
-                    }
-                    else
-                    {
+                    } else {
                         node.parentNode = curNode;
                         curNode.nextNodes.add(node);
                     }
@@ -137,12 +127,10 @@ public final class SgfParser
                     break;
 
                 case '(':
-                    if (curNode == null)
-                    {
-                        if (_infoOnly && _gameInfo != null)
-                        {
+                    if (curNode == null) {
+                        if (_infoOnly && _gameInfo != null) {
                             _reader.unread(ch);
-                            _gameInfo.originalSgf = ((CopyPushbackReader)_reader).getString();
+                            _gameInfo.originalSgf = ((CopyPushbackReader) _reader).getString();
                             _reader.read();
                         }
                         _gameInfo = new GameInfo();
@@ -163,8 +151,7 @@ public final class SgfParser
         }
     }
 
-    private GameNode _parseNode() throws IOException
-    {
+    private GameNode _parseNode() throws IOException {
         _nodeCount++;
         byte propertyType = -2;
         boolean readingValue = false;
@@ -173,39 +160,27 @@ public final class SgfParser
         _value.setLength(0);
 
         int iCh;
-        while ((iCh = _reader.read()) != -1)
-        {
+        while ((iCh = _reader.read()) != -1) {
             char ch = (char) iCh;
-            if (ch == ']' && readingValue && (_value.length() == 0 || _value.charAt(_value.length() - 1) != '\\'))
-            {
+            if (ch == ']' && readingValue && (_value.length() == 0 || _value.charAt(_value.length() - 1) != '\\')) {
                 _addProperty(node, propertyType, _value.toString());
                 readingValue = false;
-            }
-            else if (!readingValue)
-            {
-                if (ch == '[')
-                {
+            } else if (!readingValue) {
+                if (ch == '[') {
                     propertyType = parsePropertyType(_property.toString());
                     readingValue = true;
                     _value.setLength(0);
-                }
-                else if (ch == ';' || ch == '(' || ch == ')')
-                {
+                } else if (ch == ';' || ch == '(' || ch == ')') {
                     _reader.unread(iCh);
                     break;
-                }
-                else if (ch != ' ' && ch != '\n' && ch != '\r' && ch != '\t')
-                {
-                    if (propertyType >= -1)
-                    {
+                } else if (ch != ' ' && ch != '\n' && ch != '\r' && ch != '\t') {
+                    if (propertyType >= -1) {
                         _property.setLength(0);
                         propertyType = -2;
                     }
                     _property.append(ch);
                 }
-            }
-            else
-            {
+            } else {
                 _value.append(ch);
             }
         }
@@ -216,10 +191,8 @@ public final class SgfParser
         return node;
     }
 
-    private void _addProperty(GameNode node, int propertyType, String value)
-    {
-        switch (propertyType)
-        {
+    private void _addProperty(GameNode node, int propertyType, String value) {
+        switch (propertyType) {
             case PROP_BLACK:
                 _cacheStringToCoords(value);
                 node.x = (byte) _cachedCoords.x;
@@ -330,8 +303,7 @@ public final class SgfParser
      *
      * @throws IOException An error occurred during writing.
      */
-    public void save(GoGame game, OutputStream stream) throws IOException
-    {
+    public void save(GoGame game, OutputStream stream) throws IOException {
         _writer = new BufferedWriter(new PrintWriter(stream), 1024);
         _gameInfo = game.info;
         _game = game;
@@ -343,8 +315,7 @@ public final class SgfParser
         thread.start();
         try {
             thread.join();
-        }
-        catch (InterruptedException ignored) {
+        } catch (InterruptedException ignored) {
         }
         if (_exception != null)
             throw _exception;
@@ -357,29 +328,24 @@ public final class SgfParser
      *
      * @throws IOException An error occurred during writing.
      */
-    public void saveOptimized(GoGame game, OutputStream stream) throws IOException
-    {
+    public void saveOptimized(GoGame game, OutputStream stream) throws IOException {
         _optimized = true;
         save(game, stream);
     }
 
-    private Runnable save_loop = new Runnable()
-    {
+    private Runnable save_loop = new Runnable() {
         @Override
-        public void run()
-        {
+        public void run() {
             try {
                 _save_loop(_game.getBaseNode(), true);
                 _writer.flush();
-            }
-            catch (IOException e) {
+            } catch (IOException e) {
                 e.printStackTrace();
                 _exception = e;
             }
         }
 
-        private void _save_loop(GameNode curNode, boolean writeParentheses) throws IOException
-        {
+        private void _save_loop(GameNode curNode, boolean writeParentheses) throws IOException {
             if (!_optimized)
                 _writer.write("\n");
             if (writeParentheses)
@@ -387,8 +353,7 @@ public final class SgfParser
             _writeNode(curNode);
 
             List<GameNode> nextNodesList = curNode.nextNodes;
-            for (GameNode nextNode : nextNodesList)
-            {
+            for (GameNode nextNode : nextNodesList) {
                 _save_loop(nextNode, nextNodesList.size() > 1);
             }
             if (writeParentheses)
@@ -396,15 +361,12 @@ public final class SgfParser
         }
     };
 
-    private void _writeNode(GameNode node) throws IOException
-    {
+    private void _writeNode(GameNode node) throws IOException {
         _writer.write(";");
 
         // Premier coup de la partie, y ajouter les infos
-        if (node.parentNode == null)
-        {
-            if (!_optimized)
-            {
+        if (node.parentNode == null) {
+            if (!_optimized) {
                 _writer.write("GM[1]FF[4]CA[UTF-8]");
                 if (_gameInfo.applicationName != null && _gameInfo.applicationName.length() > 0)
                     _writeProperty("AP", _gameInfo.applicationName);
@@ -433,22 +395,19 @@ public final class SgfParser
                 _writeProperty("DT", _gameInfo.gameDate);
         }
 
-        if (node.color != GoBoard.EMPTY)
-        {
+        if (node.color != GoBoard.EMPTY) {
             char colorChar = node.color == GoBoard.WHITE ? 'W' : 'B';
             if (node.x == -1 && node.y == -1)
                 _writer.write(colorChar + "[]");
             else if (node.x >= 0 && node.y >= 0)
                 _writer.write(colorChar + "[" + coordsToString(node.x, node.y) + "]");
         }
-        if (node.setStones != null && node.setStones.size() > 0)
-        {
+        if (node.setStones != null && node.setStones.size() > 0) {
             List<LightCoords> whiteList = new ArrayList<LightCoords>();
             List<LightCoords> blackList = new ArrayList<LightCoords>();
             List<LightCoords> emptyList = new ArrayList<LightCoords>();
 
-            for (LightCoords coords : node.setStones)
-            {
+            for (LightCoords coords : node.setStones) {
                 if (coords.color == GoBoard.WHITE)
                     whiteList.add(coords);
                 else if (coords.color == GoBoard.BLACK)
@@ -457,20 +416,17 @@ public final class SgfParser
                     emptyList.add(coords);
             }
 
-            if (whiteList.size() > 0)
-            {
+            if (whiteList.size() > 0) {
                 _writer.write("AW");
                 for (LightCoords coords : whiteList)
                     _writer.write("[" + coordsToString(coords.x, coords.y) + "]");
             }
-            if (blackList.size() > 0)
-            {
+            if (blackList.size() > 0) {
                 _writer.write("AB");
                 for (LightCoords coords : blackList)
                     _writer.write("[" + coordsToString(coords.x, coords.y) + "]");
             }
-            if (emptyList.size() > 0)
-            {
+            if (emptyList.size() > 0) {
                 _writer.write("AE");
                 for (LightCoords coords : emptyList)
                     _writer.write("[" + coordsToString(coords.x, coords.y) + "]");
@@ -478,115 +434,107 @@ public final class SgfParser
         }
 
         // Marks
-        if (node.boardMarks != null)
-        {
+        if (node.boardMarks != null) {
             // TODO optimize
             ArrayList<BoardMark> triangles = new ArrayList<BoardMark>();
             ArrayList<BoardMark> circles = new ArrayList<BoardMark>();
             ArrayList<BoardMark> squares = new ArrayList<BoardMark>();
             ArrayList<BoardMark> cross = new ArrayList<BoardMark>();
             ArrayList<BoardMark> labels = new ArrayList<BoardMark>();
-            for (BoardMark mark : node.boardMarks)
-            {
-                switch (mark.type)
-                {
-                    case BoardMark.MARK_TRIANGLE: triangles.add(mark); break;
-                    case BoardMark.MARK_CIRCLE: circles.add(mark); break;
-                    case BoardMark.MARK_SQUARE: squares.add(mark); break;
-                    case BoardMark.MARK_CROSS: cross.add(mark); break;
-                    case BoardMark.MARK_LABEL: labels.add(mark); break;
+            for (BoardMark mark : node.boardMarks) {
+                switch (mark.type) {
+                    case BoardMark.MARK_TRIANGLE:
+                        triangles.add(mark);
+                        break;
+                    case BoardMark.MARK_CIRCLE:
+                        circles.add(mark);
+                        break;
+                    case BoardMark.MARK_SQUARE:
+                        squares.add(mark);
+                        break;
+                    case BoardMark.MARK_CROSS:
+                        cross.add(mark);
+                        break;
+                    case BoardMark.MARK_LABEL:
+                        labels.add(mark);
+                        break;
                 }
             }
-            if (triangles.size() > 0)
-            {
+            if (triangles.size() > 0) {
                 _writer.write("TR");
                 for (BoardMark mark : triangles)
                     _writer.write("[" + coordsToString(mark.x, mark.y) + "]");
             }
-            if (circles.size() > 0)
-            {
+            if (circles.size() > 0) {
                 _writer.write("CR");
                 for (BoardMark mark : circles)
                     _writer.write("[" + coordsToString(mark.x, mark.y) + "]");
             }
-            if (squares.size() > 0)
-            {
+            if (squares.size() > 0) {
                 _writer.write("SQ");
                 for (BoardMark mark : squares)
                     _writer.write("[" + coordsToString(mark.x, mark.y) + "]");
             }
-            if (cross.size() > 0)
-            {
+            if (cross.size() > 0) {
                 _writer.write("MA");
                 for (BoardMark mark : squares)
                     _writer.write("[" + coordsToString(mark.x, mark.y) + "]");
             }
-            if (labels.size() > 0)
-            {
+            if (labels.size() > 0) {
                 _writer.write("LB");
                 for (BoardMark mark : labels)
                     _writer.write("[" + coordsToString(mark.x, mark.y) + ":" + mark.getLabel() + "]");
             }
         }
         String comment = node.getComment();
-        if (comment.length() > 0)
-        {
+        if (comment.length() > 0) {
             _writeProperty("C", comment.replace("]", "\\]"));
         }
     }
 
-    private void _writeProperty(String property, Object value) throws IOException
-    {
+    private void _writeProperty(String property, Object value) throws IOException {
         _writer.write(String.format("%s[%s]", property, value.toString()));
     }
-
 
 
     /**
      * Converts the specified {@link GoGame} in a SGF[4] string.
      */
-	public String toSgfString(GoGame game)
-	{
+    public String toSgfString(GoGame game) {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream(128);
         try {
             saveOptimized(game, outputStream);
             String sgf = outputStream.toString();
             outputStream.close();
             return sgf;
-        }
-        catch (IOException ignored) {
+        } catch (IOException ignored) {
             return "";
         }
-	}
+    }
 
 
-    /** Caching the parsed SGF coords considerably reduces the SGF parsing time on Android. */
-    private void _cacheStringToCoords(String sgfCoords)
-    {
-        if (sgfCoords.length() == 0)
-        {
+    /**
+     * Caching the parsed SGF coords considerably reduces the SGF parsing time on Android.
+     */
+    private void _cacheStringToCoords(String sgfCoords) {
+        if (sgfCoords.length() == 0) {
             _cachedCoords.x = -1;
             _cachedCoords.y = -1;
-        }
-        else
-        {
+        } else {
             _cachedCoords.x = sgfCoords.charAt(0) - 'a';
             _cachedCoords.y = sgfCoords.charAt(1) - 'a';
         }
     }
 
-    private String _komiToSgfString(double komi)
-    {
-        return String.format("%d.%d", (int)(komi), ((int)Math.round(komi * 10.0) % 10));
+    private String _komiToSgfString(double komi) {
+        return String.format("%d.%d", (int) (komi), ((int) Math.round(komi * 10.0) % 10));
     }
-
 
 
     /**
      * Returns the SGF representation of the specified property (PROP_ADD_WHITE returns "AW", for example).
      */
-    public static String propertyToString(int propertyType)
-    {
+    public static String propertyToString(int propertyType) {
         return _properties[propertyType];
     }
 
@@ -594,31 +542,27 @@ public final class SgfParser
      * Returns the SGF representation of the specified coordinates.
      * TODO : handle coordinates greater than 26
      */
-    public static String coordsToString(int x, int y)
-    {
-        return Character.toString((char)('a' + x)) + Character.toString((char)('a' + y));
+    public static String coordsToString(int x, int y) {
+        return Character.toString((char) ('a' + x)) + Character.toString((char) ('a' + y));
     }
 
     /**
      * Returns the coordinates represented by the specified SGF coordinates.
      * TODO : handle coordinates greater than 26
      */
-    public static Coords stringToCoords(String sgfCoords)
-    {
+    public static Coords stringToCoords(String sgfCoords) {
         return sgfCoords.length() == 0 ? new Coords(-1, -1) : new Coords(sgfCoords.charAt(0) - 'a', sgfCoords.charAt(1) - 'a');
     }
 
     /**
      * Returns the constant representing the specified SGF property (or -1 if the property is unknown).
      */
-    public static byte parsePropertyType(String type)
-    {
+    public static byte parsePropertyType(String type) {
         int property = Arrays.binarySearch(_properties, type);
         return property >= 0 ? (byte) property : -1;
     }
 
-    public static float parseKomi(String number, char decimalSeparator)
-    {
+    public static float parseKomi(String number, char decimalSeparator) {
         int dotPos = number.indexOf(decimalSeparator);
         if (dotPos < 0)
             return Integer.parseInt(number);
@@ -628,19 +572,16 @@ public final class SgfParser
     }
 
 
-    private final class CopyPushbackReader extends PushbackReader
-    {
+    private final class CopyPushbackReader extends PushbackReader {
         StringBuilder str = new StringBuilder(1024);
 
 
-        public CopyPushbackReader(Reader reader)
-        {
+        public CopyPushbackReader(Reader reader) {
             super(reader);
         }
 
         @Override
-        public int read() throws IOException
-        {
+        public int read() throws IOException {
             int ch = super.read();
             if (ch != -1)
                 str.append((char) ch);
@@ -648,14 +589,12 @@ public final class SgfParser
         }
 
         @Override
-        public void unread(int oneChar) throws IOException
-        {
+        public void unread(int oneChar) throws IOException {
             str.setLength(str.length() - 1);
             super.unread(oneChar);
         }
 
-        public String getString()
-        {
+        public String getString() {
             String retStr = str.toString();
             str.setLength(0);
             return retStr;
@@ -734,8 +673,7 @@ public final class SgfParser
     WT  --34  White team      game-info        simpletext
     */
 
-    static
-    {
+    static {
         _properties = new String[PROP_MAX_VALUE + 1];
 
         _properties[PROP_ADD_BLACK] = "AB";

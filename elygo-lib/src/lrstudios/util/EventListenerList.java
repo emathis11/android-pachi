@@ -29,8 +29,7 @@ import java.util.ArrayList;
 /**
  * Android implementation of the Swing "EventListenerList".
  */
-public class EventListenerList implements Serializable
-{
+public class EventListenerList implements Serializable {
     protected transient Object[] listenerList = new Object[0];
 
     public synchronized <T extends java.util.EventListener> void remove(
@@ -42,14 +41,14 @@ public class EventListenerList implements Serializable
         }
 
         int position = -1;
-        for(int i = listenerList.length-1; i > 0; i -= 2) {
-            if (listenerClass == listenerList[i-1] && listener.equals(listenerList[i])) {
+        for (int i = listenerList.length - 1; i > 0; i -= 2) {
+            if (listenerClass == listenerList[i - 1] && listener.equals(listenerList[i])) {
                 position = i - 1;
                 break;
             }
         }
         if (position >= 0) {
-            Object[] newList = new Object[listenerList.length-2];
+            Object[] newList = new Object[listenerList.length - 2];
             System.arraycopy(listenerList, 0, newList, 0, position);
             System.arraycopy(listenerList, position + 2, newList, position,
                     listenerList.length - position - 2);
@@ -66,17 +65,16 @@ public class EventListenerList implements Serializable
             return;
         }
 
-        Object[] newList = new Object[listenerList.length+2];
+        Object[] newList = new Object[listenerList.length + 2];
         System.arraycopy(listenerList, 0, newList, 0, listenerList.length);
         newList[listenerList.length] = listenerClass;
-        newList[listenerList.length+1] = listener;
+        newList[listenerList.length + 1] = listener;
 
         listenerList = newList;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends java.util.EventListener> T[] getListeners(final Class<T> listenerClass)
-    {
+    public <T extends java.util.EventListener> T[] getListeners(final Class<T> listenerClass) {
         int numClassListeners = getListenerCount(listenerClass);
         T[] listeners = (T[]) (Array.newInstance(listenerClass, numClassListeners));
         if (numClassListeners > 0) {
@@ -100,14 +98,12 @@ public class EventListenerList implements Serializable
      *     obj.add(BasicButtonListener.class, new BasicButtonListener(new JButton()));
      *     System.out.println(obj.toString());
      */
-    public String toString()
-    {
+    public String toString() {
         String str = "EventListenerList: ";
         str += getListenerCount() + " listeners:";
-        for (int i = 0; i < listenerList.length; i += 2)
-        {
-            str += " type " + ((Class)listenerList[i]).getName() +
-                    " listener " + listenerList[i+1].toString();
+        for (int i = 0; i < listenerList.length; i += 2) {
+            str += " type " + ((Class) listenerList[i]).getName() +
+                    " listener " + listenerList[i + 1].toString();
         }
         return str;
     }
@@ -116,28 +112,24 @@ public class EventListenerList implements Serializable
         return listenerList;
     }
 
-    public int getListenerCount(final Class<?> listenerClass)
-    {
+    public int getListenerCount(final Class<?> listenerClass) {
         int counter = 0;
-        for (int i = 0; i < listenerList.length; i += 2)
-        {
+        for (int i = 0; i < listenerList.length; i += 2) {
             if (listenerList[i] == listenerClass)
                 counter++;
         }
         return counter;
     }
 
-    public int getListenerCount()
-    {
+    public int getListenerCount() {
         return listenerList.length >> 1;
     }
 
-    private void writeObject(final ObjectOutputStream outStream) throws IOException
-    {
+    private void writeObject(final ObjectOutputStream outStream) throws IOException {
         outStream.defaultWriteObject();
 
         for (int i = 0; i < listenerList.length; i += 2) {
-            Object listener = listenerList[i+1];
+            Object listener = listenerList[i + 1];
             if ((listener != null) && (listener instanceof Serializable)) {
                 outStream.writeObject(listenerList[i]);
                 outStream.writeObject(listener);
@@ -148,8 +140,7 @@ public class EventListenerList implements Serializable
 
     @SuppressWarnings("unchecked")
     private void readObject(final ObjectInputStream inStream) throws IOException,
-            ClassNotFoundException
-    {
+            ClassNotFoundException {
         inStream.defaultReadObject();
 
         ArrayList list = new ArrayList();

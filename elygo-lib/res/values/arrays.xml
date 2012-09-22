@@ -1,5 +1,5 @@
 <resources>
-        <string-array name="playBoardsize">
+    <string-array name="playBoardsize">
         <item>7</item>
         <item>9</item>
         <item>11</item>

@@ -21,62 +21,52 @@ package lrstudios.games.ego.lib;
 
 /**
  * Contains the result of a game in the SGF Format (RE[] property).<p>
- *
- *  "0" (zero) or "Draw" for a draw (jigo)<br/>
- *  "B+" ["score"] for a black win<br/>
- *  "W+" ["score"] for a white win<br/>
- *  Score is optional (some games don't have a score e.g. chess).<br/>
- *  If the score is given it has to be given as a real value, e.g. "B+0.5", "W+64", "B+12.5"<br/>
- *  Use "B+R" or "B+Resign" and "W+R" or "W+Resign" for a win by resignation.
- *  Applications must not write "Black resigns".<br/>
- *  Use "B+T" or "B+Time" and "W+T" or "W+Time" for a win on time, "B+F" or "B+Forfeit" and "W+F"
- *  or "W+Forfeit" for a win by forfeit<br/>
- *  "Void" for no result or suspended play<br/>
- *  "?" for an unknown result.
+ * <p/>
+ * "0" (zero) or "Draw" for a draw (jigo)<br/>
+ * "B+" ["score"] for a black win<br/>
+ * "W+" ["score"] for a white win<br/>
+ * Score is optional (some games don't have a score e.g. chess).<br/>
+ * If the score is given it has to be given as a real value, e.g. "B+0.5", "W+64", "B+12.5"<br/>
+ * Use "B+R" or "B+Resign" and "W+R" or "W+Resign" for a win by resignation.
+ * Applications must not write "Black resigns".<br/>
+ * Use "B+T" or "B+Time" and "W+T" or "W+Time" for a win on time, "B+F" or "B+Forfeit" and "W+F"
+ * or "W+Forfeit" for a win by forfeit<br/>
+ * "Void" for no result or suspended play<br/>
+ * "?" for an unknown result.
  */
-public class GoGameResult
-{
+public class GoGameResult {
     public static final char
-        JIGO = '0',
-        BLACK = 'B',
-        WHITE = 'W',
-        VOID = 'V',
-        UNKNOWN_WINNER = '?';
+            JIGO = '0',
+            BLACK = 'B',
+            WHITE = 'W',
+            VOID = 'V',
+            UNKNOWN_WINNER = '?';
 
     public static final double
-        RESIGN = -1,
-        TIME = -2,
-        FORFEIT = -3,
-        UNKNOWN_AMOUNT = -9;
+            RESIGN = -1,
+            TIME = -2,
+            FORFEIT = -3,
+            UNKNOWN_AMOUNT = -9;
 
     private char winner;
     private double score;
 
 
-    public GoGameResult(char winner, double score)
-    {
+    public GoGameResult(char winner, double score) {
         this.winner = winner;
         this.score = score;
     }
-    
-    private GoGameResult(String result)
-    {
+
+    private GoGameResult(String result) {
         char c = result.charAt(0);
 
-        if (c == '0' || c == 'D')
-        {
+        if (c == '0' || c == 'D') {
             winner = JIGO;
-        }
-        else if (c == 'V')
-        {
+        } else if (c == 'V') {
             winner = VOID;
-        }
-        else if (c == '?')
-        {
+        } else if (c == '?') {
             winner = UNKNOWN_WINNER;
-        }
-        else
-        {
+        } else {
             if (c == 'B')
                 winner = BLACK;
             else if (c == 'W')
@@ -85,8 +75,7 @@ public class GoGameResult
                 winner = UNKNOWN_WINNER;
 
             score = UNKNOWN_AMOUNT;
-            if (result.length() > 2)
-            {
+            if (result.length() > 2) {
                 c = result.charAt(2);
                 if (c == 'R')
                     score = RESIGN;
@@ -101,10 +90,11 @@ public class GoGameResult
     }
 
 
-    /** Returns the result in a valid SGF property format (without the RE[] part). */
+    /**
+     * Returns the result in a valid SGF property format (without the RE[] part).
+     */
     @Override
-    public String toString()
-    {
+    public String toString() {
         if (winner == JIGO)
             return "0";
         else if (winner == VOID)
@@ -114,7 +104,7 @@ public class GoGameResult
 
         String result;
         if (score > 0)
-            result = ((int) score) + "." + ((int)Math.round(score * 10) % 10);
+            result = ((int) score) + "." + ((int) Math.round(score * 10) % 10);
         else if (score == RESIGN)
             result = "R";
         else if (score == TIME)
@@ -132,8 +122,7 @@ public class GoGameResult
      * Returns the winner represented by this instance. It can be one of the following values (constants) :<br/>
      * JIGO, BLACK, WHITE, VOID, UNKNOWN_WINNER
      */
-    public char getWinner()
-    {
+    public char getWinner() {
         return winner;
     }
 
@@ -141,8 +130,7 @@ public class GoGameResult
      * Returns the score represented by this instance. It can be one of the following values (constants) :<br/>
      * RESIGN, TIME, FORFEIT, UNKNOWN_AMOUNT, or the result as a number.
      */
-    public double getScore()
-    {
+    public double getScore() {
         return score;
     }
 
@@ -150,12 +138,10 @@ public class GoGameResult
     /**
      * Tries to parse the given SGF result. Returns null if it failed.
      */
-    public static GoGameResult tryParse(String sgfResult)
-    {
+    public static GoGameResult tryParse(String sgfResult) {
         try {
             return new GoGameResult(sgfResult);
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }

@@ -31,27 +31,22 @@ import java.util.Stack;
  * Provides methods to parse and save LRF files from/to an instance of GoGame.
  * See the LRF_SPEC file for more informations about this format.
  */
-public final class LrfParser
-{
+public final class LrfParser {
     private GoGame _game;
     private BitWriter _writer_loop;
     private int _lrf_bits;
     private Rect _lrf_bounds;
 
 
-
-    public LrfParser()
-    {
+    public LrfParser() {
     }
 
 
-    public GoBoard parseBoard(InputStream stream) throws IOException
-    {
+    public GoBoard parseBoard(InputStream stream) throws IOException {
         return GoBoard.importLrf(new BitReader(stream));
     }
 
-    public GoGame parse(InputStream stream) throws IOException
-    {
+    public GoGame parse(InputStream stream) throws IOException {
         // Load the base position
         final BitReader reader = new BitReader(stream);
         final GoBoard board = GoBoard.importLrf(reader);
@@ -59,8 +54,7 @@ public final class LrfParser
         final int size = board.getSize();
 
         // Load the move tree if it exists
-        if (reader.read())
-        {
+        if (reader.read()) {
             Coords topLeft = GoBoard.decodeCoords((int) reader.read(9), size);
             Coords bottomRight = GoBoard.decodeCoords((int) reader.read(9), size);
             Rect bounds = new Rect(topLeft.x, topLeft.y, bottomRight.x, bottomRight.y);
@@ -71,18 +65,14 @@ public final class LrfParser
             int currentPos = 0;
 
             offsetStack.push(0);
-            while (!offsetStack.empty())
-            {
+            while (!offsetStack.empty()) {
                 if (reader.read()) // COMMAND_PLAY_MOVE
                 {
                     final Coords coords = GoBoard.decodeCoords((int) reader.read(bits), shiftY);
                     game.placeMove(coords.x + bounds.left, coords.y + bounds.top);
                     currentPos++;
-                }
-                else
-                {
-                    switch ((int) reader.read(2))
-                    {
+                } else {
+                    switch ((int) reader.read(2)) {
                         case 1: // COMMAND_SET_RESULT
                             game.setMoveValue((byte) reader.read(7));
                             break;
@@ -100,31 +90,27 @@ public final class LrfParser
                     }
                 }
             }
-        }
-        else
+        } else
             System.out.println("No variations stored in this LRF.");
 
         return game;
     }
 
 
-    public void save(GoGame game, OutputStream stream) throws IOException
-    {
+    public void save(GoGame game, OutputStream stream) throws IOException {
         BitWriter writer = new BitWriter(stream);
         GoBoard board = game.board;
         _game = game;
         String firstPlayer = game.info.firstPlayer;
         boolean reverseColors = (firstPlayer != null && firstPlayer.length() > 0
-            && Character.toUpperCase(firstPlayer.charAt(0)) == 'W');
+                && Character.toUpperCase(firstPlayer.charAt(0)) == 'W');
 
-        if (reverseColors)
-        {
+        if (reverseColors) {
             GoBoard newBoard = new GoBoard(board.getSize());
             byte[] colors = board.getBoardArray();
             byte[] newColors = newBoard.getBoardArray();
             int len = colors.length;
-            for (int i = 0; i < len; i++)
-            {
+            for (int i = 0; i < len; i++) {
                 byte color = colors[i];
                 if (color == GoBoard.WHITE)
                     newColors[i] = GoBoard.BLACK;
@@ -136,8 +122,7 @@ public final class LrfParser
         board.exportLrf(writer);
 
         // Noeuds
-        if (game.getBaseNode().nextNodes.size() > 0)
-        {
+        if (game.getBaseNode().nextNodes.size() > 0) {
             writer.write(true);
 
             // Write tree bounds
@@ -147,29 +132,26 @@ public final class LrfParser
             writer.write(GoBoard.encodeCoords(_lrf_bounds.right, _lrf_bounds.bottom, game.board.getSize()), 9);
             _writer_loop = writer;
             _save_loop(game.getBaseNode());
-        }
-        else
-        {
+        } else {
             writer.write(false);
         }
         writer.flush();
     }
 
 
-    /** Recursive function to convert the current game tree in LRF format. */
-    private void _save_loop(GameNode move) throws IOException
-    {
+    /**
+     * Recursive function to convert the current game tree in LRF format.
+     */
+    private void _save_loop(GameNode move) throws IOException {
         int moveCount = move.nextNodes.size();
 
         // In LRF format, we assume that black plays first
-        if (move.color != GoBoard.EMPTY)
-        {
+        if (move.color != GoBoard.EMPTY) {
             _writer_loop.write(true); // bit 1 = COMMAND_PLAY_MOVE
             _writer_loop.write(GoBoard.encodeCoords(move.x - _lrf_bounds.left, move.y - _lrf_bounds.top,
                     _lrf_bounds.right - _lrf_bounds.left + 1), _lrf_bits);
 
-            if (moveCount == 0)
-            {
+            if (moveCount == 0) {
                 _writer_loop.write(false);
                 _writer_loop.write(1, 2); // bits 01 = COMMAND_SET_RESULT
                 _writer_loop.write((move.value < 0) ? 0 : move.value, 7);
@@ -179,11 +161,9 @@ public final class LrfParser
         }
 
         int count = 0;
-        for (GameNode nextMove : move.nextNodes)
-        {
+        for (GameNode nextMove : move.nextNodes) {
             // Create new branches for all nodes except the last one
-            if (count < moveCount - 1)
-            {
+            if (count < moveCount - 1) {
                 _writer_loop.write(false);
                 _writer_loop.write(2, 2); // bits 010 = COMMAND_NEW_NODE
             }
@@ -198,12 +178,10 @@ public final class LrfParser
      * Obtient le nombre maximum de bits qu'il faut pour stocker les coordonnées des intersections sous forme
      * de nombre allant de 0 à n, où n est le nombre d'intersections comprises dans le rectangle.
      */
-    private int _getRequiredBits(Rect bounds)
-    {
+    private int _getRequiredBits(Rect bounds) {
         int area = (bounds.bottom - bounds.top + 1) * (bounds.right - bounds.left + 1) - 1;
         int bits = 0;
-        while (area > 0)
-        {
+        while (area > 0) {
             area >>= 1;
             bits++;
         }
@@ -211,9 +189,7 @@ public final class LrfParser
     }
 
 
-
-    private Rect _getTreeBounds()
-    {
+    private Rect _getTreeBounds() {
         final int size = _game.board.getSize();
         final Rect bounds = new Rect(size, size, -1, -1);
 
@@ -221,11 +197,9 @@ public final class LrfParser
         Stack<GameNode> stack = new Stack<GameNode>();
         stack.push(_game.getBaseNode());
 
-        while (!stack.empty())
-        {
+        while (!stack.empty()) {
             move = stack.pop();
-            if (move.x >= 0 && move.y >= 0)
-            {
+            if (move.x >= 0 && move.y >= 0) {
                 if (bounds.left > move.x) bounds.left = move.x;
                 if (bounds.top > move.y) bounds.top = move.y;
                 if (bounds.right < move.x) bounds.right = move.x;
