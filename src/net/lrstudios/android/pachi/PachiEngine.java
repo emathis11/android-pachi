@@ -2,10 +2,8 @@ package net.lrstudios.android.pachi;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.os.Handler;
 import android.preference.PreferenceManager;
 import lrstudios.games.ego.lib.ExternalGtpEngine;
-import lrstudios.games.ego.lib.UpdatePrefsTask;
 import lrstudios.games.ego.lib.Utils;
 
 import java.io.*;
@@ -13,7 +11,9 @@ import java.io.*;
 
 public class PachiEngine extends ExternalGtpEngine
 {
-    /** Increment this each time you update the pachi executable. */
+    /**
+     * Increment this each time you update the pachi executable.
+     */
     protected static final int EXE_VERSION = 1;
 
     protected static final String PREF_KEY_VERSION = "pachi_exe_version";
@@ -21,7 +21,7 @@ public class PachiEngine extends ExternalGtpEngine
 
     public PachiEngine(Context context)
     {
-        super(context, new String[]{"-t", "9", "max_tree_size=192"});
+        super(context, new String[]{"-t", "12", "max_tree_size=192"});
     }
 
     @Override
