@@ -20,6 +20,7 @@ package lrstudios.games.ego.lib.ui;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -207,6 +208,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         else if (id == R.id.menu_pass)
         {
             onPress(-1, -1);
+        }
+        else if (id == R.id.menu_settings)
+        {
+            startActivityForResult(new Intent(this, Preferences.class), BaseBoardActivity.CODE_PREFERENCES_ACTIVITY);
         }
         return true;
     }
