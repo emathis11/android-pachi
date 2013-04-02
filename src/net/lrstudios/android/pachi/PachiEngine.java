@@ -12,16 +12,21 @@ import java.io.*;
 public class PachiEngine extends ExternalGtpEngine
 {
     /**
-     * Increment this each time you update the pachi executable.
+     * Increment this counter each time you update the pachi executable
+     * (this will force the app to extract it again - I didn't find a better way
+     * to know if an android resource has been updated).
      */
     protected static final int EXE_VERSION = 1;
+
+    private static final String ENGINE_NAME = "Pachi";
+    private static final String ENGINE_VERSION = "10.00";
 
     protected static final String PREF_KEY_VERSION = "pachi_exe_version";
 
 
     public PachiEngine(Context context)
     {
-        super(context, new String[]{"-t", "12", "max_tree_size=192"});
+        super(context, new String[]{"-t", "20", "max_tree_size=256"});
     }
 
     @Override
@@ -77,12 +82,12 @@ public class PachiEngine extends ExternalGtpEngine
     @Override
     public String getName()
     {
-        return "Pachi";
+        return ENGINE_NAME;
     }
 
     @Override
     public String getVersion()
     {
-        return "10.00";
+        return ENGINE_VERSION;
     }
 }
