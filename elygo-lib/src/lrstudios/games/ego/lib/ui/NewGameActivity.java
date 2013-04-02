@@ -31,13 +31,12 @@ import lrstudios.games.ego.lib.R;
 import lrstudios.games.ego.lib.UpdatePrefsTask;
 import lrstudios.util.android.ui.BetterFragmentActivity;
 
-import java.io.FileNotFoundException;
-
 
 /**
  * Allows to start a game against a bot.
  */
-public abstract class NewGameActivity extends BetterFragmentActivity implements View.OnClickListener {
+public abstract class NewGameActivity extends BetterFragmentActivity implements View.OnClickListener
+{
     private static final String TAG = "NewGameActivity";
 
     private Spinner _spn_boardSize;
@@ -47,6 +46,13 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
     private Spinner _spn_level;
     private Button _btn_continue;
 
+    private static final String
+            _PREF_BOARDSIZE = "newgame_boardsize",
+            _PREF_KOMI = "newgame_komi",
+            _PREF_COLOR = "newgame_color",
+            _PREF_LEVEL = "newgame_level",
+            _PREF_HANDICAP = "newgame_handicap";
+
 
     /**
      * This method should return the {@link Class} of the desired bot.
@@ -55,7 +61,8 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState) {
+    public void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newgame_activity);
 
@@ -66,13 +73,13 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
         _spn_handicap = (Spinner) findViewById(R.id.spn_play_handicap);
         _btn_continue = (Button) findViewById(R.id.btn_play_continue);
 
-        // Set previous values
+        // Restore last values
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        _spn_boardSize.setSelection(prefs.getInt("newgame_boardsize", 3));
-        _spn_komi.setSelection(prefs.getInt("newgame_komi", 1));
-        _spn_color.setSelection(prefs.getInt("newgame_color", 0));
-        _spn_level.setSelection(prefs.getInt("newgame_level", 9));
-        _spn_handicap.setSelection(prefs.getInt("newgame_handicap", 0));
+        _spn_boardSize.setSelection(prefs.getInt(_PREF_BOARDSIZE, 3));
+        _spn_komi.setSelection(prefs.getInt(_PREF_KOMI, 1));
+        _spn_color.setSelection(prefs.getInt(_PREF_COLOR, 0));
+        _spn_level.setSelection(prefs.getInt(_PREF_LEVEL, 9));
+        _spn_handicap.setSelection(prefs.getInt(_PREF_HANDICAP, 0));
 
         findViewById(R.id.btn_play_start).setOnClickListener(this);
         _btn_continue.setOnClickListener(this);
@@ -82,13 +89,15 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
 
     @Override
-    public void onClick(View v) {
+    public void onClick(View v)
+    {
         Intent intent;
         IntentGameInfo gameInfo;
         int level = _spn_level.getSelectedItemPosition() + 1;
 
         int id = v.getId();
-        if (id == R.id.btn_play_start) {
+        if (id == R.id.btn_play_start)
+        {
             byte color;
             int colorPos = _spn_color.getSelectedItemPosition();
             if (colorPos == 0)
@@ -103,12 +112,13 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
             int handicap = Integer.parseInt((String) _spn_handicap.getSelectedItem());
 
             new UpdatePrefsTask(PreferenceManager.getDefaultSharedPreferences(this),
-                    "play_boardsize", "play_komi", "play_color", "play_level", "play_handicap").execute(
-                    _spn_boardSize.getSelectedItemPosition(),
-                    _spn_komi.getSelectedItemPosition(),
-                    colorPos,
-                    _spn_level.getSelectedItemPosition(),
-                    _spn_handicap.getSelectedItemPosition());
+                    _PREF_BOARDSIZE, _PREF_KOMI, _PREF_COLOR, _PREF_LEVEL, _PREF_HANDICAP)
+                    .execute(
+                            _spn_boardSize.getSelectedItemPosition(),
+                            _spn_komi.getSelectedItemPosition(),
+                            colorPos,
+                            _spn_level.getSelectedItemPosition(),
+                            _spn_handicap.getSelectedItemPosition());
 
             gameInfo = new IntentGameInfo();
             gameInfo.boardSize = boardsize;
@@ -121,7 +131,9 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
             intent.putExtra(GtpBoardActivity.INTENT_GTP_BOT_CLASS, getBotClass());
             intent.putExtra(BaseBoardActivity.INTENT_GAME_INFO, gameInfo);
             startActivityForResult(intent, 0);
-        } else if (id == R.id.btn_play_continue) {
+        }
+        else if (id == R.id.btn_play_continue)
+        {
             gameInfo = new IntentGameInfo();
             gameInfo.botLevel = level;
 
@@ -135,19 +147,16 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data)
+    {
         super.onActivityResult(requestCode, resultCode, data);
         _updateButtons();
     }
 
 
-    private void _updateButtons() {
-        // Disable "Resume" button if there is no game saved in memory
-        try {
-            openFileInput("gtp_save.sgf");
-            _btn_continue.setEnabled(true);
-        } catch (FileNotFoundException ignored) {
-            _btn_continue.setEnabled(false);
-        }
+    private void _updateButtons()
+    {
+        // Disable "Resume" button if there is no game saved
+        _btn_continue.setEnabled(getFileStreamPath("gtp_save.sgf").exists());
     }
 }

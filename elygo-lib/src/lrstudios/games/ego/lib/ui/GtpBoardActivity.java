@@ -32,6 +32,7 @@ import lrstudios.games.ego.lib.*;
 
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
+import java.util.Date;
 
 
 public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener
@@ -197,14 +198,14 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _updatePrisoners();
             _updateGameLogic();
         }
-        /*else if (id == R.id.menu_save)
+        else if (id == R.id.menu_save)
         {
             // Give a default name to the game : "BotName_MonthDay_HoursMinutes"
             Date now = new Date();
             String defaultName = String.format("%s_%02d%02d_%02d%02d",
-                _engine.getName(), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes());
-            _showSaveDialog(_engine.getGame(), defaultName);
-        }*/
+                    _engine.getName().replace(" ", ""), now.getMonth(), now.getDay(), now.getHours(), now.getMinutes());
+            _showSaveDialog(_engine.getGame(), defaultName, true);
+        }
         else if (id == R.id.menu_pass)
         {
             onPress(-1, -1);
