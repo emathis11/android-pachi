@@ -51,7 +51,7 @@ public class PachiEngine extends ExternalGtpEngine
 
                 try
                 {
-                    new ProcessBuilder("chmod", "u+x", file.getAbsolutePath()).start().waitFor();
+                    new ProcessBuilder("chmod", "744", file.getAbsolutePath()).start().waitFor();
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt(PREF_KEY_VERSION, EXE_VERSION);
                     editor.commit();
