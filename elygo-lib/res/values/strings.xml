@@ -15,7 +15,7 @@
     <string name="boardsize">Board size</string>
     <string name="version">Version %s</string>
 
-    <string name="preferences_title">Preferences</string>
+    <string name="preferences_title">Settings</string>
 
     <!-- Action Bar -->
     <string name="ab_pass">Pass</string>

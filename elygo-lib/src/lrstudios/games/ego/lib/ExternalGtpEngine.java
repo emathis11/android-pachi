@@ -99,7 +99,7 @@ public abstract class ExternalGtpEngine extends GtpEngine
             char ch;
             do
             {
-                line = _reader.readLine();
+                line = _reader.readLine(); // TODO can return null
                 Log.v(TAG, " >> " + line);
                 ch = line.length() > 0 ? line.charAt(0) : 0;
             } while (ch != '=' && ch != '?');

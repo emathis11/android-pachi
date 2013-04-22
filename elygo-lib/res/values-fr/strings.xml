@@ -14,7 +14,7 @@
     <string name="refresh">Rafraîchir</string>
     <string name="boardsize">Taille du goban</string>
 
-    <string name="preferences_title">Options</string>
+    <string name="preferences_title">Paramètres</string>
 
     <!-- Action Bar -->
     <string name="ab_pass">Passer</string>
