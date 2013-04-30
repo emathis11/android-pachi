@@ -30,14 +30,16 @@ import lrstudios.util.android.AndroidUtils;
 /**
  * Implements the Sherlock ActionBar and additional utility functions.
  */
-public class BetterFragmentActivity extends SherlockFragmentActivity {
+public class BetterFragmentActivity extends SherlockFragmentActivity
+{
     private static final String TAG = "BetterFragmentActivity";
 
     private Menu _optionsMenu;
 
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
+    public boolean onCreateOptionsMenu(Menu menu)
+    {
         super.onCreateOptionsMenu(menu);
         _optionsMenu = menu;
         return true;
@@ -47,23 +49,28 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
     /**
      * Returns the {@link Menu} containing the current items of the Action Bar.
      */
-    protected Menu getOptionsMenu() {
+    protected Menu getOptionsMenu()
+    {
         return _optionsMenu;
     }
 
-    protected void showInfoDialog(String message) {
+    protected void showInfoDialog(String message)
+    {
         showInfoDialog(null, message);
     }
 
-    protected void showInfoDialog(int messageId) {
+    protected void showInfoDialog(int messageId)
+    {
         showInfoDialog(null, getString(messageId));
     }
 
-    protected void showInfoDialog(int titleId, int messageId) {
+    protected void showInfoDialog(int titleId, int messageId)
+    {
         showInfoDialog(getString(titleId), getString(messageId));
     }
 
-    protected void showInfoDialog(String title, String message) {
+    protected void showInfoDialog(String title, String message)
+    {
         new AlertDialog.Builder(this)
                 .setTitle(title)
                 .setMessage(message)
@@ -74,14 +81,16 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
     /**
      * Shortcut for Toast.makeText(...).
      */
-    protected void showToast(int titleResId) {
+    protected void showToast(int titleResId)
+    {
         Toast.makeText(BetterFragmentActivity.this, titleResId, Toast.LENGTH_SHORT).show();
     }
 
     /**
      * Shortcut for Toast.makeText(...).
      */
-    protected void showToast(String title) {
+    protected void showToast(String title)
+    {
         Toast.makeText(BetterFragmentActivity.this, title, Toast.LENGTH_SHORT).show();
     }
 
@@ -89,14 +98,17 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
      * Enables or disables the specified item of the Action Bar.
      * Return false if the item was not found.
      */
-    protected boolean setOptionItemEnabled(int itemMenuId, boolean enabled) {
-        if (_optionsMenu == null) {
+    protected boolean setOptionItemEnabled(int itemMenuId, boolean enabled)
+    {
+        if (_optionsMenu == null)
+        {
             Log.w(TAG, "Options Menu is null");
             return false;
         }
 
         MenuItem item = _optionsMenu.findItem(itemMenuId);
-        if (item == null) {
+        if (item == null)
+        {
             Log.w(TAG, "Cannot find menu item id " + itemMenuId);
             return false;
         }
@@ -109,7 +121,8 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
      * Disables the specified item of the Action Bar.
      * Return false if the item was not found.
      */
-    protected boolean disableOptionItem(int itemMenuId) {
+    protected boolean disableOptionItem(int itemMenuId)
+    {
         return setOptionItemEnabled(itemMenuId, false);
     }
 
@@ -117,7 +130,25 @@ public class BetterFragmentActivity extends SherlockFragmentActivity {
      * Enables the specified item of the Action Bar.
      * Return false if the item was not found.
      */
-    protected boolean enableOptionItem(int itemMenuId) {
+    protected boolean enableOptionItem(int itemMenuId)
+    {
         return setOptionItemEnabled(itemMenuId, true);
+    }
+
+    /**
+     * Removes the specified item from the Action Bar.
+     */
+    protected void removeOptionItem(int itemMenuId)
+    {
+        _optionsMenu.removeItem(itemMenuId);
+    }
+
+    protected void log(Object... args)
+    {
+        StringBuilder builder = new StringBuilder();
+        for (Object arg : args)
+            builder.append(arg.toString()).append(" ");
+        builder.setLength(builder.length() - 1);
+        Log.v(TAG, builder.toString());
     }
 }
