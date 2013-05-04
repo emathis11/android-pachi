@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default locale: EN (English) -->
+
+    <!-- Frequent words -->
+    <string name="white">White</string>
+    <string name="black">Black</string>
+    <string name="handicap">Handicap</string>
+    <string name="rules">Rules</string>
+    <string name="komi">Komi</string>
+    <string name="save">Save</string>
+    <string name="load">Load</string>
+    <string name="player">Player</string>
+    <string name="refresh">Refresh</string>
+    <string name="boardsize">Board size</string>
+    <string name="version">Version %s</string>
+
+    <string name="preferences_title">Settings</string>
+
+    <!-- Action Bar -->
+    <string name="ab_pass">Pass</string>
+    <string name="ab_undo">Undo</string>
+
+    <!-- Vs Bot -->
+    <string name="gtp_player_color">Your color</string>
+    <string name="gtp_bot_level">Bot level</string>
+    <string name="gtp_start_game">Start</string>
+    <string name="gtp_resume_game">Resume</string>
+    <string name="gtp_resign_win">You won by resignation !</string>
+    <string name="gtp_game_result">%1$s wins by %2$s !</string>
+
+    <string name="board_no_moves">Game start</string>
+    <string name="board_move_number">Move %d</string>
+    <string name="board_game_vs">Game vs %1$s %2$s</string>
+    <string name="board_bot_level">Lv.%d</string>
+    <string name="board_compute_territory">Calculating territory status…</string>
+    <string name="board_player_resigned">%s resigned the game.</string>
+    <string name="board_player_passes">%s passes.</string>
+
+    <!-- Save game Dialog -->
+    <string name="hint_filename">Game name</string>
+    <string name="dialog_title_save">Save game</string>
+    <string name="txt_save_sd">Save on SD card</string>
+    <string name="enter_game_name">Enter a name for this game :</string>
+    <string name="game_saved">Game %s saved.</string>
+    <string name="overwrite_warning">A game with this name already exists. If you continue, it will be overwritten.
+    </string>
+
+    <!-- Game Info Dialog -->
+    <string name="dialog_title_gameinfo">Details</string>
+    <string name="hint_black_name">Black name</string>
+    <string name="hint_white_name">White name</string>
+    <string name="hint_player_rank">Lv.</string>
+    <string name="lbl_result">Result</string>
+    <string name="lbl_wins_by">by</string>
+    <string name="game_info_changed">The game details have been successfully changed.</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">General</string>
+    <string name="pref_appearance">Appearance</string>
+    <string name="pref_wakelock">Disable Wake lock</string>
+    <string name="pref_wakelock_desc">Only if a board is open</string>
+    <string name="pref_statusbar">Hide Status bar</string>
+    <string name="pref_statusbar_desc">Only if a board is open</string>
+    <string name="pref_fastinput">Requires validation</string>
+    <string name="pref_fastinput_off">Moves are played immediately</string>
+    <string name="pref_fastinput_on">Playing a move requires validation (a second tap)</string>
+    <string name="pref_inputtype">Stone input type</string>
+    <string name="pref_inputtype_desc">Provides several ways to play a move on the board</string>
+    <string name="pref_theme">Board theme</string>
+    <string name="pref_theme_desc">Define the visual board style</string>
+    <string name="pref_linesize">Thickness of lines</string>
+    <string name="pref_linesize_desc">The size of the lines on the board</string>
+    <string name="pref_stonespadding">Stones spacing</string>
+    <string name="pref_stonespadding_desc">The space between stones on the board</string>
+
+    <!-- Error messages -->
+    <string name="err_internal">An internal error occurred, please try again.</string>
+    <string name="err_filename_short">The name of the game is too short.</string>
+    <string name="err_sd_read_only">Cannot save the game : the SD card is read-only.</string>
+    <string name="err_save_game">An error occurred while saving the game, please try again.</string>
+    <string name="err_file_not_found">File not found : %s</string>
+    <string name="err_file_read_error">Unable to read file : %s</string>
+    <string name="err_loading_sgf">Error while loading game: the SGF file is probably corrupted.</string>
+    <string name="err_invalid_integer">The value "%s" is not a valid integer.</string>
+    <string name="err_occurred">An error occurred (%s).</string>
+    <string name="err_dialog_title">Error</string>
+
+</resources>

@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: FR (French) -->
+
+    <!-- Frequent words -->
+    <string name="white">Blanc</string>
+    <string name="black">Noir</string>
+    <string name="handicap">Handicap</string>
+    <string name="rules">Règles</string>
+    <string name="komi">Komi</string>
+    <string name="save">Sauver</string>
+    <string name="load">Charger</string>
+    <string name="player">Joueur</string>
+    <string name="refresh">Rafraîchir</string>
+    <string name="boardsize">Taille du goban</string>
+
+    <string name="preferences_title">Paramètres</string>
+
+    <!-- Action Bar -->
+    <string name="ab_pass">Passer</string>
+    <string name="ab_undo">Annuler</string>
+
+    <!-- Vs Bot -->
+    <string name="gtp_resign_win">Vous gagnez par abandon !</string>
+    <string name="gtp_game_result">%1$s gagne de %2$s !</string>
+    <string name="gtp_player_color">Votre couleur</string>
+    <string name="gtp_bot_level">Niveau</string>
+    <string name="gtp_start_game">Commencer</string>
+    <string name="gtp_resume_game">Reprendre</string>
+
+    <string name="board_no_moves">Début de partie</string>
+    <string name="board_move_number">Coup %d</string>
+    <string name="board_game_vs">Partie contre %1$s %2$s</string>
+    <string name="board_bot_level">Lv.%d</string>
+    <string name="board_compute_territory">Calcul du territoire en cours…</string>
+    <string name="board_player_resigned">%s a abandonné la partie.</string>
+    <string name="board_player_passes">%s passe.</string>
+
+    <!-- Save game Dialog -->
+    <string name="hint_filename">Nom du fichier</string>
+    <string name="dialog_title_save">Sauver la partie</string>
+    <string name="txt_save_sd">Sauver sur la carte SD</string>
+    <string name="enter_game_name">Donnez un nom à la partie :</string>
+    <string name="game_saved">La partie %s a été sauvegardée.</string>
+    <string name="overwrite_warning">Une partie avec ce nom existe déjà. Si vous continuez, elle sera écrasée.</string>
+
+    <!-- Game Info Dialog -->
+    <string name="dialog_title_gameinfo">Informations</string>
+    <string name="hint_black_name">Joueur noir</string>
+    <string name="hint_white_name">Joueur blanc</string>
+    <string name="hint_player_rank">Niv.</string>
+    <string name="lbl_result">Résultat</string>
+    <string name="lbl_wins_by">de</string>
+    <string name="game_info_changed">Les détails de la partie ont été modifiés.</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">Général</string>
+    <string name="pref_appearance">Apparence</string>
+    <string name="pref_wakelock">Désactiver mise en veille</string>
+    <string name="pref_wakelock_desc">Uniquement si un goban est ouvert</string>
+    <string name="pref_statusbar">Masquer barre de statut</string>
+    <string name="pref_statusbar_desc">Uniquement si un goban est ouvert</string>
+    <string name="pref_fastinput">Validation des coups</string>
+    <string name="pref_fastinput_off">Les coups sont joués immédiatement au relâchement</string>
+    <string name="pref_fastinput_on">Jouer un coup nécessite une validation (2e appui)</string>
+    <string name="pref_inputtype">Pose de pierres</string>
+    <string name="pref_inputtype_desc">Choisissez la façon dont les coups sont joués sur le goban</string>
+    <string name="pref_theme">Thème du goban</string>
+    <string name="pref_theme_desc">Définit le thème visuel du goban</string>
+    <string name="pref_linesize">Taille des lignes</string>
+    <string name="pref_linesize_desc">L\'épaisseur des lignes sur le goban</string>
+    <string name="pref_stonespadding">Espacement des pierres</string>
+    <string name="pref_stonespadding_desc">L\'espace entre les pierres sur le goban</string>
+
+    <!-- Error messages -->
+    <string name="err_internal">Une erreur interne est survenue, veuillez réessayer.</string>
+    <string name="err_filename_short">Le nom de la partie est trop court.</string>
+    <string name="err_sd_read_only">Impossible de sauvegarder la partie : la carte SD a été retirée ou n\'est plus
+        accessible.
+    </string>
+    <string name="err_save_game">Une erreur est survenue lors de la sauvegarde de la partie, veuillez réessayer.
+    </string>
+    <string name="err_file_not_found">Fichier introuvable : %s</string>
+    <string name="err_file_read_error">Impossible de lire le fichier : %s</string>
+    <string name="err_loading_sgf">Erreur lors du chargement de la partie: le fichier SGF est probablement corrompu.
+    </string>
+    <string name="err_invalid_integer">La valeur "%s" n\'est pas un nombre entier valide.</string>
+    <string name="err_occurred">Une erreur est survenue (%s).</string>
+    <string name="err_dialog_title">Erreur</string>
+
+</resources>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:orientation="vertical"
+              android:layout_width="fill_parent"
+              android:layout_height="fill_parent">
+
+    <EditText
+            android:id="@+id/txt_filename"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
+            android:layout_marginRight="6dp"
+            android:maxLength="100"
+            android:hint="@string/hint_filename"/>
+
+    <CheckBox
+            android:id="@+id/chk_save_sd"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
+            android:text="@string/txt_save_sd"
+            android:checked="false"/>
+
+    <TextView
+            android:id="@+id/txt_warning_file_overwrite"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="25dp"
+            android:paddingRight="25dp"
+            android:layout_marginTop="10dp"
+            android:textColor="#CC1111"
+            android:visibility="invisible"
+            android:text="@string/overwrite_warning"
+            />
+
+</LinearLayout>

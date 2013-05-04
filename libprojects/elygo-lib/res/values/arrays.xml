@@ -1,0 +1,100 @@
+<resources>
+    <string-array name="playBoardsize">
+        <item>7</item>
+        <item>9</item>
+        <item>11</item>
+        <item>13</item>
+        <item>15</item>
+        <item>17</item>
+        <item>19</item>
+    </string-array>
+
+    <string-array name="playKomi">
+        <item>7.5</item>
+        <item>6.5</item>
+        <item>5.5</item>
+        <item>0.5</item>
+        <item>-6.5</item>
+    </string-array>
+
+    <string-array name="playHandicap">
+        <item>0</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+    </string-array>
+
+    <string-array name="playColor">
+        <item>Black</item>
+        <item>White</item>
+        <item>Random</item>
+    </string-array>
+
+    <string-array name="playLevels">
+        <item>1 (faster)</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10 (stronger)</item>
+    </string-array>
+
+    <string-array name="inputTypes">
+        <item>Offset (always)</item>
+        <item>Offset (large boards only)</item>
+        <item>Stylus mode</item>
+    </string-array>
+    <string-array name="inputTypes_val">
+        <item>offset</item>
+        <item>offsetLarge</item>
+        <item>stylus</item>
+    </string-array>
+    <string-array name="stonePaddingPref">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+    <string-array name="stonePaddingPref_val">
+        <item>0</item>
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+    </string-array>
+
+    <string-array name="gridLinesSizePref">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+    <string-array name="gridLinesSizePref_val">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
+
+    <string-array name="themePref">
+        <item>Standard</item>
+        <item>Dark Wood</item>
+        <item>Black &amp; white</item>
+    </string-array>
+    <string-array name="themePref_val">
+        <item>standard</item>
+        <item>darkwood</item>
+        <item>blackwhite</item>
+    </string-array>
+
+</resources>
