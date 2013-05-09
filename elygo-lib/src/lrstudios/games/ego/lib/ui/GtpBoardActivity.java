@@ -25,6 +25,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.view.WindowManager;
 import com.actionbarsherlock.view.Menu;
 import com.actionbarsherlock.view.MenuItem;
 import com.actionbarsherlock.view.Window;
@@ -227,7 +228,9 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _updateGameLogic();
         }
         else
-            Log.w(TAG, "The move was illegal.");
+        {
+            Log.w(TAG, "The move is illegal : " + x + ", " + y);
+        }
     }
 
 
@@ -244,7 +247,14 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _waitingScoreDialog.setIndeterminate(true);
             _waitingScoreDialog.setCancelable(true);
             _waitingScoreDialog.setMessage(getString(R.string.board_compute_territory));
-            _waitingScoreDialog.show();
+            try
+            {
+                _waitingScoreDialog.show();
+            }
+            catch (WindowManager.BadTokenException e) // Happens if the activity is not visible
+            {
+                e.printStackTrace();
+            }
         }
         else if (!game.isFinished())
         {

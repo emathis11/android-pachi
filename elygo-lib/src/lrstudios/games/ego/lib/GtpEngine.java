@@ -55,12 +55,12 @@ public abstract class GtpEngine
     public abstract String sendGtpCommand(String command);
 
     /**
-     * Returns the name of the engine which can be displayed as the player name (try to keep it short).
+     * Returns the name of the engine, which can be displayed as the player name (try to keep it short).
      */
     public abstract String getName();
 
     /**
-     * Returns the actual version of the engine.
+     * Returns the version of the engine.
      */
     public abstract String getVersion();
 
@@ -197,8 +197,7 @@ public abstract class GtpEngine
             String cmd = String.format("play %1$s %2$s", _getColorString(color), _point2str(coords));
             return _cmdStatus(sendGtpCommand(cmd));
         }
-        else
-            return false;
+        return false;
     }
 
 
