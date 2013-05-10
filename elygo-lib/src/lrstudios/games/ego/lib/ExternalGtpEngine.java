@@ -15,8 +15,9 @@ public abstract class ExternalGtpEngine extends GtpEngine
 
     private static final String TAG = "ExternalGtpEngine";
 
-    protected String[] _processArgs;
-    protected Thread _stdErrThread;
+    private String[] _processArgs;
+    private Thread _stdErrThread;
+    private Thread _exitThread;
     protected OutputStreamWriter _writer;
     protected BufferedReader _reader;
 
@@ -47,6 +48,10 @@ public abstract class ExternalGtpEngine extends GtpEngine
                 System.arraycopy(_processArgs, 0, args, 1, len);
                 _engineProcess = new ProcessBuilder(args).start();
             }
+            else
+            {
+                Log.w(TAG, "Called init() again");
+            }
 
             InputStream is = _engineProcess.getInputStream();
             _reader = new BufferedReader(new InputStreamReader(is), 8192);
@@ -66,7 +71,7 @@ public abstract class ExternalGtpEngine extends GtpEngine
                         String line;
                         while ((line = reader.readLine()) != null)
                         {
-                            Log.e(TAG, "[Error] " + line);
+                            //Log.e(TAG, "[Error] " + line);
                             if (Thread.currentThread().isInterrupted())
                                 return;
                         }
@@ -78,6 +83,26 @@ public abstract class ExternalGtpEngine extends GtpEngine
                 }
             });
             _stdErrThread.start();
+
+            // Starts a thread to restart the Pachi process if it was killed
+            _exitThread = new Thread(new Runnable()
+            {
+                @Override
+                public void run()
+                {
+                    try
+                    {
+                        Process ep = _engineProcess;
+                        if (ep != null)
+                            ep.waitFor();
+                        Log.w(TAG, "##### Pachi process has exited with code " + (ep != null ? ep.exitValue() : "[null]"));
+                    }
+                    catch (InterruptedException ignored)
+                    {
+                    }
+                }
+            });
+            _exitThread.start();
         }
         catch (IOException e)
         {

@@ -89,6 +89,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             }
         }
 
+        Log.v(TAG, "[onCreate] Recreate GTP engine");
         Class<?> botClass = (Class<?>) extras.getSerializable(INTENT_GTP_BOT_CLASS);
         try
         {
@@ -114,9 +115,9 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             try
             {
                 FileInputStream stream = openFileInput("gtp_save.sgf");
-                _engine.newGame(stream);
+                _engine.newGame(GoGame.loadSgf(stream));
                 stream.close();
-                if (_engine.isBotTurn()) // The game is never saved before the bot's turn
+                if (_engine.isBotTurn()) // The game is never saved during the bot's turn
                     _engine.switchColors();
                 loadOk = true;
             }
@@ -195,7 +196,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         int id = item.getItemId();
         if (id == R.id.menu_undo)
         {
-            _engine.undo();
+            _engine.undo(true);
             _updatePrisoners();
             _updateGameLogic();
         }

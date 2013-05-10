@@ -19,9 +19,7 @@
 package lrstudios.games.ego.lib;
 
 import android.content.Context;
-
-import java.io.IOException;
-import java.io.InputStream;
+import android.util.Log;
 
 
 /**
@@ -88,15 +86,10 @@ public abstract class GtpEngine
 
     /**
      * Starts a new game at the end of the main variation of the specified game.
-     * The next player to play will be the human.
-     *
-     * @param sgfStream A stream containing an SGF file.
-     * @throws IOException A problem occured while trying to read the stream.
      */
-    public void newGame(InputStream sgfStream) throws IOException
+    public void newGame(GoGame game)
     {
-        _game = GoGame.loadSgf(sgfStream);
-
+        _game = game;
         _newGame(_game.board.getSize(), _game.getNextPlayer(), _game.getKomi(), _game.getHandicap(), false);
 
         GameNode move = _game.getBaseNode();
@@ -119,8 +112,11 @@ public abstract class GtpEngine
         if (playerColor != GoBoard.BLACK && playerColor != GoBoard.WHITE)
             throw new IllegalArgumentException("The color is invalid.");
 
-        sendGtpCommand("boardsize " + boardSize);
-        sendGtpCommand("komi " + ((int) (komi * 10.0) / 10.0));
+        if (_game == null)
+        {
+            sendGtpCommand("boardsize " + boardSize);
+            sendGtpCommand("komi " + ((int) (komi * 10.0) / 10.0));
+        }
         sendGtpCommand("clear_board");
 
         _playerColor = playerColor;
@@ -128,7 +124,7 @@ public abstract class GtpEngine
 
         // Lower the handicap until the engine agrees with it
         String cmdStatus = "";
-        while (handicap > 0 && !_cmdStatus((cmdStatus = sendGtpCommand("fixed_handicap " + handicap))))
+        while (handicap > 0 && !cmdSuccess((cmdStatus = sendGtpCommand("fixed_handicap " + handicap))))
             handicap--;
 
         if (createGame)
@@ -195,7 +191,7 @@ public abstract class GtpEngine
         if (!playMove || _game.playMove(coords))
         {
             String cmd = String.format("play %1$s %2$s", _getColorString(color), _point2str(coords));
-            return _cmdStatus(sendGtpCommand(cmd));
+            return cmdSuccess(sendGtpCommand(cmd));
         }
         return false;
     }
@@ -224,29 +220,50 @@ public abstract class GtpEngine
 
 
     /**
-     * Undo the last move from the player. This includes the answer move from the engine (if there is one).
+     * Undo the last move from the player.
      *
-     * @return false if there was no move to undo, true otherwise.
+     * @param allowDoubleUndo Also undo the answer move from the engine (if there is one).
+     * @return false if there was no move to undo.
      */
-    public boolean undo()
+    public boolean undo(boolean allowDoubleUndo)
     {
-        boolean doubleUndo = (_game.getNextPlayer() == _playerColor && _game.getCurrentNode().x >= -1);
+        boolean doubleUndo = allowDoubleUndo &&
+                (_game.getNextPlayer() == _playerColor && _game.getCurrentNode().x >= -1);
 
-        _game.undo(true);
-        if (doubleUndo)
+        String result = sendGtpCommand("undo");
+        if (cmdSuccess(result))
+        {
             _game.undo(true);
-
-        return _cmdStatus(sendGtpCommand("gg-undo " + (doubleUndo ? 2 : 1)));
+            if (doubleUndo && cmdSuccess(sendGtpCommand("undo")))
+                _game.undo(true);
+            return true;
+        }
+        else if (result.contains("cannot undo"))
+        {
+            Log.v(TAG, "Faking undo...");
+            // Being able to undo moves on android is necessary (because mistakes happen very
+            // often on small screens), so we fake an undo by starting a new game and replaying
+            // the whole game tree except the last move.
+            if (_game.undo(true) != null)
+            {
+                if (doubleUndo)
+                    _game.undo(true);
+                newGame(_game);
+                return true;
+            }
+        }
+        return false;
+        //return cmdSuccess(sendGtpCommand("gg-undo " + (doubleUndo ? 2 : 1)));
     }
 
     public boolean setLevel(int level)
     {
-        return _cmdStatus(sendGtpCommand("level " + level));
+        return cmdSuccess(sendGtpCommand("level " + level));
     }
 
     /**
      * The engine will set the status of every stone on the board (dead, white territory,
-     * or black territory). The result can be get with getGame().getFinalStatus().
+     * or black territory). The result can be obtained with getGame().getFinalStatus().
      * Note that this can take a long time to execute.
      */
     public void askFinalStatus()
@@ -360,16 +377,14 @@ public abstract class GtpEngine
         return _game;
     }
 
-
-//---- PRIVATE / PROTECTED FUNCTIONS ---------------------------------------------------
-
     /**
-     * Returns true if the specified response to a gtp command succeed, false otherwise.
+     * Returns true if the specified response to a GTP command indicates a success.
      */
-    protected boolean _cmdStatus(String response)
+    public boolean cmdSuccess(String response)
     {
         return response.charAt(0) == '=';
     }
+
 
     /**
      * Converts standard coordinates into their representation in the GTP protocol.
