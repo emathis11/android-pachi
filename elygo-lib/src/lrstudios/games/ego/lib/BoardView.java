@@ -179,6 +179,9 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public boolean onTouchEvent(MotionEvent e) {
+        if (_gestureDetector == null || _clipBounds == null)
+            return false;
+
         switch (e.getAction()) {
             // We don't use the onScroll event of the GestureDetector because it stops sending events after a long press
             case MotionEvent.ACTION_MOVE:
@@ -200,11 +203,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         surfaceHolder.setFormat(PixelFormat.TRANSPARENT);
         surfaceHolder.addCallback(this);
 
-        _gestureDetector = new GestureDetector(context, new BoardGestureListener());
         _stdBitmapPaint = new Paint();
         _answerCircleRadius = getResources().getDimension(R.dimen.boardview_answer_circle_radius);
-
-        lockPlaying(); // To prevent errors if the user try to play before the surface is created
     }
 
 
@@ -484,7 +484,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             changeGame(_game, false);
         }
         setWillNotDraw(false); // Necessary for `onDraw()` to be called
-        unlockPlaying();
+        _gestureDetector = new GestureDetector(getContext(), new BoardGestureListener());
     }
 
     @Override
