@@ -8,11 +8,9 @@ import org.acra.annotation.ReportsCrashes;
 @ReportsCrashes(
         formKey = "",
         formUri = "http://www.lr-studios.net/scripts/reports-crashes/index.php")
-public class MyApplication extends Application
-{
+public class MyApplication extends Application {
     @Override
-    public void onCreate()
-    {
+    public void onCreate() {
         ACRA.init(this);
         super.onCreate();
     }
