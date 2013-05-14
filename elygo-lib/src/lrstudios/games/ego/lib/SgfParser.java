@@ -119,7 +119,8 @@ public final class SgfParser {
                     GameNode node = _parseNode();
                     if (curNode == null) {
                         _baseNodes.add(node);
-                    } else {
+                    }
+                    else {
                         node.parentNode = curNode;
                         curNode.nextNodes.add(node);
                     }
@@ -165,22 +166,26 @@ public final class SgfParser {
             if (ch == ']' && readingValue && (_value.length() == 0 || _value.charAt(_value.length() - 1) != '\\')) {
                 _addProperty(node, propertyType, _value.toString());
                 readingValue = false;
-            } else if (!readingValue) {
+            }
+            else if (!readingValue) {
                 if (ch == '[') {
                     propertyType = parsePropertyType(_property.toString());
                     readingValue = true;
                     _value.setLength(0);
-                } else if (ch == ';' || ch == '(' || ch == ')') {
+                }
+                else if (ch == ';' || ch == '(' || ch == ')') {
                     _reader.unread(iCh);
                     break;
-                } else if (ch != ' ' && ch != '\n' && ch != '\r' && ch != '\t') {
+                }
+                else if (ch != ' ' && ch != '\n' && ch != '\r' && ch != '\t') {
                     if (propertyType >= -1) {
                         _property.setLength(0);
                         propertyType = -2;
                     }
                     _property.append(ch);
                 }
-            } else {
+            }
+            else {
                 _value.append(ch);
             }
         }
@@ -315,7 +320,8 @@ public final class SgfParser {
         thread.start();
         try {
             thread.join();
-        } catch (InterruptedException ignored) {
+        }
+        catch (InterruptedException ignored) {
         }
         if (_exception != null)
             throw _exception;
@@ -339,7 +345,8 @@ public final class SgfParser {
             try {
                 _save_loop(_game.getBaseNode(), true);
                 _writer.flush();
-            } catch (IOException e) {
+            }
+            catch (IOException e) {
                 e.printStackTrace();
                 _exception = e;
             }
@@ -507,7 +514,8 @@ public final class SgfParser {
             String sgf = outputStream.toString();
             outputStream.close();
             return sgf;
-        } catch (IOException ignored) {
+        }
+        catch (IOException ignored) {
             return "";
         }
     }
@@ -520,7 +528,8 @@ public final class SgfParser {
         if (sgfCoords.length() == 0) {
             _cachedCoords.x = -1;
             _cachedCoords.y = -1;
-        } else {
+        }
+        else {
             _cachedCoords.x = sgfCoords.charAt(0) - 'a';
             _cachedCoords.y = sgfCoords.charAt(1) - 'a';
         }

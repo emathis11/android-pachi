@@ -103,7 +103,8 @@ public final class GameNode {
             return "";
         try {
             return new String(_comment_utf8, "UTF-8");
-        } catch (Exception ignored) {
+        }
+        catch (Exception ignored) {
             return "[Error]";
         }
     }
@@ -114,7 +115,8 @@ public final class GameNode {
     public void setComment(String comment) {
         try {
             _comment_utf8 = comment.getBytes("UTF-8");
-        } catch (Exception ignored) {
+        }
+        catch (Exception ignored) {
         }
     }
 
@@ -182,7 +184,8 @@ public final class GameNode {
             move.value = value;
             nextNodes.add(move);
             return move;
-        } else {
+        }
+        else {
             return nextNodes.get(index);
         }
     }

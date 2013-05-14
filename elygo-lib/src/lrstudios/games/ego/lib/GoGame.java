@@ -142,7 +142,8 @@ public class GoGame {
             placeMove(x, y, color);
             if (_playNode != null)
                 _playNode = _currentNode;
-        } else {
+        }
+        else {
             GameNode node = new GameNode(x, y, color);
             node.parentNode = _playNode;
             _playNode.nextNodes.add(node);

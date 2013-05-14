@@ -203,7 +203,8 @@ public final class GoBoard {
 
         if (x < 0 || y < 0 || x >= size || y >= size || getColor(x, y) != GoBoard.EMPTY) {
             result = false;
-        } else {
+        }
+        else {
             // Suicide ?
             set(x, y, color);
             if (!hasLiberty(x, y)) {
@@ -214,7 +215,8 @@ public final class GoBoard {
                 if ((x + 1 < size && getColor(x + 1, y) == oppColor && !hasLiberty(x + 1, y))
                         || (x - 1 >= 0 && getColor(x - 1, y) == oppColor && !hasLiberty(x - 1, y))
                         || (y + 1 < size && getColor(x, y + 1) == oppColor && !hasLiberty(x, y + 1))
-                        || (y - 1 >= 0 && getColor(x, y - 1) == oppColor && !hasLiberty(x, y - 1))) {
+                        || (y - 1 >= 0 && getColor(x, y - 1) == oppColor && !hasLiberty(x, y - 1)))
+                {
                     result = (_ko_prisoner == null || x != _ko_prisoner.x || y != _ko_prisoner.y);
                 }
             }
@@ -430,7 +432,8 @@ public final class GoBoard {
                         writer.write((color == GoBoard.WHITE) ? 3 : 2, 2);
                 }
             }
-        } else {
+        }
+        else {
             writer.write(1, 9); // Set the UL bound higher than the BR bound to tell it's an empty board
             writer.write(0, 9);
         }

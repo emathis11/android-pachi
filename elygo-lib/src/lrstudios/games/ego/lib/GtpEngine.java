@@ -25,8 +25,7 @@ import android.util.Log;
 /**
  * Represents a Go engine which uses the standard GTP protocol to communicate.
  */
-public abstract class GtpEngine
-{
+public abstract class GtpEngine {
     private static final String TAG = "GtpEngine";
 
     private static final String _BOARD_LETTERS = "ABCDEFGHJKLMNOPQRSTUVWXYZ"; // no 'I'
@@ -63,8 +62,7 @@ public abstract class GtpEngine
     public abstract String getVersion();
 
 
-    public GtpEngine(Context context)
-    {
+    public GtpEngine(Context context) {
         _context = context;
     }
 
@@ -78,8 +76,7 @@ public abstract class GtpEngine
      *                    which will be placed automatically.
      * @throws IllegalArgumentException
      */
-    public void newGame(int boardSize, byte playerColor, double komi, int handicap)
-    {
+    public void newGame(int boardSize, byte playerColor, double komi, int handicap) {
         _newGame(boardSize, playerColor, komi, handicap, true);
     }
 
@@ -87,14 +84,12 @@ public abstract class GtpEngine
     /**
      * Starts a new game at the end of the main variation of the specified game.
      */
-    public void newGame(GoGame game)
-    {
+    public void newGame(GoGame game) {
         _game = game;
         _newGame(_game.board.getSize(), _game.getNextPlayer(), _game.getKomi(), _game.getHandicap(), false);
 
         GameNode move = _game.getBaseNode();
-        while (move.nextNodes.size() > 0)
-        {
+        while (move.nextNodes.size() > 0) {
             move = move.nextNodes.get(0);
             _playMove(new Coords(move.x, move.y), move.color, false);
         }
@@ -103,8 +98,7 @@ public abstract class GtpEngine
     }
 
 
-    protected void _newGame(int boardSize, byte playerColor, double komi, int handicap, boolean createGame)
-    {
+    protected void _newGame(int boardSize, byte playerColor, double komi, int handicap, boolean createGame) {
         if (boardSize < 4 || boardSize > 19)
             throw new IllegalArgumentException("The board size must be between 4 and 19.");
         if (handicap != 0 && (handicap < 2 || handicap > 9))
@@ -112,8 +106,7 @@ public abstract class GtpEngine
         if (playerColor != GoBoard.BLACK && playerColor != GoBoard.WHITE)
             throw new IllegalArgumentException("The color is invalid.");
 
-        if (_game == null)
-        {
+        if (_game == null) {
             sendGtpCommand("boardsize " + boardSize);
             sendGtpCommand("komi " + ((int) (komi * 10.0) / 10.0));
         }
@@ -131,20 +124,16 @@ public abstract class GtpEngine
             _game = new GoGame(boardSize, komi, 0); // TODO find a better way to handle handicap
 
         // Place it on the board (the handicap stone coordinates were returned by the "fixed_handicap" command)
-        if (cmdStatus.length() > 1)
-        {
+        if (cmdStatus.length() > 1) {
             String[] handicapCoords = cmdStatus.replace("\n", "").split(" ");
 
-            for (String handiCoord : handicapCoords)
-            {
-                try
-                {
+            for (String handiCoord : handicapCoords) {
+                try {
                     Coords coords = _str2point(handiCoord);
                     if (coords != null)
                         _game.addStone(coords.x, coords.y, GoBoard.BLACK);
                 }
-                catch (Exception ignored)
-                { // Ignore whitespaces and other useless characters
+                catch (Exception ignored) { // Ignore whitespaces and other useless characters
                 }
             }
         }
@@ -162,8 +151,7 @@ public abstract class GtpEngine
      * @return true if the move was legal, false otherwise.
      * @throws IllegalArgumentException
      */
-    public boolean playMove(Coords coords)
-    {
+    public boolean playMove(Coords coords) {
         return _playMove(coords, _playerColor, true);
     }
 
@@ -177,19 +165,16 @@ public abstract class GtpEngine
      * @return true if the move was legal, false otherwise.
      * @throws IllegalArgumentException
      */
-    public boolean playMove(Coords coords, byte color)
-    {
+    public boolean playMove(Coords coords, byte color) {
         return _playMove(coords, color, true);
     }
 
 
-    protected boolean _playMove(Coords coords, byte color, boolean playMove)
-    {
+    protected boolean _playMove(Coords coords, byte color, boolean playMove) {
         if ((coords.x != -1 || coords.y != -1) && (coords.x < 0 || coords.x >= _boardSize || coords.y < 0 || coords.y >= _boardSize))
             throw new IllegalArgumentException("The coordinates are out of bounds.");
 
-        if (!playMove || _game.playMove(coords))
-        {
+        if (!playMove || _game.playMove(coords)) {
             String cmd = String.format("play %1$s %2$s", _getColorString(color), _point2str(coords));
             return cmdSuccess(sendGtpCommand(cmd));
         }
@@ -203,8 +188,7 @@ public abstract class GtpEngine
      * @return The move played by the engine ( (0, 0) is the top left intersection).
      *         Returns (-1, -1) if the engine passes.
      */
-    public Coords genMove()
-    {
+    public Coords genMove() {
         String move = sendGtpCommand("genmove " + _getBotColorString());
         Coords coords = _str2point(move.substring(move.indexOf(' ') + 1).trim());
         //Log.v(TAG, "Bot played " + move + ", coords are " + coords);
@@ -225,27 +209,23 @@ public abstract class GtpEngine
      * @param allowDoubleUndo Also undo the answer move from the engine (if there is one).
      * @return false if there was no move to undo.
      */
-    public boolean undo(boolean allowDoubleUndo)
-    {
+    public boolean undo(boolean allowDoubleUndo) {
         boolean doubleUndo = allowDoubleUndo &&
                 (_game.getNextPlayer() == _playerColor && _game.getCurrentNode().x >= -1);
 
         String result = sendGtpCommand("undo");
-        if (cmdSuccess(result))
-        {
+        if (cmdSuccess(result)) {
             _game.undo(true);
             if (doubleUndo && cmdSuccess(sendGtpCommand("undo")))
                 _game.undo(true);
             return true;
         }
-        else if (result.contains("cannot undo"))
-        {
+        else if (result.contains("cannot undo")) {
             Log.v(TAG, "Faking undo...");
             // Being able to undo moves on android is necessary (because mistakes happen very
             // often on small screens), so we fake an undo by starting a new game and replaying
             // the whole game tree except the last move.
-            if (_game.undo(true) != null)
-            {
+            if (_game.undo(true) != null) {
                 if (doubleUndo)
                     _game.undo(true);
                 newGame(_game);
@@ -256,8 +236,7 @@ public abstract class GtpEngine
         //return cmdSuccess(sendGtpCommand("gg-undo " + (doubleUndo ? 2 : 1)));
     }
 
-    public boolean setLevel(int level)
-    {
+    public boolean setLevel(int level) {
         return cmdSuccess(sendGtpCommand("level " + level));
     }
 
@@ -266,12 +245,10 @@ public abstract class GtpEngine
      * or black territory). The result can be obtained with getGame().getFinalStatus().
      * Note that this can take a long time to execute.
      */
-    public void askFinalStatus()
-    {
+    public void askFinalStatus() {
         String[] coords = sendGtpCommand("final_status_list white_territory").split(" ");
         int len = coords.length;
-        for (int i = 1; i < len; i++)
-        {
+        for (int i = 1; i < len; i++) {
             Coords pt = _str2point(coords[i]);
             if (pt != null)
                 _game.setFinalStatus(pt.x, pt.y, GoBoard.WHITE_TERRITORY);
@@ -279,8 +256,7 @@ public abstract class GtpEngine
 
         coords = sendGtpCommand("final_status_list black_territory").split(" ");
         len = coords.length;
-        for (int i = 1; i < len; i++)
-        {
+        for (int i = 1; i < len; i++) {
             Coords pt = _str2point(coords[i]);
             if (pt != null)
                 _game.setFinalStatus(pt.x, pt.y, GoBoard.BLACK_TERRITORY);
@@ -288,11 +264,9 @@ public abstract class GtpEngine
 
         coords = sendGtpCommand("final_status_list dead").split("[ \n]");
         len = coords.length;
-        for (int i = 1; i < len; i++)
-        {
+        for (int i = 1; i < len; i++) {
             Coords pt = _str2point(coords[i]);
-            if (pt != null)
-            {
+            if (pt != null) {
                 _game.setFinalStatus(pt.x, pt.y,
                         (_game.board.getColor(pt.x, pt.y) == GoBoard.WHITE) ?
                                 GoBoard.DEAD_WHITE_STONE : GoBoard.DEAD_BLACK_STONE);
@@ -305,8 +279,7 @@ public abstract class GtpEngine
      * The engine will compute the final result of the game (or null if something failed) and
      * set it as the result of the underlying game.
      */
-    public GoGameResult computeFinalScore()
-    {
+    public GoGameResult computeFinalScore() {
         String finalScore = sendGtpCommand("final_score").split(" ")[1];
         GoGameResult result = GoGameResult.tryParse(finalScore);
         if (result != null)
@@ -318,8 +291,7 @@ public abstract class GtpEngine
     /**
      * Returns true if the next player to play is the engine, false otherwise.
      */
-    public boolean isBotTurn()
-    {
+    public boolean isBotTurn() {
         return _playerColor != _game.getNextPlayer();
     }
 
@@ -327,8 +299,7 @@ public abstract class GtpEngine
     /**
      * The two players switch colors. If the engine played black it now plays white and vice-versa.
      */
-    public void switchColors()
-    {
+    public void switchColors() {
         _playerColor = GoBoard.getOppositeColor(_playerColor);
     }
 
@@ -336,8 +307,7 @@ public abstract class GtpEngine
     /**
      * Returns a pretty ASCII board which shows the current position (gtp command "showboard").
      */
-    public String getAsciiBoard()
-    {
+    public String getAsciiBoard() {
         return sendGtpCommand("showboard");
     }
 
@@ -345,16 +315,14 @@ public abstract class GtpEngine
     /**
      * Gets the player color.
      */
-    public byte getPlayerColor()
-    {
+    public byte getPlayerColor() {
         return _playerColor;
     }
 
     /**
      * Gets the engine color.
      */
-    public byte getBotColor()
-    {
+    public byte getBotColor() {
         return GoBoard.getOppositeColor(_playerColor);
     }
 
@@ -363,8 +331,7 @@ public abstract class GtpEngine
      *
      * @return The board size.
      */
-    public int getBoardSize()
-    {
+    public int getBoardSize() {
         return _boardSize;
     }
 
@@ -372,16 +339,14 @@ public abstract class GtpEngine
     /**
      * Gets the underlying game used by the engine.
      */
-    public GoGame getGame()
-    {
+    public GoGame getGame() {
         return _game;
     }
 
     /**
      * Returns true if the specified response to a GTP command indicates a success.
      */
-    public boolean cmdSuccess(String response)
-    {
+    public boolean cmdSuccess(String response) {
         return response.charAt(0) == '=';
     }
 
@@ -393,8 +358,7 @@ public abstract class GtpEngine
      * @param coords The coordinates to convert.
      * @return The string representation.
      */
-    protected String _point2str(Coords coords)
-    {
+    protected String _point2str(Coords coords) {
         if (coords.x == -1 && coords.y == -1)
             return "pass";
         else if (coords.x == -3 && coords.y == -3)
@@ -410,40 +374,33 @@ public abstract class GtpEngine
      * @param coords
      * @return The converted coordinates, or null if they were invalid.
      */
-    protected Coords _str2point(String coords)
-    {
+    protected Coords _str2point(String coords) {
         if (coords.equalsIgnoreCase("pass"))
             return new Coords(-1, -1);
         else if (coords.equalsIgnoreCase("resign"))
             return new Coords(-3, -3);
-        else
-        {
-            try
-            {
+        else {
+            try {
                 return new Coords(
                         _BOARD_LETTERS.indexOf(coords.charAt(0)),
                         _boardSize - Integer.parseInt(coords.substring(1).trim()));
             }
-            catch (NumberFormatException e)
-            {
+            catch (NumberFormatException e) {
                 e.printStackTrace();
                 return null;
             }
         }
     }
 
-    protected String _getColorString(byte color)
-    {
+    protected String _getColorString(byte color) {
         return (color == GoBoard.WHITE ? _WHITE_NAME : _BLACK_NAME);
     }
 
-    protected String _getPlayerColorString()
-    {
+    protected String _getPlayerColorString() {
         return (_playerColor == GoBoard.BLACK ? _BLACK_NAME : _WHITE_NAME);
     }
 
-    protected String _getBotColorString()
-    {
+    protected String _getBotColorString() {
         return (_playerColor == GoBoard.BLACK ? _WHITE_NAME : _BLACK_NAME);
     }
 }

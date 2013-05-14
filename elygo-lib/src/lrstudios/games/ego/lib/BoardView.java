@@ -50,8 +50,7 @@ import java.util.List;
  * There are no functions to manipulate the go board in the view. It's only a visual
  * representation of a board and any board manipulation is done outside of this class.
  */
-public final class BoardView extends SurfaceView implements SurfaceHolder.Callback
-{
+public final class BoardView extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "BoardView";
 
     private static final double ANIM_CAPTURE_DURATION = 380.0;
@@ -113,26 +112,21 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
 
     // Gesture detector callbacks
-    private final class BoardGestureListener extends GestureDetector.SimpleOnGestureListener
-    {
+    private final class BoardGestureListener extends GestureDetector.SimpleOnGestureListener {
         @Override
-        public boolean onDown(MotionEvent event)
-        {
-            if (!_playLock)
-            {
+        public boolean onDown(MotionEvent event) {
+            if (!_playLock) {
                 float x = event.getX();
                 float y = event.getY();
 
-                if (_requiresValidation)
-                {
+                if (_requiresValidation) {
                     final Point coords = _cache_getBoardCoordsAtLocation(x, y);
                     if (_crossCursor.x >= 0 && _isMoveLegal && coords.equals(_crossCursor.x, _crossCursor.y))
                         _moveValidated = new Point(coords);
                     else
                         _moveValidated = null;
                 }
-                if (_moveValidated == null)
-                {
+                if (_moveValidated == null) {
                     final Point coords = _cache_getBoardCoordsAtLocation(x, y - _offsetY);
                     moveCrossCursor(coords);
                 }
@@ -141,10 +135,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         @Override
-        public boolean onSingleTapUp(MotionEvent event)
-        {
-            if (_requiresValidation && !_playLock && _moveValidated != null)
-            {
+        public boolean onSingleTapUp(MotionEvent event) {
+            if (_requiresValidation && !_playLock && _moveValidated != null) {
                 if (_listener != null)
                     _listener.onPress(_moveValidated.x, _moveValidated.y);
                 moveCrossCursor(null);
@@ -153,17 +145,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         @Override
-        public void onLongPress(MotionEvent event)
-        {
+        public void onLongPress(MotionEvent event) {
         }
     }
 
-
-    // This event isn't handled by the GestureDector so we handle it outside
-    private boolean onUp(MotionEvent event)
-    {
-        if (!_requiresValidation && !_playLock)
-        {
+    private boolean onUp(MotionEvent event) {
+        if (!_requiresValidation && !_playLock) {
             final Point coords = _cache_getBoardCoordsAtLocation(event.getX(), event.getY() - _offsetY);
 
             if (_crossCursor.x >= 0 && _listener != null && _isInBounds(coords) &&
@@ -173,18 +160,15 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             }
             moveCrossCursor(null);
         }
-        else if (_requiresValidation && !_isMoveLegal)
-        {
+        else if (_requiresValidation && !_isMoveLegal) {
             moveCrossCursor(null);
         }
 
         return true;
     }
 
-    private boolean onMove(MotionEvent event)
-    {
-        if (!_playLock && _moveValidated == null)
-        {
+    private boolean onMove(MotionEvent event) {
+        if (!_playLock && _moveValidated == null) {
             final Point coords = _cache_getBoardCoordsAtLocation(event.getX(), event.getY() - _offsetY);
             moveCrossCursor(coords);
         }
@@ -194,10 +178,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
 
     @Override
-    public boolean onTouchEvent(MotionEvent e)
-    {
-        switch (e.getAction())
-        {
+    public boolean onTouchEvent(MotionEvent e) {
+        switch (e.getAction()) {
             // We don't use the onScroll event of the GestureDetector because it stops sending events after a long press
             case MotionEvent.ACTION_MOVE:
                 onMove(e);
@@ -210,8 +192,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
-    public BoardView(Context context, AttributeSet attrs)
-    {
+    public BoardView(Context context, AttributeSet attrs) {
         super(context, attrs);
         readPreferences();
 
@@ -222,11 +203,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         _gestureDetector = new GestureDetector(context, new BoardGestureListener());
         _stdBitmapPaint = new Paint();
         _answerCircleRadius = getResources().getDimension(R.dimen.boardview_answer_circle_radius);
+
+        lockPlaying(); // To prevent errors if the user try to play before the surface is created
     }
 
 
-    public void readPreferences()
-    {
+    public void readPreferences() {
         SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getContext());
         _zoom_margin = Integer.parseInt(prefs.getString("tsumegoMarginPref", "3"));
         _stonesPadding = Integer.parseInt(prefs.getString("stonePaddingPref", "1"));
@@ -235,19 +217,17 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         String skin = prefs.getString("themePref", "standard");
         String inputType = prefs.getString("inputType", "0");
 
-        if (skin.equals("blackwhite"))
-        {
+        if (skin.equals("blackwhite")) {
             if (!(_theme instanceof BlackWhiteTheme))
                 _theme = new BlackWhiteTheme(getContext());
         }
-        else if (skin.equals("darkwood"))
-        {
+        else if (skin.equals("darkwood")) {
             if (!(_theme instanceof DarkBoardTheme))
                 _theme = new DarkBoardTheme(getContext());
         }
-        else
-        {
-            _theme = new StandardTheme(getContext());
+        else {
+            if (!(_theme instanceof StandardTheme))
+                _theme = new StandardTheme(getContext());
         }
 
         _setting_offsetY = inputType.startsWith("offset") ? getResources().getDimension(R.dimen.stone_input_offset) : 0;
@@ -258,8 +238,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Changes the current board shown by this view.
      */
-    public void changeGame(GoGame game, boolean allowZoom)
-    {
+    public void changeGame(GoGame game, boolean allowZoom) {
         _isZoom = allowZoom;
         _game = game;
 
@@ -269,8 +248,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         recreateGraphics();
     }
 
-    public void setZoomMargin(int margin)
-    {
+    public void setZoomMargin(int margin) {
         if (margin < 0)
             margin = 0;
         else if (margin > _size)
@@ -280,32 +258,28 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         recreateGraphics();
     }
 
-    public int getZoomMargin()
-    {
+    public int getZoomMargin() {
         return _zoom_margin;
     }
 
     /**
      * Defines whether playing moves needs validation or not (this overrides the preference).
      */
-    public void setMoveValidation(boolean needValidation)
-    {
+    public void setMoveValidation(boolean needValidation) {
         _forceRequiresValidation = needValidation;
     }
 
     /**
      * Allows or prevents the view to fire onPress events for illegal moves.
      */
-    public void allowIllegalMoves(boolean allow)
-    {
+    public void allowIllegalMoves(boolean allow) {
         _allowIllegalMoves = allow;
     }
 
     /**
      * Prevents the user to play a move.
      */
-    public void lockPlaying()
-    {
+    public void lockPlaying() {
         _playLock = true;
         moveCrossCursor(null);
     }
@@ -313,13 +287,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Allows the user to play a move.
      */
-    public void unlockPlaying()
-    {
+    public void unlockPlaying() {
         _playLock = false;
     }
 
-    public void showVariations(boolean show)
-    {
+    public void showVariations(boolean show) {
         _showVariations = show;
     }
 
@@ -327,8 +299,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Shows or hides the good and wrong variations of the current problem by drawing marks on the board.
      */
-    public void showAnswers(boolean show)
-    {
+    public void showAnswers(boolean show) {
         _showAnswers = show;
         invalidate();
     }
@@ -336,24 +307,21 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * If the answers are already shown, they will become hidden and vice versa.
      */
-    public void toggleAnswers()
-    {
+    public void toggleAnswers() {
         showAnswers(!_showAnswers);
     }
 
     /**
      * Reverses (or not) all colors of the current game (only visually, it doesn't alter the game).
      */
-    public void setReverseColors(boolean reverse)
-    {
+    public void setReverseColors(boolean reverse) {
         _reverseColors = reverse;
     }
 
     /**
      * If set to true, all black stones will become white.
      */
-    public void setMonocolor(boolean enable)
-    {
+    public void setMonocolor(boolean enable) {
         _monocolor = enable;
         invalidate();
     }
@@ -361,8 +329,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Returns the current visual theme of this board.
      */
-    public Theme getCurrentTheme()
-    {
+    public Theme getCurrentTheme() {
         return _theme;
     }
 
@@ -370,15 +337,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Draws the cross cursor to the specified location.
      */
-    private void moveCrossCursor(Point coords)
-    {
-        if (_isInBounds(coords))
-        {
+    private void moveCrossCursor(Point coords) {
+        if (_isInBounds(coords)) {
             _crossCursor.set(coords.x, coords.y);
             _isMoveLegal = _allowIllegalMoves || _game.isLegal(coords.x, coords.y);
         }
-        else
-        {
+        else {
             _crossCursor.set(-1, -1);
         }
         invalidate(); // TODO repaint cross cursor only
@@ -389,8 +353,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * {@inheritDoc}
      */
     @Override
-    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height)
-    {
+    public void surfaceChanged(SurfaceHolder holder, int format, int width, int height) {
         //Log.v(TAG, "surfaceChanged() width=" + width + ", height=" + height);
 
         final boolean isLandscape = width > height;
@@ -405,8 +368,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * Recreates some graphical objects when the zoom, board or screen size is changed.
      * This also invalidates the view.
      */
-    public void recreateGraphics()
-    {
+    public void recreateGraphics() {
         if (_surfaceWidth <= 0 || _surfaceHeight <= 0)
             return;
 
@@ -441,8 +403,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
-    private void _computeDimensions(boolean allowRotation)
-    {
+    private void _computeDimensions(boolean allowRotation) {
         final Rect maxBounds = new Rect(0, 0, _size - 1, _size - 1);
         _clipBounds = (_baseBounds == null) ? _game.board.getBounds() : _baseBounds;
 
@@ -451,13 +412,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         // and go back).
         _baseBounds = new Rect(_clipBounds);
 
-        if (!_isZoom || _clipBounds.right < 0 || _clipBounds.bottom < 0)
-        {
+        if (!_isZoom || _clipBounds.right < 0 || _clipBounds.bottom < 0) {
             _clipBounds.set(0, 0, _size - 1, _size - 1);
             allowRotation = false;
         }
-        else
-        {
+        else {
             AndroidUtils.Rect_addMargin(_clipBounds, (_size < 19 ? 99 : _zoom_margin), maxBounds);
         }
 
@@ -485,8 +444,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             _baseBounds = null;
             _computeDimensions(false);
         }
-        else
-        {
+        else {
             // If an entire side of the board is shown, there may be some space left on this side. We remove it
             int spaceWidth = (_surfaceWidth - _finalWidth) / _stoneSize;
 
@@ -505,13 +463,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
             if (bottomSpace + _clipBounds.height() >= _size)
                 bottomSpace = _size - 1 - _clipBounds.height();
 
-            if (rightSpace > 0)
-            {
+            if (rightSpace > 0) {
                 _clipBounds.right += rightSpace;
                 _finalWidth += _stoneSize * rightSpace;
             }
-            if (bottomSpace > 0)
-            {
+            if (bottomSpace > 0) {
                 _clipBounds.bottom += bottomSpace;
                 _finalHeight += _stoneSize * bottomSpace;
             }
@@ -522,25 +478,23 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
 
     @Override
-    public void surfaceCreated(SurfaceHolder holder)
-    {
-        if (_game == null)
-        {
+    public void surfaceCreated(SurfaceHolder holder) {
+        if (_game == null) {
             _game = new GoGame(9, 6.5, 0);
             changeGame(_game, false);
         }
         setWillNotDraw(false); // Necessary for `onDraw()` to be called
+        unlockPlaying();
     }
 
     @Override
-    public void surfaceDestroyed(SurfaceHolder holder)
-    {
+    public void surfaceDestroyed(SurfaceHolder holder) {
+        lockPlaying();
     }
 
 
     @Override
-    public void onDraw(Canvas canvas)
-    {
+    public void onDraw(Canvas canvas) {
         // Background
         _theme.drawBackground(canvas, 0, 0, _surfaceWidth, _surfaceHeight);
         canvas.translate(_leftMargin, 0);
@@ -561,21 +515,16 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         final byte[] colors = board.getBoardArray();
         final int stoneSize = _stoneSize;
 
-        for (int curX = _clipBounds.left; curX <= _clipBounds.right; curX++)
-        {
-            for (int curY = _clipBounds.top; curY <= _clipBounds.bottom; curY++)
-            {
+        for (int curX = _clipBounds.left; curX <= _clipBounds.right; curX++) {
+            for (int curY = _clipBounds.top; curY <= _clipBounds.bottom; curY++) {
                 int x = curX - _clipBounds.left;
                 int y = curY - _clipBounds.top;
 
                 boolean showStatus = _showFinalStatus;
-                if (showStatus)
-                {
+                if (showStatus) {
                     byte color = _game.getFinalStatus(curX, curY);
-                    if (_reverseColors)
-                    {
-                        switch (color)
-                        {
+                    if (_reverseColors) {
+                        switch (color) {
                             case GoBoard.BLACK_TERRITORY:
                                 color = GoBoard.WHITE_TERRITORY;
                                 break;
@@ -590,36 +539,30 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                                 break;
                         }
                     }
-                    if (color == GoBoard.BLACK_TERRITORY)
-                    {
+                    if (color == GoBoard.BLACK_TERRITORY) {
                         _theme.blackTerritory.setBounds(
                                 stoneSize * x, stoneSize * y,
                                 stoneSize * (x + 1), stoneSize * (y + 1));
                         _theme.blackTerritory.draw(canvas);
                     }
-                    else if (color == GoBoard.WHITE_TERRITORY)
-                    {
+                    else if (color == GoBoard.WHITE_TERRITORY) {
                         _theme.whiteTerritory.setBounds(
                                 stoneSize * x, stoneSize * y,
                                 stoneSize * (x + 1), stoneSize * (y + 1));
                         _theme.whiteTerritory.draw(canvas);
                     }
-                    else if (color == GoBoard.DEAD_BLACK_STONE)
-                    {
+                    else if (color == GoBoard.DEAD_BLACK_STONE) {
                         _theme.drawDeadBlackStone(canvas, stoneSize * x, stoneSize * y, stoneSize);
                     }
-                    else if (color == GoBoard.DEAD_WHITE_STONE)
-                    {
+                    else if (color == GoBoard.DEAD_WHITE_STONE) {
                         _theme.drawDeadWhiteStone(canvas, stoneSize * x, stoneSize * y, stoneSize);
                     }
-                    else
-                    {
+                    else {
                         showStatus = false;
                     }
                 }
 
-                if (!showStatus)
-                {
+                if (!showStatus) {
                     byte color = colors[curY * boardSize + curX];
                     if (_reverseColors && color != GoBoard.EMPTY)
                         color = GoBoard.getOppositeColor(color);
@@ -634,15 +577,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Variations
-        if (_showVariations && !_showFinalStatus)
-        {
+        if (_showVariations && !_showFinalStatus) {
             GameNode parentMove = _game.getCurrentNode().parentNode;
-            if (parentMove != null)
-            {
-                for (GameNode move : parentMove.nextNodes)
-                {
-                    if (_isInBounds(move.x, move.y) && _game.board.getColor(move.x, move.y) == GoBoard.EMPTY)
-                    {
+            if (parentMove != null) {
+                for (GameNode move : parentMove.nextNodes) {
+                    if (_isInBounds(move.x, move.y) && _game.board.getColor(move.x, move.y) == GoBoard.EMPTY) {
                         byte color = move.color;
                         if (_reverseColors && color != GoBoard.EMPTY)
                             color = GoBoard.getOppositeColor(color);
@@ -658,8 +597,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
         // Marks
         final float MARK_PADDING = 4.5f + ((_size < 10) ? 0.5f : 0f);
-        for (BoardMark mark : board.getMarks())
-        {
+        for (BoardMark mark : board.getMarks()) {
             int x = mark.x - _clipBounds.left;
             int y = mark.y - _clipBounds.top;
             byte color = colors[mark.y * boardSize + mark.x];
@@ -667,8 +605,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                 color = GoBoard.getOppositeColor(color);
 
             // Letters and digits
-            if (mark.type == BoardMark.MARK_LABEL)
-            {
+            if (mark.type == BoardMark.MARK_LABEL) {
                 Paint paint = (color == GoBoard.BLACK) ? _theme.blackLabelPaint : // TODO should be in _theme (no public Paint at all would be better)
                         (color == GoBoard.WHITE) ? _theme.whiteLabelPaint : _theme.boardLabelPaint;
 
@@ -681,14 +618,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                         paint);
             }
             // Shapes
-            else
-            {
+            else {
                 Paint paint = (color == GoBoard.BLACK) ? _theme.blackMarkPaint :
                         (color == GoBoard.WHITE) ? _theme.whiteMarkPaint : _theme.boardMarkPaint;
 
                 ShapeDrawable markShape = null;
-                switch (mark.type)
-                {
+                switch (mark.type) {
                     case BoardMark.MARK_CIRCLE:
                         markShape = _theme.circleMark;
                         break;
@@ -703,8 +638,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                         break;
                 }
 
-                if (markShape != null)
-                {
+                if (markShape != null) {
                     markShape.getPaint().set(paint);
                     markShape.setBounds(
                             Math.round(stoneSize * x + stoneSize / MARK_PADDING),
@@ -717,10 +651,8 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Problem solution
-        if (_showAnswers)
-        {
-            for (GameNode node : _game.getCurrentNode().nextNodes)
-            {
+        if (_showAnswers) {
+            for (GameNode node : _game.getCurrentNode().nextNodes) {
                 if (node.value < 0)
                     continue;
 
@@ -734,8 +666,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Cross cursor
-        if (_crossCursor.x >= 0)
-        {
+        if (_crossCursor.x >= 0) {
             int x = _crossCursor.x - _clipBounds.left;
             int y = _crossCursor.y - _clipBounds.top;
 
@@ -747,8 +678,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
                     -_leftMargin, stoneSize * y + stoneSize / 2f,
                     _surfaceWidth - _leftMargin, stoneSize * y + stoneSize / 2f, paint);
 
-            if (_isMoveLegal)
-            {
+            if (_isMoveLegal) {
                 Drawable cursor;
                 byte nextPlayer = _game.getNextPlayer();
                 if (nextPlayer == GoBoard.ANY)
@@ -767,21 +697,18 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         }
 
         // Animations
-        if (_anim_prisonersList.size() > 0)
-        {
+        if (_anim_prisonersList.size() > 0) {
             for (BoardAnimation anim : _anim_prisonersList)
                 anim.draw(canvas);
         }
     }
 
 
-    public void addPrisoners(Iterable<LightCoords> prisoners)
-    {
+    public void addPrisoners(Iterable<LightCoords> prisoners) {
         if (prisoners == null)
             return;
 
-        for (LightCoords coords : prisoners)
-        {
+        for (LightCoords coords : prisoners) {
             int x = (coords.x - _clipBounds.left) * _stoneSize;
             int y = (coords.y - _clipBounds.top) * _stoneSize;
 
@@ -800,28 +727,24 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
-    public void setBoardListener(BoardListener listener)
-    {
+    public void setBoardListener(BoardListener listener) {
         _listener = listener;
     }
 
-    public void setInitListener(InitListener listener)
-    {
+    public void setInitListener(InitListener listener) {
         _initListener = listener;
     }
 
     /**
      * Shows (or not) the final status of the current game.
      */
-    public void showFinalStatus(boolean show)
-    {
+    public void showFinalStatus(boolean show) {
         _showFinalStatus = show;
         invalidate();
     }
 
     @Override
-    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec)
-    {
+    protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         if (!_isZoom && _finalHeight > 0) // TODO this won't work properly if a board is zoomed and set to "wrap_content" (add a _fullscreen field?)
             setMeasuredDimension(MeasureSpec.getSize(widthMeasureSpec), MeasureSpec.getSize(widthMeasureSpec));
         else
@@ -829,13 +752,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     }
 
 
-    private boolean _isInBounds(Point coords)
-    {
+    private boolean _isInBounds(Point coords) {
         return coords != null && _isInBounds(coords.x, coords.y);
     }
 
-    private boolean _isInBounds(int x, int y)
-    {
+    private boolean _isInBounds(int x, int y) {
         return x >= _clipBounds.left && x <= _clipBounds.right
                 && y >= _clipBounds.top && y <= _clipBounds.bottom;
     }
@@ -844,15 +765,12 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
     /**
      * Updates all animations on the board.
      */
-    private void _updateAnimations()
-    {
+    private void _updateAnimations() {
         final double SLEEP_INTERVAL = 1000.0 / 50.0;
 
-        if (_anim_prisonersList.size() > 0)
-        {
+        if (_anim_prisonersList.size() > 0) {
             Iterator<BoardAnimation> it = _anim_prisonersList.iterator();
-            while (it.hasNext())
-            {
+            while (it.hasNext()) {
                 BoardAnimation anim = it.next();
                 anim.update(SLEEP_INTERVAL / ANIM_CAPTURE_DURATION);
 
@@ -873,8 +791,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
      * Returns the board coordinates located at the specified (x, y) point on the surface.
      * WARNING : for performance issues, the reference returned will always be the same.
      */
-    private Point _cache_getBoardCoordsAtLocation(float x, float y)
-    {
+    private Point _cache_getBoardCoordsAtLocation(float x, float y) {
         int finalX = (int) (x / _stoneSize) + _clipBounds.left;
         int finalY = (int) (y / _stoneSize) + _clipBounds.top;
         _pt_coord2point.set(finalX, finalY);
@@ -883,13 +800,11 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
 
     // Handle view animations
-    private final class RefreshHandler extends Handler
-    {
+    private final class RefreshHandler extends Handler {
         static final int _MSG_REPAINT = 5555;
 
         @Override
-        public void handleMessage(Message msg)
-        {
+        public void handleMessage(Message msg) {
             if (msg.what == _MSG_REPAINT)
                 BoardView.this._updateAnimations();
         }
@@ -897,24 +812,21 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
         /**
          * Updates all animations, then refresh the View.
          */
-        public void postUpdate(long delayMillis)
-        {
+        public void postUpdate(long delayMillis) {
             this.removeMessages(_MSG_REPAINT);
             sendMessageDelayed(obtainMessage(_MSG_REPAINT), delayMillis);
         }
     }
 
 
-    public interface BoardListener
-    {
+    public interface BoardListener {
         /**
          * Called when the user clicks on an intersection of the board.
          */
         void onPress(int x, int y);
     }
 
-    public interface InitListener
-    {
+    public interface InitListener {
         void onThemeLoaded(Theme theme);
     }
 }

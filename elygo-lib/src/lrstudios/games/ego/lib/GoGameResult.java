@@ -62,11 +62,14 @@ public class GoGameResult {
 
         if (c == '0' || c == 'D') {
             winner = JIGO;
-        } else if (c == 'V') {
+        }
+        else if (c == 'V') {
             winner = VOID;
-        } else if (c == '?') {
+        }
+        else if (c == '?') {
             winner = UNKNOWN_WINNER;
-        } else {
+        }
+        else {
             if (c == 'B')
                 winner = BLACK;
             else if (c == 'W')
@@ -141,7 +144,8 @@ public class GoGameResult {
     public static GoGameResult tryParse(String sgfResult) {
         try {
             return new GoGameResult(sgfResult);
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
             return null;
         }

@@ -95,7 +95,8 @@ public class PrisonersView extends View {
             _stone = new ShapeDrawable(new OvalShape());
             _stone.getPaint().set(whiteStonePaint);
             _stone.setBounds(0, 0, _stoneSize, _stoneSize);
-        } else {
+        }
+        else {
             Paint blackStonePaint = new Paint();
             blackStonePaint.setAntiAlias(true);
             blackStonePaint.setShader(new RadialGradient(

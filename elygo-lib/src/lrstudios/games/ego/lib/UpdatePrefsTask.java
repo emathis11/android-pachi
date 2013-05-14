@@ -60,7 +60,8 @@ public final class UpdatePrefsTask extends AsyncTask<Object, Void, Void> {
             }
 
             editor.commit();
-        } catch (Exception e) {
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
         return null;

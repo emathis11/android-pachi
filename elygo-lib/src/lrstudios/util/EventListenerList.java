@@ -35,7 +35,8 @@ public class EventListenerList implements Serializable {
     public synchronized <T extends java.util.EventListener> void remove(
             final Class<T> listenerClass,
             final T listener
-    ) {
+    )
+    {
         if (listener == null) {
             return;
         }
@@ -60,7 +61,8 @@ public class EventListenerList implements Serializable {
     public synchronized <T extends java.util.EventListener> void add(
             final Class<T> listenerClass,
             final T listener
-    ) {
+    )
+    {
         if (listener == null) {
             return;
         }
@@ -79,7 +81,8 @@ public class EventListenerList implements Serializable {
         T[] listeners = (T[]) (Array.newInstance(listenerClass, numClassListeners));
         if (numClassListeners > 0) {
             for (int innerIndex = 0, outerIndex = 0;
-                 outerIndex < numClassListeners; innerIndex += 2) {
+                 outerIndex < numClassListeners; innerIndex += 2)
+            {
 
                 if (listenerList[innerIndex] == listenerClass) {
                     listeners[numClassListeners - 1 - outerIndex] = (T) listenerList[innerIndex + 1];
@@ -140,7 +143,8 @@ public class EventListenerList implements Serializable {
 
     @SuppressWarnings("unchecked")
     private void readObject(final ObjectInputStream inStream) throws IOException,
-            ClassNotFoundException {
+            ClassNotFoundException
+    {
         inStream.defaultReadObject();
 
         ArrayList list = new ArrayList();
