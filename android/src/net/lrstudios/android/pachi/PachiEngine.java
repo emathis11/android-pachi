@@ -20,29 +20,39 @@ public class PachiEngine extends ExternalGtpEngine {
      * (this will force the app to extract it again - I didn't find a better way
      * to know if an android resource has been updated).
      */
-    protected static final int EXE_VERSION = 1;
+    private static final int EXE_VERSION = 1;
 
     private static final String ENGINE_NAME = "Pachi";
     private static final String ENGINE_VERSION = "10.00";
 
-    protected static final String PREF_KEY_VERSION = "pachi_exe_version";
+    private static final String PREF_KEY_VERSION = "pachi_exe_version";
+
+    private int _totalTime = 600;
+    private int _maxTreeSize = 192;
 
 
     public PachiEngine(Context context) {
         super(context);
         long totalRam = AndroidUtils.getTotalRam(context);
-        int treeSize = 192;
-        if (totalRam > 0) {
-            // The amount of RAM used by pachi (adjustable with max_tree_size) should not
-            // be too high compared to the total RAM available, because Android can kill a
-            // process at any time if it uses too much memory.
-            treeSize = (int) Math.round(totalRam / 1024.0 / 1024.0 * 0.5);
-            Log.v(TAG, "Set max_tree_size = " + treeSize);
-        }
-
-        setProcessArgs(new String[]{"-t", "_600", "max_tree_size=" + treeSize});
+        // The amount of RAM used by pachi (adjustable with max_tree_size) should not
+        // be too high compared to the total RAM available, because Android can kill a
+        // process at any time if it uses too much memory.
+        if (totalRam > 0)
+            _maxTreeSize = (int) Math.round(totalRam / 1024.0 / 1024.0 * 0.5);
     }
 
+    @Override
+    public boolean setLevel(int level) {
+        _totalTime = (100 * level) / 2; // TODO use boardsize, and less linear
+        return true;
+    }
+
+    @Override
+    protected String[] getProcessArgs() {
+        Log.v(TAG, "Set max_tree_size = " + _maxTreeSize);
+        Log.v(TAG, "Set time = _" + _totalTime);
+        return new String[]{"-t", "_" + _totalTime, "max_tree_size=" + _maxTreeSize};
+    }
 
     @Override
     protected File getEngineFile() {
@@ -62,6 +72,7 @@ public class PachiEngine extends ExternalGtpEngine {
                 Utils.copyStream(inputStream, outputStream, 4096);
 
                 try {
+                    //file.setExecutable(true); TODO test this instead of chmod
                     new ProcessBuilder("chmod", "744", file.getAbsolutePath()).start().waitFor();
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putInt(PREF_KEY_VERSION, EXE_VERSION);
