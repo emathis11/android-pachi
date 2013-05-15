@@ -2,8 +2,8 @@
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="net.lrstudios.android.pachi"
-    android:versionCode="2"
-    android:versionName="1.0">
+    android:versionCode="3"
+    android:versionName="1.1">
 
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
@@ -26,7 +26,7 @@
         android:theme="@style/AppThemeLight">
 
         <activity
-            android:name=".PachiNewGameActivity"
+            android:name=".MainActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
