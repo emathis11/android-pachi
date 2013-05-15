@@ -174,11 +174,11 @@ public abstract class GtpEngine {
         if ((coords.x != -1 || coords.y != -1) && (coords.x < 0 || coords.x >= _boardSize || coords.y < 0 || coords.y >= _boardSize))
             throw new IllegalArgumentException("The coordinates are out of bounds.");
 
-        if (!playMove || _game.playMove(coords)) {
-            String cmd = String.format("play %1$s %2$s", _getColorString(color), _point2str(coords));
-            return cmdSuccess(sendGtpCommand(cmd));
-        }
-        return false;
+        String cmd = String.format("play %1$s %2$s", _getColorString(color), _point2str(coords));
+        boolean success = cmdSuccess(sendGtpCommand(cmd));
+        if (success && playMove)
+            _game.playMove(coords);
+        return success;
     }
 
 
@@ -359,12 +359,22 @@ public abstract class GtpEngine {
      * @return The string representation.
      */
     protected String _point2str(Coords coords) {
-        if (coords.x == -1 && coords.y == -1)
+        return _point2str(coords.x, coords.y);
+    }
+
+    /**
+     * Converts standard coordinates into their representation in the GTP protocol.
+     * Special cases are : (-1, -1) = pass, (-3, -3) = resignation.
+     *
+     * @return The string representation.
+     */
+    protected String _point2str(int x, int y) {
+        if (x == -1 && y == -1)
             return "pass";
-        else if (coords.x == -3 && coords.y == -3)
+        else if (x == -3 && y == -3)
             return "resign";
         else
-            return String.valueOf(_BOARD_LETTERS.charAt(coords.x)) + (_boardSize - coords.y);
+            return String.valueOf(_BOARD_LETTERS.charAt(x)) + (_boardSize - y);
     }
 
     /**
@@ -392,15 +402,19 @@ public abstract class GtpEngine {
         }
     }
 
+    protected void _gtpSendKomi(float komi) {
+
+    }
+
     protected String _getColorString(byte color) {
         return (color == GoBoard.WHITE ? _WHITE_NAME : _BLACK_NAME);
     }
 
     protected String _getPlayerColorString() {
-        return (_playerColor == GoBoard.BLACK ? _BLACK_NAME : _WHITE_NAME);
+        return (_playerColor == GoBoard.WHITE ? _WHITE_NAME : _BLACK_NAME);
     }
 
     protected String _getBotColorString() {
-        return (_playerColor == GoBoard.BLACK ? _WHITE_NAME : _BLACK_NAME);
+        return (_playerColor == GoBoard.WHITE ? _BLACK_NAME : _WHITE_NAME);
     }
 }
