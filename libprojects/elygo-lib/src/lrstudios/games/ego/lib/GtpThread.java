@@ -29,8 +29,7 @@ import lrstudios.games.ego.lib.ui.GtpBoardActivity;
 /**
  * GTP commands will be sent to the specified {@link GtpEngine} from this thread.
  */
-public class GtpThread extends HandlerThread implements Handler.Callback
-{
+public class GtpThread extends HandlerThread implements Handler.Callback {
     private static final String TAG = "GtpThread";
     private static final int
             _MSG_PLAY = 1,
@@ -42,8 +41,7 @@ public class GtpThread extends HandlerThread implements Handler.Callback
     private GtpEngine _engine;
 
 
-    public GtpThread(GtpEngine engine, Handler notifyHandler, Context applicationContext)
-    {
+    public GtpThread(GtpEngine engine, Handler notifyHandler, Context applicationContext) {
         super("GtpThread");
         _engine = engine;
         _notifyHandler = notifyHandler;
@@ -51,56 +49,43 @@ public class GtpThread extends HandlerThread implements Handler.Callback
     }
 
     @Override
-    protected void onLooperPrepared()
-    {
+    protected void onLooperPrepared() {
         super.onLooperPrepared();
-        synchronized (this)
-        {
+        synchronized (this) {
             _handler = new Handler(getLooper(), this);
             notifyAll();
         }
     }
 
-    public void playMove()
-    {
-        synchronized (this)
-        {
-            while (_handler == null)
-            {
-                try
-                {
+    public void playMove() {
+        synchronized (this) {
+            while (_handler == null) {
+                try {
                     Log.v(TAG, "waiting GTP thread initialization");
                     wait();
                 }
-                catch (InterruptedException ignored)
-                {
+                catch (InterruptedException ignored) {
                 }
             }
         }
         _handler.sendMessage(_handler.obtainMessage(_MSG_PLAY));
     }
 
-    public void getFinalScore()
-    {
+    public void getFinalScore() {
         _handler.sendMessage(_handler.obtainMessage(_MSG_FINAL_SCORE));
     }
 
     @Override
-    public boolean handleMessage(Message msg)
-    {
-        if (msg.what == _MSG_PLAY)
-        {
+    public boolean handleMessage(Message msg) {
+        if (msg.what == _MSG_PLAY) {
             _engine.genMove();
 
-            if (!_engine.getGame().isFinished())
-            {
+            if (!_engine.getGame().isFinished()) {
                 // Saves an SGF file after each bot move to be able to restore the game
-                try
-                {
+                try {
                     _engine.getGame().saveSgf(_appContext.openFileOutput("gtp_save.sgf", Context.MODE_PRIVATE));
                 }
-                catch (Exception e)
-                {
+                catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -109,8 +94,7 @@ public class GtpThread extends HandlerThread implements Handler.Callback
                 _notifyHandler.sendMessage(_notifyHandler.obtainMessage(GtpBoardActivity.MSG_GTP_MOVE));
             return true;
         }
-        else if (msg.what == _MSG_FINAL_SCORE)
-        {
+        else if (msg.what == _MSG_FINAL_SCORE) {
             _engine.askFinalStatus();
             GoGameResult result = _engine.computeFinalScore();
             if (_notifyHandler != null)

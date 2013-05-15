@@ -139,7 +139,8 @@ public class ScoreView extends FrameLayout {
             if (_txtBlackTime.getVisibility() != View.VISIBLE)
                 _txtBlackTime.setVisibility(View.VISIBLE);
             _txtBlackTime.setText(blackTime);
-        } else {
+        }
+        else {
             _txtBlackTime.setVisibility(View.GONE);
         }
     }
@@ -152,7 +153,8 @@ public class ScoreView extends FrameLayout {
             if (_txtWhiteTime.getVisibility() != View.VISIBLE)
                 _txtWhiteTime.setVisibility(View.VISIBLE);
             _txtWhiteTime.setText(whiteTime);
-        } else {
+        }
+        else {
             _txtWhiteTime.setVisibility(View.GONE);
         }
     }

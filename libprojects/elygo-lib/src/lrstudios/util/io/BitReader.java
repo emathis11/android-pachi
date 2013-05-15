@@ -60,7 +60,8 @@ public class BitReader {
         if (_bitmask == 0x80) {
             _bitmask = 0x1;
             _bufferPos++;
-        } else {
+        }
+        else {
             _bitmask <<= 1;
         }
 

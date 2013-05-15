@@ -50,7 +50,8 @@ public class BitWriter {
             if (_bufferPos == _buffer.length)
                 flush();
             _buffer[_bufferPos] = 0;
-        } else {
+        }
+        else {
             _nextBit <<= 1;
         }
     }

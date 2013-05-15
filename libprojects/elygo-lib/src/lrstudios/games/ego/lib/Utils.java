@@ -77,13 +77,14 @@ public final class Utils {
     }
 
     /**
-     * Closes the specified stream without throwing any exceptions.
+     * Closes the specified object without throwing any exceptions.
      */
-    public static void closeStream(InputStream stream) {
+    public static void closeObject(Closeable closeable) {
         try {
-            if (stream != null)
-                stream.close();
-        } catch (Exception ignored) {
+            if (closeable != null)
+                closeable.close();
+        }
+        catch (Exception ignored) {
         }
     }
 
@@ -145,17 +146,6 @@ public final class Utils {
 
     public static long stopwatch_get() {
         return (System.nanoTime() - startTime) / 1000000;
-    }
-
-    /**
-     * Closes the specified stream without throwing any exceptions.
-     */
-    public static void closeStream(OutputStream stream) {
-        try {
-            if (stream != null)
-                stream.close();
-        } catch (Exception ignored) {
-        }
     }
 
     public static String komiToString(double komi, char decimalSeparator) {

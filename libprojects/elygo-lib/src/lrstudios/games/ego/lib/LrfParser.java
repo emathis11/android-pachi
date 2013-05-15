@@ -71,7 +71,8 @@ public final class LrfParser {
                     final Coords coords = GoBoard.decodeCoords((int) reader.read(bits), shiftY);
                     game.placeMove(coords.x + bounds.left, coords.y + bounds.top);
                     currentPos++;
-                } else {
+                }
+                else {
                     switch ((int) reader.read(2)) {
                         case 1: // COMMAND_SET_RESULT
                             game.setMoveValue((byte) reader.read(7));
@@ -90,7 +91,8 @@ public final class LrfParser {
                     }
                 }
             }
-        } else
+        }
+        else
             System.out.println("No variations stored in this LRF.");
 
         return game;
@@ -132,7 +134,8 @@ public final class LrfParser {
             writer.write(GoBoard.encodeCoords(_lrf_bounds.right, _lrf_bounds.bottom, game.board.getSize()), 9);
             _writer_loop = writer;
             _save_loop(game.getBaseNode());
-        } else {
+        }
+        else {
             writer.write(false);
         }
         writer.flush();

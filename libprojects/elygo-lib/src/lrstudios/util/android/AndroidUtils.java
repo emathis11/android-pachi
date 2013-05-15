@@ -18,11 +18,9 @@
 
 package lrstudios.util.android;
 
+import android.app.ActivityManager;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.pm.PackageManager;
-import android.content.pm.ResolveInfo;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.os.Environment;
@@ -30,7 +28,8 @@ import android.text.InputFilter;
 import android.text.Spanned;
 import lrstudios.games.ego.lib.Utils;
 
-import java.util.List;
+import java.io.IOException;
+import java.io.RandomAccessFile;
 
 
 public class AndroidUtils {
@@ -41,7 +40,8 @@ public class AndroidUtils {
         return new InputFilter() {
             @Override
             public CharSequence filter(CharSequence source, int start, int end,
-                                       Spanned dest, int dstart, int dend) {
+                                       Spanned dest, int dstart, int dend)
+            {
                 for (int i = start; i < end; i++) {
                     if (Utils.FILENAME_RESERVED_CHARS.indexOf(source.charAt(i)) >= 0)
                         return "";
@@ -62,15 +62,6 @@ public class AndroidUtils {
             };
         }
         return _emptyDialogOnClickListener;
-    }
-
-    /**
-     * Returns true if the specified intent is callable.
-     */
-    public static boolean isIntentCallable(Context context, Intent intent) {
-        List<ResolveInfo> list = context.getPackageManager().queryIntentActivities(intent,
-                PackageManager.MATCH_DEFAULT_ONLY);
-        return list.size() > 0;
     }
 
     /**
@@ -122,5 +113,33 @@ public class AndroidUtils {
         if (rect.top < bounds.top) rect.top = bounds.top;
         if (rect.right >= bounds.right) rect.right = bounds.right;
         if (rect.bottom >= bounds.bottom) rect.bottom = bounds.bottom;
+    }
+
+
+    /**
+     * Returns the total RAM available on the device (or -1 if an error occurred).
+     */
+    public static long getTotalRam(Context context) {
+        if (android.os.Build.VERSION.SDK_INT >= 16) {
+            ActivityManager actManager = (ActivityManager) context.getSystemService(Context.ACTIVITY_SERVICE);
+            ActivityManager.MemoryInfo memInfo = new ActivityManager.MemoryInfo();
+            actManager.getMemoryInfo(memInfo);
+            return memInfo.totalMem;
+        }
+        else {
+            RandomAccessFile reader = null;
+            try {
+                reader = new RandomAccessFile("/proc/meminfo", "r");
+                String line = reader.readLine();
+                String[] arr = line.split("\\s+");
+                return Integer.parseInt(arr[1]) * 1024;
+            }
+            catch (IOException e) {
+                return -1;
+            }
+            finally {
+                Utils.closeObject(reader);
+            }
+        }
     }
 }

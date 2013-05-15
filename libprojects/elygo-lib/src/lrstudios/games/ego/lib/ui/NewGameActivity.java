@@ -35,8 +35,7 @@ import lrstudios.util.android.ui.BetterFragmentActivity;
 /**
  * Allows to start a game against a bot.
  */
-public abstract class NewGameActivity extends BetterFragmentActivity implements View.OnClickListener
-{
+public abstract class NewGameActivity extends BetterFragmentActivity implements View.OnClickListener {
     private static final String TAG = "NewGameActivity";
 
     private Spinner _spn_boardSize;
@@ -61,8 +60,7 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
 
     @Override
-    public void onCreate(Bundle savedInstanceState)
-    {
+    public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.newgame_activity);
 
@@ -89,15 +87,13 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
 
     @Override
-    public void onClick(View v)
-    {
+    public void onClick(View v) {
         Intent intent;
         IntentGameInfo gameInfo;
         int level = _spn_level.getSelectedItemPosition() + 1;
 
         int id = v.getId();
-        if (id == R.id.btn_play_start)
-        {
+        if (id == R.id.btn_play_start) {
             byte color;
             int colorPos = _spn_color.getSelectedItemPosition();
             if (colorPos == 0)
@@ -132,8 +128,7 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
             intent.putExtra(BaseBoardActivity.INTENT_GAME_INFO, gameInfo);
             startActivityForResult(intent, 0);
         }
-        else if (id == R.id.btn_play_continue)
-        {
+        else if (id == R.id.btn_play_continue) {
             gameInfo = new IntentGameInfo();
             gameInfo.botLevel = level;
 
@@ -147,15 +142,13 @@ public abstract class NewGameActivity extends BetterFragmentActivity implements 
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data)
-    {
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         _updateButtons();
     }
 
 
-    private void _updateButtons()
-    {
+    private void _updateButtons() {
         // Disable "Resume" button if there is no game saved
         _btn_continue.setEnabled(getFileStreamPath("gtp_save.sgf").exists());
     }
