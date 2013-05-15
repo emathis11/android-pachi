@@ -10,11 +10,11 @@ import java.io.*;
  * Provides functions to start a GTP engine in another process and communicate with it.
  */
 public abstract class ExternalGtpEngine extends GtpEngine {
+
     protected static Process _engineProcess;
 
     private static final String TAG = "ExternalGtpEngine";
 
-    private String[] _processArgs;
     private Thread _stdErrThread;
     private Thread _exitThread;
     private OutputStreamWriter _writer;
@@ -22,7 +22,7 @@ public abstract class ExternalGtpEngine extends GtpEngine {
 
 
     /**
-     * Gets the file where the engine is located.
+     * Returns the location of the engine executable file.
      */
     protected abstract File getEngineFile();
 
@@ -35,14 +35,15 @@ public abstract class ExternalGtpEngine extends GtpEngine {
     public boolean init() {
         try {
             if (_engineProcess == null) {
-                int len = _processArgs.length;
+                String[] processArgs = getProcessArgs();
+                int len = processArgs.length;
                 String[] args = new String[len + 1];
                 args[0] = getEngineFile().getAbsolutePath();
-                System.arraycopy(_processArgs, 0, args, 1, len);
+                System.arraycopy(processArgs, 0, args, 1, len);
                 _engineProcess = new ProcessBuilder(args).start();
             }
             else {
-                Log.w(TAG, "Called init() again");
+                Log.d(TAG, "Called init() again");
             }
 
             InputStream is = _engineProcess.getInputStream();
@@ -59,7 +60,7 @@ public abstract class ExternalGtpEngine extends GtpEngine {
                     try {
                         String line;
                         while ((line = reader.readLine()) != null) {
-                            //Log.e(TAG, "[Error] " + line);
+                            Log.e(TAG, "[Err] " + line);
                             if (Thread.currentThread().isInterrupted())
                                 return;
                         }
@@ -79,7 +80,7 @@ public abstract class ExternalGtpEngine extends GtpEngine {
                         Process ep = _engineProcess;
                         if (ep != null)
                             ep.waitFor();
-                        Log.w(TAG, "##### Pachi process has exited with code " + (ep != null ? ep.exitValue() : "[null]"));
+                        Log.w(TAG, "##### Engine process has exited with code " + (ep != null ? ep.exitValue() : "[null]"));
                     }
                     catch (InterruptedException ignored) {
                     }
@@ -115,7 +116,11 @@ public abstract class ExternalGtpEngine extends GtpEngine {
         }
     }
 
-    protected void setProcessArgs(String[] args) {
-        _processArgs = args;
+    /**
+     * Override this to return custom command line arguments. This will be called just before
+     * starting the engine process.
+     */
+    protected String[] getProcessArgs() {
+        return new String[0];
     }
 }
