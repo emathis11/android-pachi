@@ -21,6 +21,8 @@ package lrstudios.games.ego.lib;
 import android.content.Context;
 import android.util.Log;
 
+import java.util.Properties;
+
 
 /**
  * Represents a Go engine which uses the standard GTP protocol to communicate.
@@ -39,9 +41,9 @@ public abstract class GtpEngine {
 
 
     /**
-     * Initializes the engine. Returns false if there was an error.
+     * Initializes the engine with the specified set of properties. Returns false if there was an error.
      */
-    public abstract boolean init();
+    public abstract boolean init(Properties properties);
 
     /**
      * Sends a GTP command to the engine.
@@ -99,12 +101,8 @@ public abstract class GtpEngine {
 
 
     protected void _newGame(int boardSize, byte playerColor, double komi, int handicap, boolean createGame) {
-        if (boardSize < 4 || boardSize > 19)
-            throw new IllegalArgumentException("The board size must be between 4 and 19.");
-        if (handicap != 0 && (handicap < 2 || handicap > 9))
-            throw new IllegalArgumentException("The handicap must be between 2 and 9.");
         if (playerColor != GoBoard.BLACK && playerColor != GoBoard.WHITE)
-            throw new IllegalArgumentException("The color is invalid.");
+            throw new IllegalArgumentException("The player color is invalid (" + playerColor + ").");
 
         if (_game == null) {
             sendGtpCommand("boardsize " + boardSize);
@@ -349,7 +347,6 @@ public abstract class GtpEngine {
     public boolean cmdSuccess(String response) {
         return response.charAt(0) == '=';
     }
-
 
     /**
      * Converts standard coordinates into their representation in the GTP protocol.

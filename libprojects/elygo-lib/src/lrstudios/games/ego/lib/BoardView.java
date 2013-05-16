@@ -489,7 +489,7 @@ public final class BoardView extends SurfaceView implements SurfaceHolder.Callba
 
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        lockPlaying();
+        _gestureDetector = null;
     }
 
 
