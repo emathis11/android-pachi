@@ -104,10 +104,8 @@ public abstract class GtpEngine {
         if (playerColor != GoBoard.BLACK && playerColor != GoBoard.WHITE)
             throw new IllegalArgumentException("The player color is invalid (" + playerColor + ").");
 
-        if (_game == null) {
-            sendGtpCommand("boardsize " + boardSize);
-            sendGtpCommand("komi " + ((int) (komi * 10.0) / 10.0));
-        }
+        sendGtpCommand("boardsize " + boardSize);
+        sendGtpCommand("komi " + ((int) (komi * 10.0) / 10.0));
         sendGtpCommand("clear_board");
 
         _playerColor = playerColor;
