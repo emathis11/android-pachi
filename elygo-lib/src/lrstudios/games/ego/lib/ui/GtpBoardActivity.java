@@ -34,6 +34,7 @@ import lrstudios.games.ego.lib.*;
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.Date;
+import java.util.Properties;
 
 
 public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener {
@@ -64,7 +65,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         _scoreView = (ScoreView) findViewById(R.id.score_view);
 
         final Bundle extras = getIntent().getExtras();
-        IntentGameInfo gameInfo = (IntentGameInfo) extras.getParcelable(INTENT_GAME_INFO);
+        IntentGameInfo gameInfo = extras.getParcelable(INTENT_GAME_INFO);
         if (gameInfo == null) {
             showToast(R.string.err_internal);
             finish();
@@ -76,14 +77,13 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         if (_gtpThread != null && _gtpThread.isAlive()) {
             _gtpThread.quit();
             try {
-                _gtpThread.join(); // TODO show a ProgressDialog?
+                _gtpThread.join(); // TODO show a ProgressDialog
             }
             catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
 
-        Log.v(TAG, "[onCreate] Recreate GTP engine");
         Class<?> botClass = (Class<?>) extras.getSerializable(INTENT_GTP_BOT_CLASS);
         try {
             _engine = (GtpEngine) botClass.getConstructor(Context.class).newInstance(this);
@@ -95,36 +95,44 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             return;
         }
 
-        _engine.init();
+        GoGame restoredGame = null;
+        int boardSize = gameInfo.boardSize;
+        if (extras.getBoolean(INTENT_PLAY_RESTORE, false)) {
+            FileInputStream stream = null;
+            try {
+                stream = openFileInput("gtp_save.sgf");
+                restoredGame = GoGame.loadSgf(stream);
+                boardSize = restoredGame.info.boardSize;
+            }
+            catch (Exception e) {
+                e.printStackTrace();
+                restoredGame = null;
+                showToast(R.string.err_cannot_restore_game);
+            }
+            finally {
+                Utils.closeObject(stream);
+            }
+        }
+
+        // Initialize the engine
+        Properties props = new Properties();
+        props.setProperty("level", Integer.toString(gameInfo.botLevel));
+        props.setProperty("boardsize", Integer.toString(boardSize));
+        if (!_engine.init(props)) {
+            showToast(getString(R.string.err_cannot_start_engine, _engine.getName()));
+            finish();
+            return;
+        }
         _engine.setLevel(gameInfo.botLevel);
         _gtpThread = new GtpThread(_engine, _handler, getApplicationContext());
         _gtpThread.start();
 
-        boolean restore = extras.getBoolean(INTENT_PLAY_RESTORE, false);
-        boolean loadOk = false;
-        if (restore) {
-            try {
-                FileInputStream stream = openFileInput("gtp_save.sgf");
-                _engine.newGame(GoGame.loadSgf(stream));
-                stream.close();
-                if (_engine.isBotTurn()) // The game is never saved during the bot's turn
-                    _engine.switchColors();
-                loadOk = true;
-            }
-            catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-
-        if (!loadOk || !restore) {
-            int boardsize = gameInfo.boardSize;
-            double komi = gameInfo.komi;
+        if (restoredGame == null) {
             byte color = gameInfo.color;
-            int handicap = gameInfo.handicap;
             if (color == GoBoard.EMPTY)
                 color = _random.nextBoolean() ? GoBoard.BLACK : GoBoard.WHITE;
 
-            _engine.newGame(boardsize, color, komi, handicap);
+            _engine.newGame(gameInfo.boardSize, color, gameInfo.komi, gameInfo.handicap);
         }
 
         _boardView.setBoardListener(this);

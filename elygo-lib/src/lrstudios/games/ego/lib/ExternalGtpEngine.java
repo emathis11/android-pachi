@@ -4,6 +4,7 @@ import android.content.Context;
 import android.util.Log;
 
 import java.io.*;
+import java.util.Properties;
 
 
 /**
@@ -20,6 +21,7 @@ public abstract class ExternalGtpEngine extends GtpEngine {
     private OutputStreamWriter _writer;
     private BufferedReader _reader;
     private boolean _isRunning;
+    private Properties _properties;
 
 
     /**
@@ -33,7 +35,8 @@ public abstract class ExternalGtpEngine extends GtpEngine {
     }
 
     @Override
-    public boolean init() {
+    public boolean init(Properties properties) {
+        _properties = properties;
         try {
             if (!_isRunning) {
                 String[] processArgs = getProcessArgs();
@@ -107,7 +110,7 @@ public abstract class ExternalGtpEngine extends GtpEngine {
             e.printStackTrace();
             // An IOException means that Android killed the process, so we start it
             // again and replay the whole game
-            if (init()) {
+            if (init(_properties)) {
                 try {
                     GoGame game = getGame();
                     _intSendGtpCommand("boardsize " + game.board.getSize());

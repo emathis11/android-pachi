@@ -87,5 +87,7 @@
     <string name="err_invalid_integer">La valeur "%s" n\'est pas un nombre entier valide.</string>
     <string name="err_occurred">Une erreur est survenue (%s).</string>
     <string name="err_dialog_title">Erreur</string>
+    <string name="err_cannot_start_engine">Impossible de démarrer le programme "%s".</string>
+    <string name="err_cannot_restore_game">Impossible de restaurer la partie : le fichier est corrompu.</string>
 
 </resources>

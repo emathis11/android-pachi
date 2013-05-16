@@ -85,5 +85,7 @@
     <string name="err_invalid_integer">The value "%s" is not a valid integer.</string>
     <string name="err_occurred">An error occurred (%s).</string>
     <string name="err_dialog_title">Error</string>
+    <string name="err_cannot_start_engine">Unable to start the engine "%s".</string>
+    <string name="err_cannot_restore_game">Unable to restore the game : the file is corrupted.</string>
 
 </resources>
