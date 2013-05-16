@@ -9,6 +9,7 @@ import lrstudios.games.ego.lib.Utils;
 import lrstudios.util.android.AndroidUtils;
 
 import java.io.*;
+import java.util.Properties;
 
 
 public class PachiEngine extends ExternalGtpEngine {
@@ -42,9 +43,12 @@ public class PachiEngine extends ExternalGtpEngine {
     }
 
     @Override
-    public boolean setLevel(int level) {
-        _totalTime = (100 * level) / 2; // TODO use boardsize, and less linear
-        return true;
+    public boolean init(Properties properties) {
+        int level = Integer.getInteger(properties.getProperty("level"), 5);
+        int boardsize = Integer.getInteger(properties.getProperty("boardsize"), 9);
+
+        _totalTime = (boardsize * boardsize * level) / 2;
+        return super.init(properties);
     }
 
     @Override

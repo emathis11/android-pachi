@@ -10,7 +10,7 @@
 
     <uses-sdk
         android:minSdkVersion="7"
-        android:targetSdkVersion="16" />
+        android:targetSdkVersion="17" />
 
     <supports-screens
         android:anyDensity="true"
@@ -39,11 +39,11 @@
         <activity
             android:name="lrstudios.games.ego.lib.ui.GtpBoardActivity"
             android:uiOptions="splitActionBarWhenNarrow"
-            android:screenOrientation="portrait"></activity>
+            android:screenOrientation="portrait" />
 
         <activity
             android:name="lrstudios.games.ego.lib.ui.Preferences"
-            android:label="@string/preferences_title"></activity>
+            android:label="@string/preferences_title" />
 
     </application>
 
