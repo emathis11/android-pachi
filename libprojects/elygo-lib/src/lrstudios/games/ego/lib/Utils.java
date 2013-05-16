@@ -32,6 +32,18 @@ public final class Utils {
 
 
     /**
+     * Try to parse the specified string to an integer. If it fails, it returns defaultValue.
+     */
+    public static int tryParseInt(String value, int defaultValue) {
+        try {
+            return Integer.parseInt(value);
+        }
+        catch (NumberFormatException e) {
+            return defaultValue;
+        }
+    }
+
+    /**
      * Converts a collection to a sorted list.
      */
     public static <T extends Comparable<? super T>> List<T> asSortedList(Collection<T> c) {
