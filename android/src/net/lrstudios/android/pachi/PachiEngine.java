@@ -44,8 +44,8 @@ public class PachiEngine extends ExternalGtpEngine {
 
     @Override
     public boolean init(Properties properties) {
-        int level = Integer.getInteger(properties.getProperty("level"), 5);
-        int boardsize = Integer.getInteger(properties.getProperty("boardsize"), 9);
+        int level = Utils.tryParseInt(properties.getProperty("level"), 5);
+        int boardsize = Utils.tryParseInt(properties.getProperty("boardsize"), 9);
 
         _totalTime = (2 * boardsize * boardsize) + (8 * boardsize * level);
         return super.init(properties);
