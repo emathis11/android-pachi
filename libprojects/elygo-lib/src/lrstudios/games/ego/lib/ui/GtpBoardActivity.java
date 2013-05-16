@@ -127,7 +127,10 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         _gtpThread = new GtpThread(_engine, _handler, getApplicationContext());
         _gtpThread.start();
 
-        if (restoredGame == null) {
+        if (restoredGame != null) {
+            _engine.newGame(restoredGame);
+        }
+        else {
             byte color = gameInfo.color;
             if (color == GoBoard.EMPTY)
                 color = _random.nextBoolean() ? GoBoard.BLACK : GoBoard.WHITE;
