@@ -45,5 +45,15 @@
             android:name="lrstudios.games.ego.lib.ui.Preferences"
             android:label="@string/preferences_title" />
 
+        <activity
+            android:name="net.lrstudios.android.pachi.KgsGtpActivity"
+            android:label="KGS GTP Mode"
+            android:screenOrientation="portrait">
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+
     </application>
 </manifest>
