@@ -29,7 +29,7 @@ public class PachiEngine extends ExternalGtpEngine {
     private static final String PREF_KEY_VERSION = "pachi_exe_version";
 
     private int _totalTime = 600;
-    private int _maxTreeSize = 192;
+    private int _maxTreeSize = 256;
 
 
     public PachiEngine(Context context) {
@@ -39,7 +39,7 @@ public class PachiEngine extends ExternalGtpEngine {
         // be too high compared to the total RAM available, because Android can kill a
         // process at any time if it uses too much memory.
         if (totalRam > 0)
-            _maxTreeSize = (int) Math.round(totalRam / 1024.0 / 1024.0 * 0.5);
+            _maxTreeSize = Math.max(256, (int) Math.round(totalRam / 1024.0 / 1024.0 * 0.5));
     }
 
     @Override
