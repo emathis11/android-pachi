@@ -28,7 +28,7 @@ public class PachiEngine extends ExternalGtpEngine {
 
     private static final String PREF_KEY_VERSION = "pachi_exe_version";
 
-    private int _totalTime = 600;
+    private int _time = 600;
     private int _maxTreeSize = 256;
 
 
@@ -47,15 +47,15 @@ public class PachiEngine extends ExternalGtpEngine {
         int level = Utils.tryParseInt(properties.getProperty("level"), 5);
         int boardsize = Utils.tryParseInt(properties.getProperty("boardsize"), 9);
 
-        _totalTime = (2 * boardsize * boardsize) + (8 * boardsize * level);
+        _time = (int) Math.round((boardsize * 1.5) * (0.5 + level / 10.0));
         return super.init(properties);
     }
 
     @Override
     protected String[] getProcessArgs() {
         Log.v(TAG, "Set max_tree_size = " + _maxTreeSize);
-        Log.v(TAG, "Set time = _" + _totalTime);
-        return new String[]{"-t", "_" + _totalTime, "max_tree_size=" + _maxTreeSize};
+        Log.v(TAG, "Set time = " + _time);
+        return new String[]{"-t", "" + _time, "max_tree_size=" + _maxTreeSize};
     }
 
     @Override
