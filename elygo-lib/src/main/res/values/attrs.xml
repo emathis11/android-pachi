@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="detailedSeekBar_titleStyle" format="reference" />
+    <attr name="detailedSeekBar_descriptionStyle" format="reference" />
+
+    <declare-styleable name="DetailedSeekBar">
+        <attr name="barTitle" format="string" />
+        <attr name="descriptionLeft" format="string" />
+        <attr name="descriptionRight" format="string" />
+    </declare-styleable>
+
+    <declare-styleable name="PrisonersView">
+        <attr name="showWhiteStone" format="boolean"/>
+    </declare-styleable>
+</resources>

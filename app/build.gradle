@@ -1,0 +1,54 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+
+    defaultConfig {
+        applicationId "net.lrstudios.android.pachi"
+        minSdkVersion 15
+        targetSdkVersion 23
+        versionCode 9
+        versionName "1.16"
+    }
+
+    signingConfigs {
+        debug {
+            storeFile file("../debug.keystore")
+        }
+
+        release {
+            storeFile file("../release.keystore")
+            storePassword System.getenv("KEYSTORE_PASSWORD")
+            keyAlias "krelease"
+            keyPassword System.getenv("KEYSTORE_PASSWORD")
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.release
+        }
+
+        debug {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+
+        amazon.initWith(buildTypes.release)
+        amazon {
+        }
+    }
+
+    lintOptions {
+        abortOnError false
+    }
+}
+
+dependencies {
+    compile 'com.android.support:appcompat-v7:23.0.1'
+
+    compile project(':elygo-lib')
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+}

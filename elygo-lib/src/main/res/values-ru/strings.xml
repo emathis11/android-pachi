@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: RU (Russian) -->
+
+    <!-- Frequent words -->
+    <string name="white">Белый</string>
+    <string name="black">Черный</string>
+    <string name="handicap">Гандикап</string>
+    <string name="rules">Правила</string>
+    <string name="komi">Коми</string>
+    <string name="save">Сохранить</string>
+    <string name="load">Загрузить</string>
+    <string name="player">Игрок</string>
+    <string name="refresh">Обновить</string>
+    <string name="boardsize">Размер доски</string>
+    <string name="version">Версия %s</string>
+    <string name="random">случайный</string>
+    <string name="loading">Загрузка…</string>
+
+    <string name="preferences_title">Настройки</string>
+
+    <!-- Action Bar -->
+    <string name="ab_pass">Пропустить</string>
+    <string name="ab_undo">Отменить</string>
+    <string name="ab_about">О</string>
+
+    <!-- Vs Bot -->
+    <string name="gtp_player_color">Ваш цвет</string>
+    <string name="gtp_bot_level">Уровень</string>
+    <string name="gtp_start_game">Начать</string>
+    <string name="gtp_resume_game">Продолжить</string>
+    <string name="gtp_resign_win">вы выиграл после сдачи противника !</string>
+    <string name="gtp_game_result">%1$s выиграл по %2$s !</string>
+
+    <string name="board_no_moves">Начало игры</string>
+    <string name="board_move_number">Переместить %d</string>
+    <string name="board_game_vs">Игра против компьютера</string>
+    <string name="board_bot_level">Ур.%d</string>
+    <string name="board_compute_territory">Расчет территории…</string>
+    <string name="board_player_resigned">%s resigned the game.</string>
+    <string name="board_player_passes">%s пропускает.</string>
+
+    <!-- Save game Dialog -->
+    <string name="hint_filename">Название игры</string>
+    <string name="dialog_title_save">Сохранить игру</string>
+    <string name="txt_save_sd">Сохранить на SD карту</string>
+    <string name="enter_game_name">название:</string>
+    <string name="game_saved">Игры %s сохранена.</string>
+    <string name="overwrite_warning">Игра с таким названием уже существует. Если вы продолжите, она будет перезаписана.
+    </string>
+
+    <!-- Game Info Dialog -->
+    <string name="dialog_title_gameinfo">Детали</string>
+    <string name="hint_black_name">Черное название</string>
+    <string name="hint_white_name">Белое название</string>
+    <string name="hint_player_rank">Ур.</string>
+    <string name="lbl_result">Результат</string>
+    <string name="lbl_wins_by">по</string>
+    <string name="game_info_changed">Готово.</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">Общее</string>
+    <string name="pref_appearance">Внешний вид</string>
+    <string name="pref_sound">Звук</string>
+    <string name="pref_wakelock">Держите экран вкл.</string>
+    <string name="pref_wakelock_desc">Только если доска открыта</string>
+    <string name="pref_statusbar">Скрыть строку состояния</string>
+    <string name="pref_statusbar_desc">Только если доска открыта</string>
+    <string name="pref_fastinput">Требуется проверка</string>
+    <string name="pref_fastinput_off">Ходы делаются немедленно</string>
+    <string name="pref_fastinput_on">Для хода требуется проверка (второе нажатие)</string>
+    <string name="pref_inputtype">Тип ввода камня</string>
+    <string name="pref_inputtype_desc">Предоставляет несколько способов сделать ход</string>
+    <string name="pref_theme">Тема доски</string>
+    <string name="pref_theme_desc">Определить визуальный стиль доски</string>
+    <string name="pref_linesize">Толщина линий</string>
+    <string name="pref_linesize_desc"></string>
+    <string name="pref_stonespadding">Расстояние между камнями</string>
+    <string name="pref_stonespadding_desc"></string>
+
+    <!-- Error messages -->
+    <string name="err_internal">Произошла внутренняя ошибка, попробуйте еще раз.</string>
+    <string name="err_sd_read_only">Невозможно сохранить игру: карта SD только для чтения.</string>
+    <string name="err_file_not_found">Файл не найден : %s²</string>
+    <string name="err_loading_sgf">Ошибка при загрузке игры: возможно, файл поврежден.</string>
+    <string name="err_invalid_integer">Значение "%s" не является допустимым целое.</string>
+    <string name="err_occurred">Произошла ошибка (%s).</string>
+    <string name="err_dialog_title">Ошибка</string>
+</resources>

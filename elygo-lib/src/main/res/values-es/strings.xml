@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: ES (Spanish) -->
+
+    <!-- Frequent words -->
+    <string name="white">Blanco</string>
+    <string name="black">Negro</string>
+    <string name="handicap">Handicap</string>
+    <string name="rules">Reglas</string>
+    <string name="komi">Komi</string>
+    <string name="save">Guardar</string>
+    <string name="load">Cargar</string>
+    <string name="player">Jugador</string>
+    <string name="refresh">Actualizar</string>
+    <string name="boardsize">Tamaño del goban</string>
+    <string name="version">Versión %s</string>
+    <string name="random">Azar</string>
+    <string name="loading">Cargando…</string>
+
+    <string name="preferences_title">Parámetros</string>
+
+    <!-- Action Bar -->
+    <string name="ab_pass">Pasar</string>
+    <string name="ab_undo">Anular</string>
+    <string name="ab_about">About</string>
+
+    <!-- Vs Bot -->
+    <string name="gtp_resign_win">¡ Usted gana por abandono !</string>
+    <string name="gtp_game_result">¡ %1$s gana de %2$s !</string>
+    <string name="gtp_player_color">Su color</string>
+    <string name="gtp_bot_level">Nivel</string>
+    <string name="gtp_start_game">Empezar</string>
+    <string name="gtp_resume_game">Seguir con</string>
+
+    <string name="board_no_moves">Principio de la partida</string>
+    <string name="board_move_number">Jugada %d</string>
+    <string name="board_game_vs">Partida vs %1$s %2$s</string>
+    <string name="board_bot_level">Niv.%d</string>
+    <string name="board_compute_territory">Cálculo del territorio en curso…</string>
+    <string name="board_player_resigned">%s abandonó la partida.</string>
+    <string name="board_player_passes">%s pasa.</string>
+
+    <!-- Save game Dialog -->
+    <string name="hint_filename">Nombre del archivo</string>
+    <string name="dialog_title_save">Salvar la partida</string>
+    <string name="txt_save_sd">Salvar sobre la carta SD</string>
+    <string name="enter_game_name">De Usted un nombre a la partida :</string>
+    <string name="game_saved">La partida %s fue salvada.</string>
+    <string name="overwrite_warning">Ya existe una partida con este nombre. Si Usted sigue, será aplastada.</string>
+
+    <!-- Game Infos Dialog -->
+    <string name="dialog_title_gameinfo">Informaciones</string>
+    <string name="hint_black_name">Jugador negro</string>
+    <string name="hint_white_name">Jugador blanco</string>
+    <string name="hint_player_rank">Niv.</string>
+    <string name="lbl_result">Resultado</string>
+    <string name="lbl_wins_by">de</string>
+    <string name="game_info_changed">Los detalles de la partida fueron cambiados.</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">General</string>
+    <string name="pref_appearance">Aparencia</string>
+    <string name="pref_sound">Sonido</string>
+    <string name="pref_wakelock">Desactivar la puesta en espera</string>
+    <string name="pref_wakelock_desc">Unicamente si un goban está abierto</string>
+    <string name="pref_statusbar">Ocultar la barra de estatuto</string>
+    <string name="pref_statusbar_desc">Unicamente si un goban está abierto</string>
+    <string name="pref_fastinput">Validación de las jugadas</string>
+    <string name="pref_fastinput_off">Las jugadas son efectivos al soltar de la clave</string>
+    <string name="pref_fastinput_on">Jugar un movimiento necesita una validación (Segundo apoyo)</string>
+    <string name="pref_inputtype">Colocación de piedras</string>
+    <string name="pref_inputtype_desc">Elija el modo con el cuál los movimientos están jugados sobre el goban</string>
+    <string name="pref_theme">Tema del goban</string>
+    <string name="pref_theme_desc">Define el tema visual del goban</string>
+    <string name="pref_linesize">Tamaño de las líneas</string>
+    <string name="pref_linesize_desc">El grosor de las lineas sobre el goban</string>
+    <string name="pref_stonespadding">Espaciamento de las piedras</string>
+    <string name="pref_stonespadding_desc">El espacio entre las piedras sobre el goban</string>
+
+    <!-- Error messages -->
+    <string name="err_internal">Ha ocurrido un error interno. Por favor, trata de nuevo.</string>
+    <string name="err_filename_short">El nombre de la partida es demasiado corto.</string>
+    <string name="err_sd_read_only">No se puede salvar la partida : la carte SD manca.</string>
+    <string name="err_save_game">Ha occurido un error interno durante el respaldo de la partida. Proba de nuevo.
+    </string>
+    <string name="err_file_not_found">No se encuentra el archivo : %s</string>
+    <string name="err_file_read_error">Se puede leer el archivo : %s</string>
+    <string name="err_loading_sgf">Error durante la carga de la partida : el archivo SGF está probablemente dañado.
+    </string>
+    <string name="err_invalid_integer">El valor "%s" no es un nombre completo válido.</string>
+    <string name="err_occurred">Ha ocurrido un error (%s).</string>
+    <string name="err_dialog_title">Error</string>
+
+</resources>

@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: PL (Polish) -->
+
+    <!-- Frequent words -->
+    <string name="white">Białe</string>
+    <string name="black">Czarne</string>
+    <string name="handicap">Wyrównanie (handicap)</string>
+    <string name="rules">Zasady</string>
+    <string name="komi">Komi</string>
+    <string name="save">Zapisz</string>
+    <string name="load">Załaduj</string>
+    <string name="player">Gracz</string>
+    <string name="refresh">Odśwież</string>
+    <string name="boardsize">Rozmiar planszy</string>
+    <string name="version">Wersja %s</string>
+    <string name="random">Przypadkowy</string>
+    <string name="loading">Wczytywanie…</string>
+
+    <string name="preferences_title">Ustawienia</string>
+
+    <!-- Action Bar -->
+    <string name="ab_pass">Pas</string>
+    <string name="ab_undo">Cofnij</string>
+    <string name="ab_about">O grze</string>
+
+    <!-- Vs Bot -->
+    <string name="gtp_player_color">Twój kolor</string>
+    <string name="gtp_bot_level">Poziom</string>
+    <string name="gtp_start_game">Start</string>
+    <string name="gtp_resume_game">Wznów</string>
+    <string name="gtp_resign_win">Wygrałeś przez rezygnację !</string>
+    <string name="gtp_game_result">%1$s wygrywa %2$s !</string>
+
+    <string name="board_no_moves">Start gry</string>
+    <string name="board_move_number">Ruch %d</string>
+    <string name="board_game_vs">Gra z %1$s %2$s</string>
+    <string name="board_bot_level">Poz.%d</string>
+    <string name="board_compute_territory">Obliczanie terytorium…</string>
+    <string name="board_player_resigned">%s zrezygnował.</string>
+    <string name="board_player_passes">%s pasują.</string>
+
+    <!-- Save game Dialog -->
+    <string name="hint_filename">Nazwa gry</string>
+    <string name="dialog_title_save">Zapisz grę</string>
+    <string name="txt_save_sd">Zapisz na karcie SD</string>
+    <string name="enter_game_name">Nazwa:</string>
+    <string name="game_saved">Gra %s zapisana.</string>
+    <string name="overwrite_warning">Gra o tej nazwie już istnieje. Jeśli będziesz kontynuować, zostanie nadpisana.
+    </string>
+
+    <!-- Game Info Dialog -->
+    <string name="dialog_title_gameinfo">Szczegóły</string>
+    <string name="hint_black_name">Nazwa czarnych</string>
+    <string name="hint_white_name">Nazwa białych</string>
+    <string name="hint_player_rank">Lv.</string>
+    <string name="lbl_result">Wynik</string>
+    <string name="lbl_wins_by">przez</string>
+    <string name="game_info_changed">Gotowe.</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">Ogólne</string>
+    <string name="pref_appearance">Wygląd</string>
+    <string name="pref_sound">Dźwięk</string>
+    <string name="pref_wakelock">Pozostaw ekran włączony</string>
+    <string name="pref_wakelock_desc">Tylko wtedy, gdy plansza jest otwarta</string>
+    <string name="pref_statusbar">Ukryj pasek stanu</string>
+    <string name="pref_statusbar_desc">Tylko wtedy, gdy plansza jest otwarta</string>
+    <string name="pref_fastinput">Wymaga zatwierdzenia</string>
+    <string name="pref_fastinput_off">Ruchy są wykonywane natychmiast</string>
+    <string name="pref_fastinput_on">Ruch w grze wymaga zatwierdzenia (drugie dotknięcie)</string>
+    <string name="pref_inputtype">Model wprowadzania kamieni</string>
+    <string name="pref_inputtype_desc">Istnieje kilka sposobów, aby wykonać ruch</string>
+    <string name="pref_theme">Motyw planszy</string>
+    <string name="pref_theme_desc">Zdefiniuj wizualny styl planszy</string>
+    <string name="pref_linesize">Grubość linii</string>
+    <string name="pref_linesize_desc"></string>
+    <string name="pref_stonespadding">Rozstaw kamieni</string>
+    <string name="pref_stonespadding_desc"></string>
+
+    <!-- Error messages -->
+    <string name="err_internal">Wystąpił błąd wewnętrzny, spróbuj ponownie.</string>
+    <string name="err_sd_read_only">Nie można zapisać gry: karta SD jest w trybie tylko do odczytu.</string>
+    <string name="err_file_not_found">Nie znaleziono pliku: %s</string>
+    <string name="err_loading_sgf">Błąd podczas ładowania gry: plik jest prawdopodobnie uszkodzony.</string>
+    <string name="err_occurred">Wystąpił błąd (%s).</string>
+</resources>

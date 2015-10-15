@@ -1,9 +1,0 @@
-.deps
-.*.swp
-*.o
-*.a
-pachi
-tags
-book.dat
-patterns.prob
-patterns.spat

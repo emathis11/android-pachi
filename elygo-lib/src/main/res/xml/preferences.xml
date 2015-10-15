@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/pref_general">
+        <CheckBoxPreference
+            android:title="@string/pref_sound"
+            android:key="enableSound"
+            android:defaultValue="true" />
+        <CheckBoxPreference
+                android:title="@string/pref_wakelock"
+                android:key="wakeLockPref"
+                android:summary="@string/pref_wakelock_desc"
+                android:defaultValue="true"/>
+        <CheckBoxPreference
+                android:title="@string/pref_statusbar"
+                android:key="statusBarPref"
+                android:summary="@string/pref_statusbar_desc"
+                android:defaultValue="false"/>
+        <CheckBoxPreference
+                android:title="@string/pref_fastinput"
+                android:key="requiresValidationPref"
+                android:summaryOn="@string/pref_fastinput_on"
+                android:summaryOff="@string/pref_fastinput_off"
+                android:defaultValue="false"/>
+        <ListPreference
+                android:title="@string/pref_inputtype"
+                android:key="inputType"
+                android:summary="@string/pref_inputtype_desc"
+                android:entries="@array/inputTypes"
+                android:entryValues="@array/inputTypes_val"
+                android:defaultValue="stylus"/>
+    </PreferenceCategory>
+
+    <PreferenceCategory android:title="@string/pref_appearance">
+        <ListPreference
+                android:title="@string/pref_theme"
+                android:key="themePref"
+                android:summary="@string/pref_theme_desc"
+                android:entries="@array/themePref"
+                android:entryValues="@array/themePref_val"
+                android:defaultValue="darkwood"/>
+        <ListPreference
+                android:title="@string/pref_stonespadding"
+                android:key="stonePaddingPref"
+                android:summary="@string/pref_stonespadding_desc"
+                android:entries="@array/stonePaddingPref"
+                android:entryValues="@array/stonePaddingPref_val"
+                android:defaultValue="0"/>
+        <ListPreference
+                android:title="@string/pref_linesize"
+                android:key="gridLinesSizePref"
+                android:summary="@string/pref_linesize_desc"
+                android:entries="@array/gridLinesSizePref"
+                android:entryValues="@array/gridLinesSizePref_val"
+                android:defaultValue="1"/>
+    </PreferenceCategory>
+</PreferenceScreen>

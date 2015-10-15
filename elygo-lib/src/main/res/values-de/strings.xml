@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: DE (German) -->
+
+    <!-- Frequent words -->
+    <string name="white">Weiß</string>
+    <string name="black">Schwarz</string>
+    <string name="handicap">Handicap</string>
+    <string name="rules">Regeln</string>
+    <string name="komi">Komi</string>
+    <string name="save">Speichern</string>
+    <string name="load">Laden</string>
+    <string name="player">Spieler</string>
+    <string name="refresh">Aktualisieren</string>
+    <string name="boardsize">Brettgröße</string>
+    <string name="version">Version %s</string>
+    <string name="random">Zufällig</string>
+    <string name="loading">Wird geladen…</string>
+
+    <string name="preferences_title">Einstellungen</string>
+
+    <!-- Action Bar -->
+    <string name="ab_pass">Passen</string>
+    <string name="ab_undo">Rückgängig machen</string>
+    <string name="ab_about">Über</string>
+
+    <!-- Vs Bot -->
+    <string name="gtp_player_color">Ihre Farbe</string>
+    <string name="gtp_bot_level">Level</string>
+    <string name="gtp_start_game">Start</string>
+    <string name="gtp_resume_game">Fortsetzen</string>
+    <string name="gtp_resign_win">Du hat durch Aufgabe gewonnen</string>
+    <string name="gtp_game_result">%1$s gewinnt mit %2$s !</string>
+
+    <string name="board_no_moves">Spielbeginn</string>
+    <string name="board_move_number">Zug %d</string>
+    <string name="board_game_vs">Spiel gegen %1$s %2$s</string>
+    <string name="board_bot_level">Lv.%d</string>
+    <string name="board_compute_territory">Berechne Gebiet…</string>
+    <string name="board_player_resigned">%s hat aufgegeben.</string>
+    <string name="board_player_passes">%s Pässe</string>
+
+    <!-- Save game Dialog -->
+    <string name="hint_filename">Spielname</string>
+    <string name="dialog_title_save">Spiel speichern</string>
+    <string name="txt_save_sd">Auf SD-Karte speichern</string>
+    <string name="enter_game_name">Name :</string>
+    <string name="game_saved">Spiel %s gespeichert.</string>
+    <string name="overwrite_warning">Es gibt bereits ein Spiel mit diesem Namen. Falls Sie fortfahren, wird dieses
+        überschrieben.
+    </string>
+
+    <!-- Game Info Dialog -->
+    <string name="dialog_title_gameinfo">Details</string>
+    <string name="hint_black_name">Schwarzer Name</string>
+    <string name="hint_white_name">Weißer Name</string>
+    <string name="hint_player_rank">Lv.</string>
+    <string name="lbl_result">Ergebnis</string>
+    <string name="lbl_wins_by">mit</string>
+    <string name="game_info_changed">Fertig.</string>
+
+    <!-- Preferences -->
+    <string name="pref_general">Allgemein</string>
+    <string name="pref_appearance">Erscheinungsbild</string>
+    <string name="pref_sound">Töne</string>
+    <string name="pref_wakelock">Display wachhalten</string>
+    <string name="pref_wakelock_desc">Nur wenn ein Brett offen ist</string>
+    <string name="pref_statusbar">Statusleiste verbergen</string>
+    <string name="pref_statusbar_desc">Nur wenn ein Brett offen ist</string>
+    <string name="pref_fastinput">Erfordert Bestätigung</string>
+    <string name="pref_fastinput_off">Züge werden gleich gespielt.</string>
+    <string name="pref_fastinput_on">Das Spielen eines Zugs erfordert Bestätigung (zweites Tippen).</string>
+    <string name="pref_inputtype">Eingabemodus</string>
+    <string name="pref_inputtype_desc">Bietet mehrere Arten, einen Zug zu spielen.</string>
+    <string name="pref_theme">Aussehen des Brettes</string>
+    <string name="pref_theme_desc">Die optische Erscheinung des Bretts einstellen</string>
+    <string name="pref_linesize">Linienstärke</string>
+    <string name="pref_linesize_desc"></string>
+    <string name="pref_stonespadding">Steineabstand</string>
+    <string name="pref_stonespadding_desc"></string>
+
+    <!-- Error messages -->
+    <string name="err_internal">Ein interner Fehler ist aufgetreten, bitte erneut versuchen.</string>
+    <string name="err_sd_read_only">Kann das Spiel nicht speichern: die SD-Karte ist schreibgeschützt.</string>
+    <string name="err_file_not_found">Datei nicht gefunden (%s)</string>
+    <string name="err_loading_sgf">Fehler beim Laden des Spiels: die Datei ist wahrscheinlich beschädigt.</string>
+    <string name="err_occurred">Ein Fehler ist aufgetreten (%s).</string>
+</resources>

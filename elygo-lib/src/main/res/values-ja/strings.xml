@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default locale: EN (English) -->
+
+    <!-- Frequent words -->
+    <string name="white">白</string>
+    <string name="black">黒</string>
+    <string name="handicap">手合い</string>
+    <string name="rules">ルール</string>
+    <string name="komi">コミ</string>
+    <string name="save">保存する</string>
+    <string name="load">ロードする</string>
+    <string name="player">プレーヤー</string>
+    <string name="refresh">リフレッシュ</string>
+    <string name="boardsize">盤のサイズ</string>
+    <string name="version">バージョン %s</string>
+    <string name="random">ランダム</string>
+    <string name="loading">読み込んでいます…</string>
+
+    <string name="preferences_title">設定</string>
+
+        <!-- Action Bar -->
+    <string name="ab_pass">パス</string>
+    <string name="ab_undo">戻る</string>
+    <string name="ab_about">このゲームについて</string>
+
+        <!-- Vs Bot -->
+    <string name="gtp_player_color">あなたの石の色</string>
+    <string name="gtp_bot_level">コンピューターのレベル</string>
+    <string name="gtp_start_game">開始</string>
+    <string name="gtp_resume_game">再開</string>
+    <string name="gtp_resign_win">投了によりあなたが勝ちました！</string>
+    <string name="gtp_game_result">%1$s%2$s目勝！</string>
+
+    <string name="board_no_moves">ゲーム開始</string>
+    <string name="board_move_number">第%d手</string>
+    <string name="board_game_vs">%1$s %2$s との対局</string>
+    <string name="board_bot_level">Lv.%d</string>
+    <string name="board_compute_territory">地を数えています…</string>
+    <string name="board_player_resigned">%sが投了しました。</string>
+    <string name="board_player_passes">%sはパスします。</string>
+
+        <!-- Save game Dialog -->
+    <string name="hint_filename">ゲーム名</string>
+    <string name="dialog_title_save">ゲームを保存する</string>
+    <string name="txt_save_sd">SDカードに保存する</string>
+    <string name="enter_game_name">このゲームにつける名前を入力してください :</string>
+    <string name="game_saved">ゲームを保存しました。 (%s)</string>
+    <string name="overwrite_warning">この名前のゲームはすでに存在します。上書きされます。</string>
+
+        <!-- Game Info Dialog -->
+    <string name="dialog_title_gameinfo">詳細</string>
+    <string name="hint_black_name">黒の名前</string>
+    <string name="hint_white_name">白の名前</string>
+    <string name="hint_player_rank">Lv.</string>
+    <string name="lbl_result">結果</string>
+    <string name="lbl_wins_by">で</string>
+    <string name="game_info_changed">成功。</string>
+
+        <!-- Preferences -->
+    <string name="pref_general">通常設定</string>
+    <string name="pref_appearance">外観</string>
+    <string name="pref_sound">音</string>
+    <string name="pref_wakelock">ウェイクロックを無効にする</string>
+    <string name="pref_wakelock_desc">ゲームが開いている場合のみ</string>
+    <string name="pref_statusbar">ステータスバーを隠す</string>
+    <string name="pref_statusbar_desc">ゲームが開いている場合のみ</string>
+    <string name="pref_fastinput">承認が必要</string>
+    <string name="pref_fastinput_off">手を直ちにプレイする</string>
+    <string name="pref_fastinput_on">手をプレイするのに承認が必要</string>
+    <string name="pref_inputtype">石の入力の種類</string>
+    <string name="pref_inputtype_desc"> </string>
+    <string name="pref_theme">ビジュアルテーマ</string>
+    <string name="pref_theme_desc">ビジュアルスタイルを定義する</string>
+    <string name="pref_linesize">線の太さ</string>
+    <string name="pref_linesize_desc"> </string>
+    <string name="pref_stonespadding">石の大きさ</string>
+    <string name="pref_stonespadding_desc"> </string>
+
+        <!-- Error messages -->
+    <string name="err_internal">内部エラーが発生しました。もう一度試してください。</string>
+    <string name="err_filename_short">ゲーム名が短すぎます。</string>
+    <string name="err_sd_read_only">ゲームを保存できません : SDカードが読み取り専用です。</string>
+    <string name="err_save_game">ゲーム保存中にエラーが発生しました。もう一度試してください。</string>
+    <string name="err_file_not_found">ファイルがみつかりません : %s</string>
+    <string name="err_file_read_error">ファイルを読み取れません : %s</string>
+    <string name="err_loading_sgf">ゲームのロード中にエラーが発生しました : ファイルが破損しているようです。</string>
+    <string name="err_invalid_integer">%s: 値が有効な数ではありません。</string>
+    <string name="err_occurred">エラーが発生しました: %s</string>
+    <string name="err_dialog_title">エラー</string>
+    <string name="err_cannot_start_engine">Unable to start the engine "%s".</string>
+    <string name="err_cannot_restore_game">ゲームをリストアできません : ファイルが破損しています。</string>
+</resources>

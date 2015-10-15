@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="inputTypes">
+        <item>Versetzt</item>
+        <item>Versetzt (nur bei großen Brettausschnitten) </item>
+        <item>Punktgenau (Stylus-Modus) </item>
+    </string-array>
+
+    <string-array name="themePref">
+        <item>Standard</item>
+        <item>Holzstruktur</item>
+        <item>Schwarz und Weiß</item>
+    </string-array>
+</resources>

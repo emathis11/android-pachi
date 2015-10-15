@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="playLevels">
+        <item>1 速い</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+        <item>6</item>
+        <item>7</item>
+        <item>8</item>
+        <item>9</item>
+        <item>10 強い</item>
+    </string-array>
+
+    <string-array name="inputTypes">
+        <item>オフセット (常に)</item>
+        <item>オフセット (唯19x19)</item>
+        <item>スタイラスモード</item>
+    </string-array>
+
+    <string-array name="themePref">
+        <item>ウッド</item>
+        <item>ダークウッド</item>
+        <item>本</item>
+    </string-array>
+</resources>

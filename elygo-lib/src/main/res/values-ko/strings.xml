@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Locale: KO (Korean) -->
+
+    <!-- Frequent words -->
+    
+    <string name="white">흰색</string>
+    <string name="black">검은색</string>
+    <string name="handicap">접바둑</string>
+    <string name="rules">규칙</string>
+    <string name="komi">덤</string>
+    <string name="save">저장</string>
+    <string name="load">불러오기</string>
+    <string name="player">플레이어</string>
+    <string name="refresh">새로 고침</string>
+    <string name="boardsize">보드 크기</string>
+    <string name="version">버전 %s</string>
+    <string name="random">랜덤</string>
+    <string name="loading">불러오는 중...</string>
+
+    <string name="preferences_title">설정</string>
+
+    <!-- Action Bar -->
+<string name="ab_pass">Pass</string>
+    <string name="ab_undo">취소</string>
+    <string name="ab_about">정보</string>
+
+    <!-- Preferences -->
+    
+    <string name="pref_general">일반</string>
+    <string name="pref_appearance">외관</string>
+    <string name="pref_sound">소리</string>
+    <string name="pref_wakelock">항상 화면 켜짐</string>
+    <string name="pref_wakelock_desc" />
+    <string name="pref_statusbar">상태 표시 줄 숨기기</string>
+    <string name="pref_statusbar_desc" />
+    <string name="pref_inputtype">입력 유형</string>
+    <string name="pref_inputtype_desc" />
+    <string name="pref_theme">바둑판 테마</string>
+    <string name="pref_theme_desc" />
+    <string name="pref_linesize">선 두께</string>
+    <string name="pref_linesize_desc" />
+    <string name="pref_stonespadding">돌 간격</string>
+    <string name="pref_stonespadding_desc" />
+</resources>
