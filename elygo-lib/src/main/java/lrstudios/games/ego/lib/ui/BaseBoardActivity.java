@@ -85,7 +85,6 @@ public abstract class BaseBoardActivity extends BetterFragmentActivity implement
         super.onCreate(savedInstanceState);
         setVolumeControlStream(AudioManager.STREAM_MUSIC);
         _soundHelper = new SoundHelper(this);
-
         _internalGamesDir = getDir("SGF", Context.MODE_PRIVATE);
         _loadPreferences();
     }

@@ -20,11 +20,15 @@ package lrstudios.util.android.ui;
 
 import android.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import lrstudios.games.ego.lib.R;
 import lrstudios.util.android.AndroidUtils;
 
 
@@ -32,12 +36,17 @@ public class BetterFragmentActivity extends AppCompatActivity {
     private static final String TAG = BetterFragmentActivity.class.getSimpleName();
 
     private Menu _optionsMenu;
+    private ProgressBar _progressIndicator;
 
 
     @Override
     public void setContentView(int layoutResID) {
         super.setContentView(layoutResID);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayShowHomeEnabled(true);
+        _progressIndicator = (ProgressBar) findViewById(R.id.progress_indicator);
     }
 
     @Override
@@ -56,6 +65,10 @@ public class BetterFragmentActivity extends AppCompatActivity {
             return super.onOptionsItemSelected(item);
 
         return true;
+    }
+
+    protected void setProgressIndicatorVisibility(boolean show) {
+        _progressIndicator.setVisibility(show ? View.VISIBLE : View.GONE);
     }
 
     /**

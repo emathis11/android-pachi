@@ -29,13 +29,26 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
-import lrstudios.games.ego.lib.*;
 
 import java.io.FileInputStream;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
 import java.util.Properties;
+
+import lrstudios.games.ego.lib.BoardView;
+import lrstudios.games.ego.lib.Coords;
+import lrstudios.games.ego.lib.GameInfo;
+import lrstudios.games.ego.lib.GameNode;
+import lrstudios.games.ego.lib.GoBoard;
+import lrstudios.games.ego.lib.GoGame;
+import lrstudios.games.ego.lib.GoGameResult;
+import lrstudios.games.ego.lib.GtpEngine;
+import lrstudios.games.ego.lib.GtpThread;
+import lrstudios.games.ego.lib.IntentGameInfo;
+import lrstudios.games.ego.lib.R;
+import lrstudios.games.ego.lib.ScoreView;
+import lrstudios.games.ego.lib.Utils;
 
 
 public class GtpBoardActivity extends BaseBoardActivity implements BoardView.BoardListener {
@@ -171,10 +184,9 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         _scoreView.setBlackPrisoners(_engine.getGame().getBlackPrisoners());
         _scoreView.setWhitePrisoners(_engine.getGame().getWhitePrisoners());
 
-        setProgressBarIndeterminateVisibility(false);
+        setProgressIndicatorVisibility(false);
         _updateGameLogic();
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -256,7 +268,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
         else if (!game.isFinished()) {
             if (_engine.isBotTurn()) {
                 _lockPlaying();
-                setProgressBarIndeterminateVisibility(true);
+                setProgressIndicatorVisibility(true);
                 _gtpThread.playMove();
             }
             else {
@@ -315,7 +327,7 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
                     Log.e(TAG, "invalid move coordinates : " + move);
                 }
 
-                setProgressBarIndeterminateVisibility(false);
+                setProgressIndicatorVisibility(false);
                 _updateGameLogic();
             }
             else if (msg.what == MSG_FINAL_SCORE) {
