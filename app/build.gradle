@@ -6,7 +6,7 @@ android {
 
     defaultConfig {
         applicationId "net.lrstudios.android.pachi"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 11
         versionName "1.18"

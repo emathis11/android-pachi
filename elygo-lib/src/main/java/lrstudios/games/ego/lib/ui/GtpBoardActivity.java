@@ -18,22 +18,30 @@
 
 package lrstudios.games.ego.lib.ui;
 
+import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.os.ParcelFileDescriptor;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.GregorianCalendar;
+import java.util.Locale;
 import java.util.Properties;
 
 import lrstudios.games.ego.lib.BoardView;
@@ -208,16 +216,17 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
             _updateGameLogic();
         }
         else if (id == R.id.menu_save) {
-            // Give a default name to the game : "BotName_MonthDay_HoursMinutes"
+            // Give a default name to the game : "BotName_YearMonthDay_HoursMinutes"
             Calendar calendar = new GregorianCalendar();
-            String defaultName = String.format("%s_%02d%02d_%02d%02d",
+            String defaultName = String.format(Locale.US, "%s_%04d%02d%02d_%02d%02d",
                     _engine.getName().replace(" ", ""),
+                    calendar.get(Calendar.YEAR),
                     calendar.get(Calendar.MONTH) + 1,
                     calendar.get(Calendar.DAY_OF_MONTH),
                     calendar.get(Calendar.HOUR_OF_DAY),
                     calendar.get(Calendar.MINUTE));
 
-            _showSaveDialog(_engine.getGame(), defaultName, true);
+            createFile("application/x-go-sgf", defaultName);
         }
         else if (id == R.id.menu_pass) {
             onPress(-1, -1);
@@ -245,6 +254,38 @@ public class GtpBoardActivity extends BaseBoardActivity implements BoardView.Boa
     public void onCursorMoved(int x, int y) {
     }
 
+
+    private void createFile(String mimeType, String fileName) {
+        Intent intent = new Intent(Intent.ACTION_CREATE_DOCUMENT);
+
+        // Filter to only show results that can be "opened", such as
+        // a file (as opposed to a list of contacts or timezones).
+        intent.addCategory(Intent.CATEGORY_OPENABLE);
+        intent.setType(mimeType);
+        intent.putExtra(Intent.EXTRA_TITLE, fileName);
+        startActivityForResult(intent, 444);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode == 444) {
+            if (resultCode == Activity.RESULT_OK) {
+                try {
+                    Uri uri = data.getData();
+                    ParcelFileDescriptor pfd = getContentResolver().openFileDescriptor(uri, "w");
+                    FileOutputStream outputStream = new FileOutputStream(pfd.getFileDescriptor());
+                    outputStream.write(_engine.getGame().getSgf().getBytes());
+                    outputStream.close();
+                    pfd.close();
+                }
+                catch (IOException e) {
+                    e.printStackTrace();
+                }
+                Toast.makeText(this, getString(R.string.game_saved, ""), Toast.LENGTH_SHORT).show();
+            }
+        }
+        super.onActivityResult(requestCode, resultCode, data);
+    }
 
     private void _updateGameLogic() {
         GoGame game = _engine.getGame();
