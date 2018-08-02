@@ -1,15 +1,15 @@
 apply plugin: 'com.android.application'
 
 android {
-    compileSdkVersion 25
-    buildToolsVersion '26.0.2'
+    compileSdkVersion 27
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
-        applicationId "net.lrstudios.android.pachi"
+        applicationId 'net.lrstudios.android.pachi'
         minSdkVersion 21
-        targetSdkVersion 25
-        versionCode 11
-        versionName "1.18"
+        targetSdkVersion 27
+        versionCode 12
+        versionName '1.19'
     }
 
     signingConfigs {
@@ -43,7 +43,7 @@ android {
 }
 
 dependencies {
-    compile 'com.android.support:appcompat-v7:25.4.0'
+    compile 'com.android.support:appcompat-v7:27.1.1'
 
     compile project(':elygo-lib')
     compile fileTree(dir: 'libs', include: ['*.jar'])

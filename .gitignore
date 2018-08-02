@@ -9,5 +9,7 @@
 /libs
 /obj
 
-make_release.bat
-release.keystore
+*.bat
+*.sh
+*.keystore
+*.apk

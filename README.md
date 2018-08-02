@@ -10,7 +10,6 @@ To do this, open the `jni` folder and enter the command `ndk-build`. If you get 
 
 - [The Pachi project](http://pachi.or.cz)
 - [elygo-lib](http://github.com/Daimas/elygo-lib)
-- [ActionBarSherlock](http://actionbarsherlock.com)
 
 ## License
 
